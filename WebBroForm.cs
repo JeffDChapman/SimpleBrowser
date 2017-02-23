@@ -60,13 +60,12 @@ namespace WebLoader
             pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
             string pageBodyModshow = "<font face=\"verdana\">" + pageBodyMod;
 
-            tbSkipNav = true;
             this.Text = myBrowser.DocumentTitle;
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(pageBodyModshow);
             myBrowser.Refresh();
             this.myAddrBar.Text = myBrowser.Url.ToString();
-            tbSkipNav = false;
+            SavePage = myBrowser.Url.ToString();
         }
 
 
@@ -75,27 +74,38 @@ namespace WebLoader
             this.myBrowser.Navigate(homeLoc);
         }
 
-        private void myBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
-        {
-            if (tbSkipNav) { return; }
-            SavePage = myBrowser.Url.ToString();
-        }
-
         private void btnGoTo_Click(object sender, EventArgs e)
         {
-            tbSkipNav = false;
             this.btnBack.Enabled = true;
-            SavePage = myBrowser.Url.ToString();
             myBrowser.Navigate(myAddrBar.Text);
         }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            tbSkipNav = false;
             myBrowser.Navigate(PriorPage);
             PriorPage = SavePage;
             this.btnBack.Enabled = false;
+        }
 
+        private void myBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            string reDirLoc = e.Url.ToString();
+            if (reDirLoc.Substring(0,6) == "about:")
+            {
+                string baseAddr = myAddrBar.Text;
+                int lastSlashLoc = baseAddr.LastIndexOf("/");
+                if (reDirLoc.Substring(6,1) == "/")
+                {
+                    string shorterBase = baseAddr.Substring(0, lastSlashLoc);
+                    lastSlashLoc = shorterBase.LastIndexOf("/") - 1;
+                }
+                string newBaseAddr = baseAddr.Substring(0, lastSlashLoc + 1);
+                string reDirect = newBaseAddr + reDirLoc.Substring(6);
+                if (reDirect.IndexOf("blank") < 0) 
+                {
+                    myAddrBar.Text = reDirect;
+                }
+            }
         }
     }
 }
