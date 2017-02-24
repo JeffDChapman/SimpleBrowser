@@ -34,6 +34,7 @@
             this.btnHome = new System.Windows.Forms.Button();
             this.btnGoTo = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
+            this.lboxRecent = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // myBrowser
@@ -48,7 +49,7 @@
             this.myBrowser.Size = new System.Drawing.Size(799, 613);
             this.myBrowser.TabIndex = 0;
             this.myBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.myBrowser_DocumentCompleted);
-            this.myBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.myBrowser_Navigated);
+            this.myBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.myBrowser_Navigating);
             // 
             // myAddrBar
             // 
@@ -91,11 +92,23 @@
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
+            // lboxRecent
+            // 
+            this.lboxRecent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lboxRecent.FormattingEnabled = true;
+            this.lboxRecent.Location = new System.Drawing.Point(397, 0);
+            this.lboxRecent.Name = "lboxRecent";
+            this.lboxRecent.Size = new System.Drawing.Size(396, 173);
+            this.lboxRecent.TabIndex = 5;
+            this.lboxRecent.Visible = false;
+            this.lboxRecent.Click += new System.EventHandler(this.lboxRecent_Click);
+            // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(791, 638);
+            this.Controls.Add(this.lboxRecent);
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnGoTo);
             this.Controls.Add(this.btnHome);
@@ -116,6 +129,7 @@
         private System.Windows.Forms.Button btnHome;
         private System.Windows.Forms.Button btnGoTo;
         private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.ListBox lboxRecent;
     }
 }
 
