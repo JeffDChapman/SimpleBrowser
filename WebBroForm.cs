@@ -60,6 +60,9 @@ namespace WebLoader
             myBrowser.Document.Write(pageBodyModshow);
             myBrowser.Refresh();
             this.myAddrBar.Text = myBrowser.Url.ToString();
+            SavePage = myBrowser.Url.ToString();
+
+
         }
 
 
@@ -71,13 +74,18 @@ namespace WebLoader
         private void btnGoTo_Click(object sender, EventArgs e)
         {
             this.btnBack.Enabled = true;
+
             this.lboxRecent.Items.Add(myAddrBar.Text);
+
             myBrowser.Navigate(myAddrBar.Text);
         }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            this.lboxRecent.Visible = true;
+          this.btnBack.Enabled = false;
+
+
+
         }
 
         private void myBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
@@ -99,6 +107,8 @@ namespace WebLoader
                     myAddrBar.Text = reDirect;
                 }
             }
+
+
         }
 
         private void lboxRecent_Click(object sender, EventArgs e)
@@ -106,6 +116,7 @@ namespace WebLoader
             string goToPage = this.lboxRecent.SelectedItem.ToString();
             this.lboxRecent.Visible = false;
             myBrowser.Navigate(goToPage);
+
         }
     }
 }
