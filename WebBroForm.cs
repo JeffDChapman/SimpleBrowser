@@ -71,7 +71,7 @@ namespace WebLoader
         private void btnGoTo_Click(object sender, EventArgs e)
         {
             this.btnBack.Enabled = true;
-            this.lboxRecent.Items.Add(myAddrBar.Text);
+            this.lboxRecent.Items.Insert(0, myAddrBar.Text);
             myBrowser.Navigate(myAddrBar.Text);
         }
 
@@ -87,9 +87,9 @@ namespace WebLoader
             {
                 string baseAddr = myAddrBar.Text;
                 int lastSlashLoc = baseAddr.LastIndexOf("/");
-                if (reDirLoc.Substring(6,1) == "/")
+                if ((reDirLoc.Substring(6, 1) == "/") && (baseAddr.IndexOf(reDirLoc.Substring(6, 4)) >= 0))
                 {
-                    string shorterBase = baseAddr.Substring(0, lastSlashLoc);
+                    string shorterBase = baseAddr.Substring(0, lastSlashLoc + 1);
                     lastSlashLoc = shorterBase.LastIndexOf("/") - 1;
                 }
                 string newBaseAddr = baseAddr.Substring(0, lastSlashLoc + 1);
