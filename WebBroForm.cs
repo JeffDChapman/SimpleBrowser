@@ -71,7 +71,7 @@ namespace WebLoader
         private void btnGoTo_Click(object sender, EventArgs e)
         {
             this.btnBack.Enabled = true;
-            this.lboxRecent.Items.Add(myAddrBar.Text);
+            this.lboxRecent.Items.Insert(0, myAddrBar.Text);
             myBrowser.Navigate(myAddrBar.Text);
         }
 
