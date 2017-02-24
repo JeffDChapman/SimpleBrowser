@@ -18,8 +18,6 @@ namespace WebLoader
         }
 
         private bool tbSkipNav = true;
-        private string PriorPage = "";
-        private string SavePage = "";
         private string homeLoc = "file:///C:/Users/jchapman/Desktop/Basics/Work%20Favorites.htm";
 
         private void WebBroForm_Load(object sender, EventArgs e)
@@ -34,10 +32,7 @@ namespace WebLoader
             string pageBodyMod = fixDoc.Body.InnerHtml.ToString();
             string StopRecur = pageBodyMod.Substring(1, 4).ToLower();
             if (StopRecur == "font")
-            {
-                if (PriorPage != myBrowser.Url.ToString())
-                    {this.btnBack.Enabled = true;}
-                return; }
+                {return; }
             pageBodyMod = pageBodyMod.Replace("font", "fnot");
             pageBodyMod = pageBodyMod.Replace("FONT", "FNOT");
             pageBodyMod = pageBodyMod.Replace("widt", "wdit");
@@ -66,6 +61,8 @@ namespace WebLoader
             myBrowser.Refresh();
             this.myAddrBar.Text = myBrowser.Url.ToString();
             SavePage = myBrowser.Url.ToString();
+
+
         }
 
 
@@ -77,14 +74,18 @@ namespace WebLoader
         private void btnGoTo_Click(object sender, EventArgs e)
         {
             this.btnBack.Enabled = true;
+
+            this.lboxRecent.Items.Add(myAddrBar.Text);
+
             myBrowser.Navigate(myAddrBar.Text);
         }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            myBrowser.Navigate(PriorPage);
-            PriorPage = SavePage;
-            this.btnBack.Enabled = false;
+          this.btnBack.Enabled = false;
+
+
+
         }
 
         private void myBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
@@ -106,6 +107,16 @@ namespace WebLoader
                     myAddrBar.Text = reDirect;
                 }
             }
+
+
+        }
+
+        private void lboxRecent_Click(object sender, EventArgs e)
+        {
+            string goToPage = this.lboxRecent.SelectedItem.ToString();
+            this.lboxRecent.Visible = false;
+            myBrowser.Navigate(goToPage);
+
         }
     }
 }
