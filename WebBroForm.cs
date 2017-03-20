@@ -32,7 +32,10 @@ namespace WebLoader
             string pageBodyMod = fixDoc.Body.InnerHtml.ToString();
             string StopRecur = pageBodyMod.Substring(1, 4).ToLower();
             if (StopRecur == "font")
-                {return; }
+            {
+                this.myBrowser.Visible = true;
+                return; 
+            }
             pageBodyMod = pageBodyMod.Replace("font", "fnot");
             pageBodyMod = pageBodyMod.Replace("FONT", "FNOT");
             pageBodyMod = pageBodyMod.Replace("widt", "wdit");
@@ -58,11 +61,9 @@ namespace WebLoader
             this.Text = myBrowser.DocumentTitle;
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(pageBodyModshow);
+            this.myBrowser.Visible = true;
             myBrowser.Refresh();
             this.myAddrBar.Text = myBrowser.Url.ToString();
-            SavePage = myBrowser.Url.ToString();
-
-
         }
 
 
@@ -80,15 +81,14 @@ namespace WebLoader
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-          this.btnBack.Enabled = false;
-
-
-
+            this.lboxRecent.Visible = true;
         }
 
         private void myBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             string reDirLoc = e.Url.ToString();
+            this.myBrowser.Visible = false;
+
             if (reDirLoc.Substring(0,6) == "about:")
             {
                 string baseAddr = myAddrBar.Text;
@@ -105,7 +105,6 @@ namespace WebLoader
                     myAddrBar.Text = reDirect;
                 }
             }
-
 
         }
 

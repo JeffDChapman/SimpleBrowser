@@ -35,6 +35,7 @@
             this.btnGoTo = new System.Windows.Forms.Button();
             this.btnBack = new System.Windows.Forms.Button();
             this.lboxRecent = new System.Windows.Forms.ListBox();
+            this.lblWorking = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // myBrowser
@@ -103,6 +104,17 @@
             this.lboxRecent.Visible = false;
             this.lboxRecent.Click += new System.EventHandler(this.lboxRecent_Click);
             // 
+            // lblWorking
+            // 
+            this.lblWorking.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblWorking.AutoSize = true;
+            this.lblWorking.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWorking.Location = new System.Drawing.Point(577, 25);
+            this.lblWorking.Name = "lblWorking";
+            this.lblWorking.Size = new System.Drawing.Size(190, 37);
+            this.lblWorking.TabIndex = 6;
+            this.lblWorking.Text = "Working . . .";
+            // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -114,6 +126,7 @@
             this.Controls.Add(this.btnHome);
             this.Controls.Add(this.myAddrBar);
             this.Controls.Add(this.myBrowser);
+            this.Controls.Add(this.lblWorking);
             this.Name = "WebBroForm";
             this.Text = "[Title Goes Here]";
             this.Load += new System.EventHandler(this.WebBroForm_Load);
@@ -130,6 +143,7 @@
         private System.Windows.Forms.Button btnGoTo;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.ListBox lboxRecent;
+        private System.Windows.Forms.Label lblWorking;
     }
 }
 
