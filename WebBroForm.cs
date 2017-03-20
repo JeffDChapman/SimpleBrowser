@@ -88,6 +88,7 @@ namespace WebLoader
         {
             string reDirLoc = e.Url.ToString();
             this.myBrowser.Visible = false;
+
             if (reDirLoc.Substring(0,6) == "about:")
             {
                 string baseAddr = myAddrBar.Text;
@@ -104,6 +105,7 @@ namespace WebLoader
                     myAddrBar.Text = reDirect;
                 }
             }
+
         }
 
         private void lboxRecent_Click(object sender, EventArgs e)
@@ -111,6 +113,7 @@ namespace WebLoader
             string goToPage = this.lboxRecent.SelectedItem.ToString();
             this.lboxRecent.Visible = false;
             myBrowser.Navigate(goToPage);
+
         }
     }
 }
