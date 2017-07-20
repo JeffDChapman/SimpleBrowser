@@ -101,9 +101,24 @@ namespace WebLoader
                 string reDirect = newBaseAddr + reDirLoc.Substring(6);
                 if (reDirect.IndexOf("blank") < 0) 
                 {
-                    myAddrBar.Text = reDirect;
+                    myAddrBar.Text = RemoveDupsInPath(reDirect);
                 }
             }
+        }
+
+        private string RemoveDupsInPath(string inRedirect)
+        {
+            string reDirectBack = "";
+            string priorSet = "";
+            string[] backSep = new string[] { "/" };
+            string[] result = inRedirect.Split(backSep, StringSplitOptions.None);
+            foreach (string oneSet in result)
+            {
+                if (oneSet != priorSet)
+                    { reDirectBack += oneSet + "/"; }
+                priorSet = oneSet;
+            }
+            return (reDirectBack.Substring(0, reDirectBack.Length - 1));
         }
 
         private void lboxRecent_Click(object sender, EventArgs e)
@@ -121,6 +136,12 @@ namespace WebLoader
                 this.lboxRecent.Visible = false;
                 this.Refresh();
             }
+        }
+
+        private void btnStopLoad_Click(object sender, EventArgs e)
+        {
+            this.myBrowser.Stop();
+            this.myBrowser.Visible = true;
         }
     }
 }
