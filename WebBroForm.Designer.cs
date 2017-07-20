@@ -36,6 +36,7 @@
             this.btnBack = new System.Windows.Forms.Button();
             this.lboxRecent = new System.Windows.Forms.ListBox();
             this.lblWorking = new System.Windows.Forms.Label();
+            this.btnStopLoad = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // myBrowser
@@ -56,9 +57,9 @@
             // 
             this.myAddrBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.myAddrBar.Location = new System.Drawing.Point(28, 0);
+            this.myAddrBar.Location = new System.Drawing.Point(55, 0);
             this.myAddrBar.Name = "myAddrBar";
-            this.myAddrBar.Size = new System.Drawing.Size(711, 20);
+            this.myAddrBar.Size = new System.Drawing.Size(684, 20);
             this.myAddrBar.TabIndex = 1;
             // 
             // btnHome
@@ -115,11 +116,22 @@
             this.lblWorking.TabIndex = 6;
             this.lblWorking.Text = "Working . . .";
             // 
+            // btnStopLoad
+            // 
+            this.btnStopLoad.Image = ((System.Drawing.Image)(resources.GetObject("btnStopLoad.Image")));
+            this.btnStopLoad.Location = new System.Drawing.Point(26, 0);
+            this.btnStopLoad.Name = "btnStopLoad";
+            this.btnStopLoad.Size = new System.Drawing.Size(28, 20);
+            this.btnStopLoad.TabIndex = 7;
+            this.btnStopLoad.UseVisualStyleBackColor = true;
+            this.btnStopLoad.Click += new System.EventHandler(this.btnStopLoad_Click);
+            // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(791, 638);
+            this.Controls.Add(this.btnStopLoad);
             this.Controls.Add(this.lboxRecent);
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.btnGoTo);
@@ -127,9 +139,11 @@
             this.Controls.Add(this.myAddrBar);
             this.Controls.Add(this.myBrowser);
             this.Controls.Add(this.lblWorking);
+            this.KeyPreview = true;
             this.Name = "WebBroForm";
             this.Text = "[Title Goes Here]";
             this.Load += new System.EventHandler(this.WebBroForm_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WebBroForm_KeyPress);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -144,6 +158,7 @@
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.ListBox lboxRecent;
         private System.Windows.Forms.Label lblWorking;
+        private System.Windows.Forms.Button btnStopLoad;
     }
 }
 

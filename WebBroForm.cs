@@ -88,7 +88,6 @@ namespace WebLoader
         {
             string reDirLoc = e.Url.ToString();
             this.myBrowser.Visible = false;
-
             if (reDirLoc.Substring(0,6) == "about:")
             {
                 string baseAddr = myAddrBar.Text;
@@ -105,7 +104,6 @@ namespace WebLoader
                     myAddrBar.Text = reDirect;
                 }
             }
-
         }
 
         private void lboxRecent_Click(object sender, EventArgs e)
@@ -113,7 +111,22 @@ namespace WebLoader
             string goToPage = this.lboxRecent.SelectedItem.ToString();
             this.lboxRecent.Visible = false;
             myBrowser.Navigate(goToPage);
+        }
 
+
+        private void WebBroForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Escape)
+            {
+                this.lboxRecent.Visible = false;
+                this.Refresh();
+            }
+        }
+
+        private void btnStopLoad_Click(object sender, EventArgs e)
+        {
+            this.myBrowser.Stop();
+            this.myBrowser.Visible = true;
         }
     }
 }
