@@ -127,9 +127,11 @@
             this.Controls.Add(this.myAddrBar);
             this.Controls.Add(this.myBrowser);
             this.Controls.Add(this.lblWorking);
+            this.KeyPreview = true;
             this.Name = "WebBroForm";
             this.Text = "[Title Goes Here]";
             this.Load += new System.EventHandler(this.WebBroForm_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WebBroForm_KeyPress);
             this.ResumeLayout(false);
             this.PerformLayout();
 
