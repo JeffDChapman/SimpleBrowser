@@ -1,0 +1,9 @@
+c:\users\jchapman\documents\visual studio 2013\Projects\WebLoader\WebLoader\bin\Debug\WebLoader.exe.config
+c:\users\jchapman\documents\visual studio 2013\Projects\WebLoader\WebLoader\bin\Debug\WebLoader.exe
+c:\users\jchapman\documents\visual studio 2013\Projects\WebLoader\WebLoader\bin\Debug\WebLoader.pdb
+c:\users\jchapman\documents\visual studio 2013\Projects\WebLoader\WebLoader\obj\Debug\WebLoader.csprojResolveAssemblyReference.cache
+c:\users\jchapman\documents\visual studio 2013\Projects\WebLoader\WebLoader\obj\Debug\WebLoader.WebBroForm.resources
+c:\users\jchapman\documents\visual studio 2013\Projects\WebLoader\WebLoader\obj\Debug\WebLoader.Properties.Resources.resources
+c:\users\jchapman\documents\visual studio 2013\Projects\WebLoader\WebLoader\obj\Debug\WebLoader.csproj.GenerateResource.Cache
+c:\users\jchapman\documents\visual studio 2013\Projects\WebLoader\WebLoader\obj\Debug\WebLoader.exe
+c:\users\jchapman\documents\visual studio 2013\Projects\WebLoader\WebLoader\obj\Debug\WebLoader.pdb

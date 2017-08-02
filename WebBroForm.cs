@@ -17,6 +17,7 @@ namespace WebLoader
             InitializeComponent();
         }
 
+        private bool allowScripts = false;
         private bool tbSkipNav = true;
         private string homeLoc = "file:///C:/Users/jchapman/Desktop/Basics/Work%20Favorites.htm";
 
@@ -39,23 +40,27 @@ namespace WebLoader
             pageBodyMod = pageBodyMod.Replace("font", "fnot");
             pageBodyMod = pageBodyMod.Replace("FONT", "FNOT");
             pageBodyMod = pageBodyMod.Replace("widt", "wdit");
-            pageBodyMod = pageBodyMod.Replace("WIDT", "WDUT");
-            pageBodyMod = pageBodyMod.Replace("styl", "stly");
-            pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
-            pageBodyMod = pageBodyMod.Replace("scri", "srci");
-            pageBodyMod = pageBodyMod.Replace("SCRI", "SRCI");
-            pageBodyMod = pageBodyMod.Replace("Scri", "Srci");
-            pageBodyMod = pageBodyMod.Replace("java", "jav");
-            pageBodyMod = pageBodyMod.Replace("JAVA", "JAV");
-            pageBodyMod = pageBodyMod.Replace("func", "fucn");
-            pageBodyMod = pageBodyMod.Replace("FUNC", "FUCN");
-            pageBodyMod = pageBodyMod.Replace("over", "ovre");
-            pageBodyMod = pageBodyMod.Replace("OVER", "OVRE");
-            pageBodyMod = pageBodyMod.Replace("mouseout", "mouesout");
-            pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
-            pageBodyMod = pageBodyMod.Replace("widg", "wigd");
-            pageBodyMod = pageBodyMod.Replace("WIDG", "WIGD");
-            pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
+            pageBodyMod = pageBodyMod.Replace("WIDT", "WDIT");
+
+            if (allowScripts == false)
+            {
+                pageBodyMod = pageBodyMod.Replace("styl", "stly");
+                pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
+                pageBodyMod = pageBodyMod.Replace("scri", "srci");
+                pageBodyMod = pageBodyMod.Replace("SCRI", "SRCI");
+                pageBodyMod = pageBodyMod.Replace("Scri", "Srci");
+                pageBodyMod = pageBodyMod.Replace("java", "jav");
+                pageBodyMod = pageBodyMod.Replace("JAVA", "JAV");
+                pageBodyMod = pageBodyMod.Replace("func", "fucn");
+                pageBodyMod = pageBodyMod.Replace("FUNC", "FUCN");
+                pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
+                pageBodyMod = pageBodyMod.Replace("over", "ovre");
+                pageBodyMod = pageBodyMod.Replace("OVER", "OVRE");
+                pageBodyMod = pageBodyMod.Replace("mouseout", "mouesout");
+                pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
+                pageBodyMod = pageBodyMod.Replace("widg", "wigd");
+                pageBodyMod = pageBodyMod.Replace("WIDG", "WIGD");
+            }
             string pageBodyModshow = "<font face=\"verdana\">" + pageBodyMod;
 
             this.Text = myBrowser.DocumentTitle;
@@ -142,6 +147,18 @@ namespace WebLoader
         {
             this.myBrowser.Stop();
             this.myBrowser.Visible = true;
+        }
+
+        private void btnScriptOK_Click(object sender, EventArgs e)
+        {
+            if (allowScripts == true)
+                { allowScripts = false;
+                this.lblCheckedOn.Visible = false;
+                }
+            else
+                { allowScripts = true;
+                this.lblCheckedOn.Visible = true;
+                }
         }
     }
 }
