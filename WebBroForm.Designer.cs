@@ -40,6 +40,7 @@
             this.btnScriptOK = new System.Windows.Forms.Button();
             this.lblCheckedOn = new System.Windows.Forms.Label();
             this.btnHistory = new System.Windows.Forms.Button();
+
             this.SuspendLayout();
             // 
             // myBrowser
