@@ -39,6 +39,8 @@
             this.btnStopLoad = new System.Windows.Forms.Button();
             this.btnScriptOK = new System.Windows.Forms.Button();
             this.lblCheckedOn = new System.Windows.Forms.Label();
+            this.btnHistory = new System.Windows.Forms.Button();
+
             this.SuspendLayout();
             // 
             // myBrowser
@@ -63,6 +65,7 @@
             this.myAddrBar.Name = "myAddrBar";
             this.myAddrBar.Size = new System.Drawing.Size(660, 20);
             this.myAddrBar.TabIndex = 1;
+            this.myAddrBar.Click += new System.EventHandler(this.myAddrBar_Click);
             // 
             // btnHome
             // 
@@ -150,11 +153,24 @@
             this.lblCheckedOn.TabIndex = 9;
             this.lblCheckedOn.Visible = false;
             // 
+            // btnHistory
+            // 
+            this.btnHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnHistory.Location = new System.Drawing.Point(770, 1);
+            this.btnHistory.Name = "btnHistory";
+            this.btnHistory.Size = new System.Drawing.Size(20, 23);
+            this.btnHistory.TabIndex = 10;
+            this.btnHistory.Text = "H";
+            this.btnHistory.UseVisualStyleBackColor = true;
+            this.btnHistory.Visible = false;
+            this.btnHistory.Click += new System.EventHandler(this.btnHistory_Click);
+            // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(791, 638);
+            this.Controls.Add(this.btnHistory);
             this.Controls.Add(this.lboxRecent);
             this.Controls.Add(this.lblCheckedOn);
             this.Controls.Add(this.btnScriptOK);
@@ -187,6 +203,7 @@
         private System.Windows.Forms.Button btnStopLoad;
         private System.Windows.Forms.Button btnScriptOK;
         private System.Windows.Forms.Label lblCheckedOn;
+        private System.Windows.Forms.Button btnHistory;
     }
 }
 

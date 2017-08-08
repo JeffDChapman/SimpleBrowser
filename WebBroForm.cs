@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace WebLoader
 {
@@ -19,7 +20,9 @@ namespace WebLoader
 
         private bool allowScripts = false;
         private bool tbSkipNav = true;
+        private bool addrAllSelected = false;
         private string homeLoc = "file:///C:/Users/jchapman/Desktop/Basics/Work%20Favorites.htm";
+        private string histPath = @"wBhist.txt";
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
@@ -56,6 +59,7 @@ namespace WebLoader
                 pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
                 pageBodyMod = pageBodyMod.Replace("over", "ovre");
                 pageBodyMod = pageBodyMod.Replace("OVER", "OVRE");
+                pageBodyMod = pageBodyMod.Replace("target", "tagret"); 
                 pageBodyMod = pageBodyMod.Replace("mouseout", "mouesout");
                 pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
                 pageBodyMod = pageBodyMod.Replace("widg", "wigd");
@@ -69,6 +73,9 @@ namespace WebLoader
             this.myBrowser.Visible = true;
             myBrowser.Refresh();
             this.myAddrBar.Text = myBrowser.Url.ToString();
+            string appendText = this.myAddrBar.Text + Environment.NewLine;
+            File.AppendAllText(histPath, appendText);
+            addrAllSelected = false;
         }
 
 
@@ -87,6 +94,8 @@ namespace WebLoader
         private void btnBack_Click(object sender, EventArgs e)
         {
             this.lboxRecent.Visible = true;
+            this.btnHistory.Visible = true;
+            this.btnHistory.BringToFront();
         }
 
         private void myBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
@@ -107,6 +116,7 @@ namespace WebLoader
                 if (reDirect.IndexOf("blank") < 0) 
                 {
                     myAddrBar.Text = RemoveDupsInPath(reDirect);
+                    addrAllSelected = true;
                 }
             }
         }
@@ -129,6 +139,7 @@ namespace WebLoader
         private void lboxRecent_Click(object sender, EventArgs e)
         {
             string goToPage = this.lboxRecent.SelectedItem.ToString();
+            this.btnHistory.Visible = false;
             this.lboxRecent.Visible = false;
             myBrowser.Navigate(goToPage);
         }
@@ -138,6 +149,7 @@ namespace WebLoader
         {
             if (e.KeyChar == (char)Keys.Escape)
             {
+                this.btnHistory.Visible = false;
                 this.lboxRecent.Visible = false;
                 this.Refresh();
             }
@@ -159,6 +171,32 @@ namespace WebLoader
                 { allowScripts = true;
                 this.lblCheckedOn.Visible = true;
                 }
+        }
+
+        private void myAddrBar_Click(object sender, EventArgs e)
+        {
+            if (addrAllSelected == false)
+            {
+                this.myAddrBar.SelectAll();
+                addrAllSelected = true;
+            }
+        }
+
+        private void btnHistory_Click(object sender, EventArgs e)
+        {
+            this.btnHistory.Visible = false;
+            this.lboxRecent.Visible = false;
+            string histHead = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">";
+            histHead += "<HTML><HEAD>";
+            histHead += "<META HTTP-EQUIV=\"CONTENT-TYPE\" CONTENT=\"text/html; charset=windows-1252\">";
+            histHead += "<TITLE>History</TITLE></HEAD><BODY LANG=\"en-US\" DIR=\"LTR\" bgcolor =\"BLACK\">";
+            string histText = File.ReadAllText(histPath);
+            string histDocument = histHead + histText + "</BODY></HTML>";
+            myBrowser.Document.OpenNew(false);
+            myBrowser.Document.Write(histDocument);
+            this.myBrowser.Visible = true;
+            myBrowser.Refresh();
+            this.myAddrBar.Text = "History";
         }
     }
 }
