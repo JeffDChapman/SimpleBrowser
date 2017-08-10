@@ -40,7 +40,8 @@
             this.btnScriptOK = new System.Windows.Forms.Button();
             this.lblCheckedOn = new System.Windows.Forms.Label();
             this.btnHistory = new System.Windows.Forms.Button();
-
+            this.picLoading = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.SuspendLayout();
             // 
             // myBrowser
@@ -165,6 +166,19 @@
             this.btnHistory.Visible = false;
             this.btnHistory.Click += new System.EventHandler(this.btnHistory_Click);
             // 
+            // picLoading
+            // 
+            this.picLoading.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.picLoading.Image = ((System.Drawing.Image)(resources.GetObject("picLoading.Image")));
+            this.picLoading.Location = new System.Drawing.Point(300, 250);
+            this.picLoading.Name = "picLoading";
+            this.picLoading.Size = new System.Drawing.Size(200, 200);
+            this.picLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picLoading.TabIndex = 11;
+            this.picLoading.TabStop = false;
+            // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -181,11 +195,13 @@
             this.Controls.Add(this.myAddrBar);
             this.Controls.Add(this.myBrowser);
             this.Controls.Add(this.lblWorking);
+            this.Controls.Add(this.picLoading);
             this.KeyPreview = true;
             this.Name = "WebBroForm";
             this.Text = "[Title Goes Here]";
             this.Load += new System.EventHandler(this.WebBroForm_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WebBroForm_KeyPress);
+            ((System.ComponentModel.ISupportInitialize)(this.picLoading)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -204,6 +220,7 @@
         private System.Windows.Forms.Button btnScriptOK;
         private System.Windows.Forms.Label lblCheckedOn;
         private System.Windows.Forms.Button btnHistory;
+        private System.Windows.Forms.PictureBox picLoading;
     }
 }
 
