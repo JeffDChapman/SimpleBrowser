@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -191,12 +192,19 @@ namespace WebLoader
             histHead += "<META HTTP-EQUIV=\"CONTENT-TYPE\" CONTENT=\"text/html; charset=windows-1252\">";
             histHead += "<TITLE>History</TITLE></HEAD><BODY LANG=\"en-US\" DIR=\"LTR\" bgcolor =\"BLACK\">";
             string histText = File.ReadAllText(histPath);
-            string histDocument = histHead + histText + "</BODY></HTML>";
+            string histDocument = histHead + ConvertUrlsToLinks(histText) + "</BODY></HTML>";
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(histDocument);
             this.myBrowser.Visible = true;
             myBrowser.Refresh();
             this.myAddrBar.Text = "History";
+        }
+
+        private string ConvertUrlsToLinks(string msg)
+        {
+            string regex = @"((www\.|(http|https|ftp|news|file)+\:\/\/)[&#95;.a-z0-9-]+\.[a-z0-9\/&#95;:@=.+?,##%&~-]*[^.|\'|\# |!|\(|?|,| |>|<|;|\)])";
+            Regex r = new Regex(regex, RegexOptions.IgnoreCase);
+            return r.Replace(msg, "<a href=\"$1\" title=\"Click to open in a new window or tab\" target=\"&#95;blank\">$1</a>").Replace("href=\"www", "href=\"http://www");
         }
     }
 }
