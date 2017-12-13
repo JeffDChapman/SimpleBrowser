@@ -45,11 +45,17 @@ namespace WebLoader
             pageBodyMod = pageBodyMod.Replace("FONT", "FNOT");
             pageBodyMod = pageBodyMod.Replace("widt", "wdit");
             pageBodyMod = pageBodyMod.Replace("WIDT", "WDIT");
+            pageBodyMod = pageBodyMod.Replace("H1", "br/");
+            pageBodyMod = pageBodyMod.Replace("H2", "br/");
+            pageBodyMod = pageBodyMod.Replace("H3", "br/");
+            pageBodyMod = pageBodyMod.Replace("H4", "br/");
 
             if (allowScripts == false)
             {
                 pageBodyMod = RemoveScriptCode(pageBodyMod, "SCRIPT");
                 pageBodyMod = RemoveScriptCode(pageBodyMod, "script");
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "STYLE");
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "style"); 
                 pageBodyMod = pageBodyMod.Replace("styl", "stly");
                 pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
                 pageBodyMod = pageBodyMod.Replace("scri", "srci");
