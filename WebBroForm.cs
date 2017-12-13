@@ -48,6 +48,8 @@ namespace WebLoader
 
             if (allowScripts == false)
             {
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "SCRIPT");
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "script");
                 pageBodyMod = pageBodyMod.Replace("styl", "stly");
                 pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
                 pageBodyMod = pageBodyMod.Replace("scri", "srci");
@@ -79,6 +81,18 @@ namespace WebLoader
             addrAllSelected = false;
         }
 
+        private string RemoveScriptCode(string pageBodyMod, string checkWord)
+        {
+            string bodyReturn = pageBodyMod;
+            while (true)
+            {
+                int startScr = bodyReturn.IndexOf("<" + checkWord);
+                if (startScr < 0) { return bodyReturn; }
+                int endScr = bodyReturn.IndexOf("</" + checkWord);
+                bodyReturn = bodyReturn.Substring(0, startScr) + bodyReturn.Substring(endScr + 3 + checkWord.Length);
+            }
+            return bodyReturn;
+        }
 
         private void btnHome_Click(object sender, EventArgs e)
         {
