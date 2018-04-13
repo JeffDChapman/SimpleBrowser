@@ -136,7 +136,8 @@ namespace WebLoader
                 string reDirect = newBaseAddr + reDirLoc.Substring(6);
                 if (reDirect.IndexOf("blank") < 0) 
                 {
-                    myAddrBar.Text = RemoveDupsInPath(reDirect);
+                    reDirect = RemoveDupsInPath(reDirect);
+                    myAddrBar.Text = FixDoubleSlash(reDirect);
                     addrAllSelected = true;
                 }
             }
@@ -155,6 +156,17 @@ namespace WebLoader
                 priorSet = oneSet;
             }
             return (reDirectBack.Substring(0, reDirectBack.Length - 1));
+        }
+
+        private string FixDoubleSlash(string inRedirect)
+        {
+            int dSloc = inRedirect.IndexOf("//", 8);
+            if (dSloc < 0)
+                {return inRedirect;}
+            int fSloc = inRedirect.IndexOf("/", 8);
+            string reDirectBack = "";
+            reDirectBack = inRedirect.Substring(0, fSloc) + inRedirect.Substring(dSloc + 1);
+            return (reDirectBack);
         }
 
         private void lboxRecent_Click(object sender, EventArgs e)
