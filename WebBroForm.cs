@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -20,6 +21,8 @@ namespace WebLoader
 
         private bool allowScripts = false;
         private bool tbSkipNav = true;
+        private bool isSpying = false;
+        private Image spyImg;
         private bool addrAllSelected = false;
         private string homeLoc = "file:///C:/Users/jchapman/Desktop/Basics/Work%20Favorites.htm";
         private string histPath = @"wBhist.txt";
@@ -28,6 +31,8 @@ namespace WebLoader
         {
             this.btnBack.Enabled = false;
             this.myBrowser.Navigate(homeLoc);
+            spyImg = this.btnSpy.Image;
+            this.btnSpy.Image = null;
         }
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -40,13 +45,33 @@ namespace WebLoader
                 this.myBrowser.Visible = true;
                 return; 
             }
+
+            if (isSpying)
+            {
+                pageBodyMod = pageBodyMod.Replace("<", "[");
+                pageBodyMod = pageBodyMod.Replace(">", "]");
+                myBrowser.Document.OpenNew(false);
+                myBrowser.Document.Write(pageBodyMod);
+                this.myBrowser.Visible = true;
+                myBrowser.Refresh();
+                return;
+            }
+
             pageBodyMod = pageBodyMod.Replace("font", "fnot");
             pageBodyMod = pageBodyMod.Replace("FONT", "FNOT");
             pageBodyMod = pageBodyMod.Replace("widt", "wdit");
             pageBodyMod = pageBodyMod.Replace("WIDT", "WDIT");
+            pageBodyMod = pageBodyMod.Replace("H1", "br/");
+            pageBodyMod = pageBodyMod.Replace("H2", "br/");
+            pageBodyMod = pageBodyMod.Replace("H3", "br/");
+            pageBodyMod = pageBodyMod.Replace("H4", "br/");
 
             if (allowScripts == false)
             {
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "SCRIPT");
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "script");
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "STYLE");
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "style"); 
                 pageBodyMod = pageBodyMod.Replace("styl", "stly");
                 pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
                 pageBodyMod = pageBodyMod.Replace("scri", "srci");
@@ -78,9 +103,23 @@ namespace WebLoader
             addrAllSelected = false;
         }
 
+        private string RemoveScriptCode(string pageBodyMod, string checkWord)
+        {
+            string bodyReturn = pageBodyMod;
+            while (true)
+            {
+                int startScr = bodyReturn.IndexOf("<" + checkWord);
+                if (startScr < 0) { return bodyReturn; }
+                int endScr = bodyReturn.IndexOf("</" + checkWord);
+                bodyReturn = bodyReturn.Substring(0, startScr) + bodyReturn.Substring(endScr + 3 + checkWord.Length);
+            }
+            return bodyReturn;
+        }
 
         private void btnHome_Click(object sender, EventArgs e)
         {
+            isSpying = false;
+            this.btnSpy.Image = null;
             this.myBrowser.Navigate(homeLoc);
         }
 
@@ -88,6 +127,8 @@ namespace WebLoader
         {
             this.btnBack.Enabled = true;
             this.lboxRecent.Items.Insert(0, myAddrBar.Text);
+            isSpying = false;
+            this.btnSpy.Image = null;
             myBrowser.Navigate(myAddrBar.Text);
         }
 
@@ -115,7 +156,8 @@ namespace WebLoader
                 string reDirect = newBaseAddr + reDirLoc.Substring(6);
                 if (reDirect.IndexOf("blank") < 0) 
                 {
-                    myAddrBar.Text = RemoveDupsInPath(reDirect);
+                    reDirect = RemoveDupsInPath(reDirect);
+                    myAddrBar.Text = FixDoubleSlash(reDirect);
                     addrAllSelected = true;
                 }
             }
@@ -134,6 +176,17 @@ namespace WebLoader
                 priorSet = oneSet;
             }
             return (reDirectBack.Substring(0, reDirectBack.Length - 1));
+        }
+
+        private string FixDoubleSlash(string inRedirect)
+        {
+            int dSloc = inRedirect.IndexOf("//", 8);
+            if (dSloc < 0)
+                {return inRedirect;}
+            int fSloc = inRedirect.IndexOf("/", 8);
+            string reDirectBack = "";
+            reDirectBack = inRedirect.Substring(0, fSloc) + inRedirect.Substring(dSloc + 1);
+            return (reDirectBack);
         }
 
         private void lboxRecent_Click(object sender, EventArgs e)
@@ -191,12 +244,27 @@ namespace WebLoader
             histHead += "<META HTTP-EQUIV=\"CONTENT-TYPE\" CONTENT=\"text/html; charset=windows-1252\">";
             histHead += "<TITLE>History</TITLE></HEAD><BODY LANG=\"en-US\" DIR=\"LTR\" bgcolor =\"BLACK\">";
             string histText = File.ReadAllText(histPath);
-            string histDocument = histHead + histText + "</BODY></HTML>";
+            string histDocument = histHead + ConvertUrlsToLinks(histText) + "</BODY></HTML>";
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(histDocument);
             this.myBrowser.Visible = true;
             myBrowser.Refresh();
             this.myAddrBar.Text = "History";
+        }
+
+        private string ConvertUrlsToLinks(string msg)
+        {
+            string regex = @"((www\.|(http|https|ftp|news|file)+\:\/\/)[&#95;.a-z0-9-]+\.[a-z0-9\/&#95;:@=.+?,##%&~-]*[^.|\'|\# |!|\(|?|,| |>|<|;|\)])";
+            Regex r = new Regex(regex, RegexOptions.IgnoreCase);
+            return r.Replace(msg, "<a href=\"$1\" title=\"Click to open in a new window or tab\" target=\"&#95;blank\">$1</a>").Replace("href=\"www", "href=\"http://www");
+        }
+
+        private void btnSpy_Click(object sender, EventArgs e)
+        {
+            this.btnSpy.Image = spyImg;
+            isSpying = true;
+            string goToPage = this.myAddrBar.Text;
+            myBrowser.Navigate(goToPage);
         }
     }
 }
