@@ -266,5 +266,6 @@ namespace WebLoader
             string goToPage = this.myAddrBar.Text;
             myBrowser.Navigate(goToPage);
         }
+
     }
 }
