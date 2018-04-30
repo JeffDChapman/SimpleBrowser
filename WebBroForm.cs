@@ -21,6 +21,8 @@ namespace WebLoader
 
         private bool allowScripts = false;
         private bool tbSkipNav = true;
+        private bool isSpying = false;
+        private Image spyImg;
         private bool addrAllSelected = false;
         private string homeLoc = "file:///C:/Users/jchapman/Desktop/Basics/Work%20Favorites.htm";
         private string histPath = @"wBhist.txt";
@@ -29,6 +31,8 @@ namespace WebLoader
         {
             this.btnBack.Enabled = false;
             this.myBrowser.Navigate(homeLoc);
+            spyImg = this.btnSpy.Image;
+            this.btnSpy.Image = null;
         }
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -41,6 +45,18 @@ namespace WebLoader
                 this.myBrowser.Visible = true;
                 return; 
             }
+
+            if (isSpying)
+            {
+                pageBodyMod = pageBodyMod.Replace("<", "[");
+                pageBodyMod = pageBodyMod.Replace(">", "]");
+                myBrowser.Document.OpenNew(false);
+                myBrowser.Document.Write(pageBodyMod);
+                this.myBrowser.Visible = true;
+                myBrowser.Refresh();
+                return;
+            }
+
             pageBodyMod = pageBodyMod.Replace("font", "fnot");
             pageBodyMod = pageBodyMod.Replace("FONT", "FNOT");
             pageBodyMod = pageBodyMod.Replace("widt", "wdit");
@@ -102,6 +118,8 @@ namespace WebLoader
 
         private void btnHome_Click(object sender, EventArgs e)
         {
+            isSpying = false;
+            this.btnSpy.Image = null;
             this.myBrowser.Navigate(homeLoc);
         }
 
@@ -109,6 +127,8 @@ namespace WebLoader
         {
             this.btnBack.Enabled = true;
             this.lboxRecent.Items.Insert(0, myAddrBar.Text);
+            isSpying = false;
+            this.btnSpy.Image = null;
             myBrowser.Navigate(myAddrBar.Text);
         }
 
@@ -238,5 +258,14 @@ namespace WebLoader
             Regex r = new Regex(regex, RegexOptions.IgnoreCase);
             return r.Replace(msg, "<a href=\"$1\" title=\"Click to open in a new window or tab\" target=\"&#95;blank\">$1</a>").Replace("href=\"www", "href=\"http://www");
         }
+
+        private void btnSpy_Click(object sender, EventArgs e)
+        {
+            this.btnSpy.Image = spyImg;
+            isSpying = true;
+            string goToPage = this.myAddrBar.Text;
+            myBrowser.Navigate(goToPage);
+        }
+
     }
 }
