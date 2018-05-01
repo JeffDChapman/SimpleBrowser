@@ -271,8 +271,7 @@ namespace WebLoader
 
             PoshPageBrackets();
             myBrowser.Refresh();
- 
-        }
+         }
 
         private void PoshPageBrackets()
         {
