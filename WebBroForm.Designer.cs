@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebBroForm));
             this.myBrowser = new System.Windows.Forms.WebBrowser();
             this.myAddrBar = new System.Windows.Forms.TextBox();
@@ -42,6 +43,7 @@
             this.btnHistory = new System.Windows.Forms.Button();
             this.picLoading = new System.Windows.Forms.PictureBox();
             this.btnSpy = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,6 +59,7 @@
             this.myBrowser.Size = new System.Drawing.Size(799, 613);
             this.myBrowser.TabIndex = 0;
             this.myBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.myBrowser_DocumentCompleted);
+            this.myBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.myBrowser_Navigated);
             this.myBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.myBrowser_Navigating);
             // 
             // myAddrBar
@@ -76,6 +79,7 @@
             this.btnHome.Name = "btnHome";
             this.btnHome.Size = new System.Drawing.Size(28, 20);
             this.btnHome.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.btnHome, "Home");
             this.btnHome.UseVisualStyleBackColor = true;
             this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
             // 
@@ -87,6 +91,7 @@
             this.btnGoTo.Name = "btnGoTo";
             this.btnGoTo.Size = new System.Drawing.Size(28, 20);
             this.btnGoTo.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.btnGoTo, "Go");
             this.btnGoTo.UseVisualStyleBackColor = true;
             this.btnGoTo.Click += new System.EventHandler(this.btnGoTo_Click);
             // 
@@ -98,6 +103,7 @@
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(28, 20);
             this.btnBack.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.btnBack, "Recent");
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
             // 
@@ -130,6 +136,7 @@
             this.btnStopLoad.Name = "btnStopLoad";
             this.btnStopLoad.Size = new System.Drawing.Size(28, 20);
             this.btnStopLoad.TabIndex = 7;
+            this.toolTip1.SetToolTip(this.btnStopLoad, "Stop Loading");
             this.btnStopLoad.UseVisualStyleBackColor = true;
             this.btnStopLoad.Click += new System.EventHandler(this.btnStopLoad_Click);
             // 
@@ -142,6 +149,7 @@
             this.btnScriptOK.Name = "btnScriptOK";
             this.btnScriptOK.Size = new System.Drawing.Size(28, 20);
             this.btnScriptOK.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.btnScriptOK, "Allow Scripts");
             this.btnScriptOK.UseVisualStyleBackColor = true;
             this.btnScriptOK.Click += new System.EventHandler(this.btnScriptOK_Click);
             // 
@@ -163,6 +171,7 @@
             this.btnHistory.Size = new System.Drawing.Size(20, 23);
             this.btnHistory.TabIndex = 10;
             this.btnHistory.Text = "H";
+            this.toolTip1.SetToolTip(this.btnHistory, "All History");
             this.btnHistory.UseVisualStyleBackColor = true;
             this.btnHistory.Visible = false;
             this.btnHistory.Click += new System.EventHandler(this.btnHistory_Click);
@@ -191,8 +200,15 @@
             this.btnSpy.Name = "btnSpy";
             this.btnSpy.Size = new System.Drawing.Size(24, 18);
             this.btnSpy.TabIndex = 12;
+            this.toolTip1.SetToolTip(this.btnSpy, "Spy Code");
             this.btnSpy.UseVisualStyleBackColor = false;
             this.btnSpy.Click += new System.EventHandler(this.btnSpy_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 5000;
+            this.toolTip1.InitialDelay = 1000;
+            this.toolTip1.ReshowDelay = 100;
             // 
             // WebBroForm
             // 
@@ -200,6 +216,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(791, 638);
             this.Controls.Add(this.btnHistory);
+            this.Controls.Add(this.lboxRecent);
             this.Controls.Add(this.myBrowser);
             this.Controls.Add(this.btnSpy);
             this.Controls.Add(this.lblCheckedOn);
@@ -211,7 +228,6 @@
             this.Controls.Add(this.myAddrBar);
             this.Controls.Add(this.lblWorking);
             this.Controls.Add(this.picLoading);
-            this.Controls.Add(this.lboxRecent);
             this.KeyPreview = true;
             this.Name = "WebBroForm";
             this.Text = "[Title Goes Here]";
@@ -238,6 +254,7 @@
         private System.Windows.Forms.Button btnHistory;
         private System.Windows.Forms.PictureBox picLoading;
         private System.Windows.Forms.Button btnSpy;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

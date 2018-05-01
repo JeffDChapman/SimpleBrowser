@@ -37,6 +37,9 @@ namespace WebLoader
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            if (isSpying)
+                { return; }
+
             HtmlDocument fixDoc = myBrowser.Document;
             string pageBodyMod = fixDoc.Body.InnerHtml.ToString();
             string StopRecur = pageBodyMod.Substring(1, 4).ToLower();
@@ -44,17 +47,6 @@ namespace WebLoader
             {
                 this.myBrowser.Visible = true;
                 return; 
-            }
-
-            if (isSpying)
-            {
-                pageBodyMod = pageBodyMod.Replace("<", "[");
-                pageBodyMod = pageBodyMod.Replace(">", "]");
-                myBrowser.Document.OpenNew(false);
-                myBrowser.Document.Write(pageBodyMod);
-                this.myBrowser.Visible = true;
-                myBrowser.Refresh();
-                return;
             }
 
             pageBodyMod = pageBodyMod.Replace("font", "fnot");
@@ -211,6 +203,11 @@ namespace WebLoader
         private void btnStopLoad_Click(object sender, EventArgs e)
         {
             this.myBrowser.Stop();
+            if (isSpying)
+            {
+                PoshPageBrackets();
+                myBrowser.Refresh();
+            }
             this.myBrowser.Visible = true;
         }
 
@@ -267,5 +264,25 @@ namespace WebLoader
             myBrowser.Navigate(goToPage);
         }
 
+        private void myBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
+        {
+            if (!isSpying)
+                { return; }
+
+            PoshPageBrackets();
+            myBrowser.Refresh();
+ 
+        }
+
+        private void PoshPageBrackets()
+        {
+            HtmlDocument fixDoc = myBrowser.Document;
+            string pageBodyMod = fixDoc.Body.InnerHtml.ToString();
+            pageBodyMod = pageBodyMod.Replace("<", "[");
+            pageBodyMod = pageBodyMod.Replace(">", "]");
+            myBrowser.Document.OpenNew(false);
+            myBrowser.Document.Write(pageBodyMod);
+            this.myBrowser.Visible = true;
+        }
     }
 }
