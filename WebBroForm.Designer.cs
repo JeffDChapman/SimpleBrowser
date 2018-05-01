@@ -57,6 +57,7 @@
             this.myBrowser.Size = new System.Drawing.Size(799, 613);
             this.myBrowser.TabIndex = 0;
             this.myBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.myBrowser_DocumentCompleted);
+            this.myBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.myBrowser_Navigated);
             this.myBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.myBrowser_Navigating);
             // 
             // myAddrBar
@@ -200,6 +201,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(791, 638);
             this.Controls.Add(this.btnHistory);
+            this.Controls.Add(this.lboxRecent);
             this.Controls.Add(this.myBrowser);
             this.Controls.Add(this.btnSpy);
             this.Controls.Add(this.lblCheckedOn);
@@ -211,7 +213,6 @@
             this.Controls.Add(this.myAddrBar);
             this.Controls.Add(this.lblWorking);
             this.Controls.Add(this.picLoading);
-            this.Controls.Add(this.lboxRecent);
             this.KeyPreview = true;
             this.Name = "WebBroForm";
             this.Text = "[Title Goes Here]";
