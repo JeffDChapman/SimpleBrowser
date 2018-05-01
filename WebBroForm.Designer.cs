@@ -41,6 +41,7 @@
             this.lblCheckedOn = new System.Windows.Forms.Label();
             this.btnHistory = new System.Windows.Forms.Button();
             this.picLoading = new System.Windows.Forms.PictureBox();
+            this.btnSpy = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,6 +57,7 @@
             this.myBrowser.Size = new System.Drawing.Size(799, 613);
             this.myBrowser.TabIndex = 0;
             this.myBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.myBrowser_DocumentCompleted);
+            this.myBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.myBrowser_Navigated);
             this.myBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.myBrowser_Navigating);
             // 
             // myAddrBar
@@ -179,6 +181,20 @@
             this.picLoading.TabIndex = 11;
             this.picLoading.TabStop = false;
             // 
+            // btnSpy
+            // 
+            this.btnSpy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSpy.BackColor = System.Drawing.Color.LightCoral;
+            this.btnSpy.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Blue;
+            this.btnSpy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSpy.Image = ((System.Drawing.Image)(resources.GetObject("btnSpy.Image")));
+            this.btnSpy.Location = new System.Drawing.Point(688, 1);
+            this.btnSpy.Name = "btnSpy";
+            this.btnSpy.Size = new System.Drawing.Size(24, 18);
+            this.btnSpy.TabIndex = 12;
+            this.btnSpy.UseVisualStyleBackColor = false;
+            this.btnSpy.Click += new System.EventHandler(this.btnSpy_Click);
+            // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -186,6 +202,8 @@
             this.ClientSize = new System.Drawing.Size(791, 638);
             this.Controls.Add(this.btnHistory);
             this.Controls.Add(this.lboxRecent);
+            this.Controls.Add(this.myBrowser);
+            this.Controls.Add(this.btnSpy);
             this.Controls.Add(this.lblCheckedOn);
             this.Controls.Add(this.btnScriptOK);
             this.Controls.Add(this.btnStopLoad);
@@ -193,7 +211,6 @@
             this.Controls.Add(this.btnGoTo);
             this.Controls.Add(this.btnHome);
             this.Controls.Add(this.myAddrBar);
-            this.Controls.Add(this.myBrowser);
             this.Controls.Add(this.lblWorking);
             this.Controls.Add(this.picLoading);
             this.KeyPreview = true;
@@ -221,6 +238,7 @@
         private System.Windows.Forms.Label lblCheckedOn;
         private System.Windows.Forms.Button btnHistory;
         private System.Windows.Forms.PictureBox picLoading;
+        private System.Windows.Forms.Button btnSpy;
     }
 }
 
