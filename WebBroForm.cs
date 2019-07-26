@@ -22,9 +22,11 @@ namespace WebLoader
         private bool allowScripts = false;
         private bool tbSkipNav = true;
         private bool isSpying = false;
+        private bool stopClick = false;
         private Image spyImg;
         private bool addrAllSelected = false;
-        private string homeLoc = "file:///C:/Users/jchapman/Desktop/Basics/Work%20Favorites.htm";
+        private int navLoopCount = 0;
+        private string homeLoc = "file:///C:/Users/JeffC/Desktop/Stuff/Bookmarks.htm";
         private string histPath = @"wBhist.txt";
 
         private void WebBroForm_Load(object sender, EventArgs e)
@@ -33,6 +35,8 @@ namespace WebLoader
             this.myBrowser.Navigate(homeLoc);
             spyImg = this.btnSpy.Image;
             this.btnSpy.Image = null;
+            this.Top = 15;
+            this.Height = 700;
         }
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -40,13 +44,32 @@ namespace WebLoader
             if (isSpying)
                 { return; }
 
+            CleanHTML();
+        }
+
+        private void CleanHTML()
+        {
+            this.lblStatus.Text = "Code Replacement in process...";
+            this.lblStatus.Refresh();
             HtmlDocument fixDoc = myBrowser.Document;
+            if ((fixDoc.Body == null) || (fixDoc.Body.InnerHtml == null))
+            {
+                this.lblStatus.Text = "Empty Document";
+                this.lblStatus.Refresh();
+                return;
+            }
             string pageBodyMod = fixDoc.Body.InnerHtml.ToString();
+
+            pageBodyMod = RemoveScriptCode(pageBodyMod, "HEAD");
+            pageBodyMod = RemoveScriptCode(pageBodyMod, "head");
+
             string StopRecur = pageBodyMod.Substring(1, 4).ToLower();
             if (StopRecur == "font")
             {
                 this.myBrowser.Visible = true;
-                return; 
+                this.lblStatus.Text = "Ready";
+                this.Refresh();
+                return;
             }
 
             pageBodyMod = pageBodyMod.Replace("font", "fnot");
@@ -60,10 +83,14 @@ namespace WebLoader
 
             if (allowScripts == false)
             {
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "HEAD");
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "head");
                 pageBodyMod = RemoveScriptCode(pageBodyMod, "SCRIPT");
                 pageBodyMod = RemoveScriptCode(pageBodyMod, "script");
                 pageBodyMod = RemoveScriptCode(pageBodyMod, "STYLE");
-                pageBodyMod = RemoveScriptCode(pageBodyMod, "style"); 
+                pageBodyMod = RemoveScriptCode(pageBodyMod, "style");
+                pageBodyMod = pageBodyMod.Replace("REDIR", "REDRI");
+                pageBodyMod = pageBodyMod.Replace("redir", "redri");
                 pageBodyMod = pageBodyMod.Replace("styl", "stly");
                 pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
                 pageBodyMod = pageBodyMod.Replace("scri", "srci");
@@ -76,7 +103,7 @@ namespace WebLoader
                 pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
                 pageBodyMod = pageBodyMod.Replace("over", "ovre");
                 pageBodyMod = pageBodyMod.Replace("OVER", "OVRE");
-                pageBodyMod = pageBodyMod.Replace("target", "tagret"); 
+                pageBodyMod = pageBodyMod.Replace("target", "tagret");
                 pageBodyMod = pageBodyMod.Replace("mouseout", "mouesout");
                 pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
                 pageBodyMod = pageBodyMod.Replace("widg", "wigd");
@@ -84,12 +111,17 @@ namespace WebLoader
             }
             string pageBodyModshow = "<font face=\"verdana\">" + pageBodyMod;
 
+            stopClick = false;
             this.Text = myBrowser.DocumentTitle;
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(pageBodyModshow);
+
             this.myBrowser.Visible = true;
+            this.lblStatus.Text = "Ready";
+            this.Refresh();
             myBrowser.Refresh();
-            this.myAddrBar.Text = myBrowser.Url.ToString();
+            if (myBrowser.Url != null)
+            { this.myAddrBar.Text = myBrowser.Url.ToString(); }
             string appendText = this.myAddrBar.Text + Environment.NewLine;
             File.AppendAllText(histPath, appendText);
             addrAllSelected = false;
@@ -112,14 +144,18 @@ namespace WebLoader
         {
             isSpying = false;
             this.btnSpy.Image = null;
+            stopClick = false;
+            navLoopCount = 0;
             this.myBrowser.Navigate(homeLoc);
         }
 
         private void btnGoTo_Click(object sender, EventArgs e)
         {
             this.btnBack.Enabled = true;
+            stopClick = false;
             this.lboxRecent.Items.Insert(0, myAddrBar.Text);
             isSpying = false;
+            navLoopCount = 0;
             this.btnSpy.Image = null;
             myBrowser.Navigate(myAddrBar.Text);
         }
@@ -133,6 +169,18 @@ namespace WebLoader
 
         private void myBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
+            if (stopClick == true) { return; }
+            this.lblStatus.Text = "Navigating...";
+            this.Refresh();
+            navLoopCount++;
+            if (navLoopCount > 10)
+            {
+                this.lblStatus.Text = "Loop Count Exceeded...";
+                PoshPageBrackets();
+                myBrowser.Refresh();
+                navLoopCount = 0;
+                return;
+            }
             string reDirLoc = e.Url.ToString();
             this.myBrowser.Visible = false;
             if (reDirLoc.Substring(0,6) == "about:")
@@ -186,6 +234,7 @@ namespace WebLoader
             string goToPage = this.lboxRecent.SelectedItem.ToString();
             this.btnHistory.Visible = false;
             this.lboxRecent.Visible = false;
+            navLoopCount = 0;
             myBrowser.Navigate(goToPage);
         }
 
@@ -202,12 +251,28 @@ namespace WebLoader
 
         private void btnStopLoad_Click(object sender, EventArgs e)
         {
+            if (stopClick == true)
+            {
+                PoshPageBrackets();
+                myBrowser.Refresh();
+                stopClick = false;
+                return;
+            }
+            stopClick = true;
+            this.lblStatus.Text = "Interrupting...";
+            this.Refresh();
             this.myBrowser.Stop();
+           
             if (isSpying)
             {
                 PoshPageBrackets();
                 myBrowser.Refresh();
+                stopClick = false;
             }
+            else 
+                {
+                    myBrowser_DocumentCompleted(this, null); 
+                }
             this.myBrowser.Visible = true;
         }
 
@@ -266,16 +331,31 @@ namespace WebLoader
 
         private void myBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
+            this.lblStatus.Text = "Navigation Done";
+            this.lblStatus.Refresh();
+
+            if (stopClick)
+            {
+                CleanHTML();
+                return;
+            }
+
             if (!isSpying)
                 { return; }
 
             PoshPageBrackets();
             myBrowser.Refresh();
-
+         }
 
         private void PoshPageBrackets()
         {
             HtmlDocument fixDoc = myBrowser.Document;
+            if ((fixDoc.Body == null) || (fixDoc.Body.InnerHtml == null))
+            {
+                this.lblStatus.Text = "Empty Document";
+                this.lblStatus.Refresh();
+                return;
+            }
             string pageBodyMod = fixDoc.Body.InnerHtml.ToString();
             pageBodyMod = pageBodyMod.Replace("<", "[");
             pageBodyMod = pageBodyMod.Replace(">", "]");
