@@ -28,10 +28,15 @@ namespace WebLoader
         private int navLoopCount = 0;
         private string homeLoc = "file:///C:/Users/JeffC/Desktop/Stuff/Bookmarks.htm";
         private string histPath = @"wBhist.txt";
+        public string chosenFont = "verdana";
+        public string chosenSize = "12";
+        private bool clickedOnUrl;
+        public bool stopPopUps = false;
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
             this.btnBack.Enabled = false;
+            clickedOnUrl = false;
             this.myBrowser.Navigate(homeLoc);
             spyImg = this.btnSpy.Image;
             this.btnSpy.Image = null;
@@ -69,6 +74,8 @@ namespace WebLoader
                 this.myBrowser.Visible = true;
                 this.lblStatus.Text = "Ready";
                 this.Refresh();
+                clickedOnUrl = true;
+                tmrPopUps.Enabled = true;
                 return;
             }
 
@@ -82,35 +89,10 @@ namespace WebLoader
             pageBodyMod = pageBodyMod.Replace("H4", "br/");
 
             if (allowScripts == false)
-            {
-                pageBodyMod = RemoveScriptCode(pageBodyMod, "HEAD");
-                pageBodyMod = RemoveScriptCode(pageBodyMod, "head");
-                pageBodyMod = RemoveScriptCode(pageBodyMod, "SCRIPT");
-                pageBodyMod = RemoveScriptCode(pageBodyMod, "script");
-                pageBodyMod = RemoveScriptCode(pageBodyMod, "STYLE");
-                pageBodyMod = RemoveScriptCode(pageBodyMod, "style");
-                pageBodyMod = pageBodyMod.Replace("REDIR", "REDRI");
-                pageBodyMod = pageBodyMod.Replace("redir", "redri");
-                pageBodyMod = pageBodyMod.Replace("styl", "stly");
-                pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
-                pageBodyMod = pageBodyMod.Replace("scri", "srci");
-                pageBodyMod = pageBodyMod.Replace("SCRI", "SRCI");
-                pageBodyMod = pageBodyMod.Replace("Scri", "Srci");
-                pageBodyMod = pageBodyMod.Replace("java", "jav");
-                pageBodyMod = pageBodyMod.Replace("JAVA", "JAV");
-                pageBodyMod = pageBodyMod.Replace("func", "fucn");
-                pageBodyMod = pageBodyMod.Replace("FUNC", "FUCN");
-                pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
-                pageBodyMod = pageBodyMod.Replace("over", "ovre");
-                pageBodyMod = pageBodyMod.Replace("OVER", "OVRE");
-                pageBodyMod = pageBodyMod.Replace("target", "tagret");
-                pageBodyMod = pageBodyMod.Replace("mouseout", "mouesout");
-                pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
-                pageBodyMod = pageBodyMod.Replace("widg", "wigd");
-                pageBodyMod = pageBodyMod.Replace("WIDG", "WIGD");
-            }
-            string pageBodyModshow = "<font face=\"verdana\">" + pageBodyMod;
-
+                pageBodyMod = ScriptReplacements(pageBodyMod);
+            int webSize = (int)Convert.ToSingle(chosenSize) / 4;
+            string pageBodyModshow = "<!DOCTYPE html>";
+            pageBodyModshow += "<font size=\"" + webSize + "\" face=\"" + chosenFont + "\"/>" + pageBodyMod;
             stopClick = false;
             this.Text = myBrowser.DocumentTitle;
             myBrowser.Document.OpenNew(false);
@@ -120,11 +102,46 @@ namespace WebLoader
             this.lblStatus.Text = "Ready";
             this.Refresh();
             myBrowser.Refresh();
+            clickedOnUrl = true;
+            tmrPopUps.Enabled = true;
             if (myBrowser.Url != null)
-            { this.myAddrBar.Text = myBrowser.Url.ToString(); }
-            string appendText = this.myAddrBar.Text + Environment.NewLine;
-            File.AppendAllText(histPath, appendText);
+                { this.myAddrBar.Text = myBrowser.Url.ToString(); }
+            if (this.myAddrBar.Text.Substring(0, 5) != "file:")
+            {
+                string appendText = this.myAddrBar.Text + Environment.NewLine;
+                File.AppendAllText(histPath, appendText);
+            }
             addrAllSelected = false;
+        }
+
+        private string ScriptReplacements(string pageBodyMod)
+        {
+            pageBodyMod = RemoveScriptCode(pageBodyMod, "HEAD");
+            pageBodyMod = RemoveScriptCode(pageBodyMod, "head");
+            pageBodyMod = RemoveScriptCode(pageBodyMod, "SCRIPT");
+            pageBodyMod = RemoveScriptCode(pageBodyMod, "script");
+            pageBodyMod = RemoveScriptCode(pageBodyMod, "STYLE");
+            pageBodyMod = RemoveScriptCode(pageBodyMod, "style");
+            pageBodyMod = pageBodyMod.Replace("REDIR", "REDRI");
+            pageBodyMod = pageBodyMod.Replace("redir", "redri");
+            pageBodyMod = pageBodyMod.Replace("styl", "stly");
+            pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
+            pageBodyMod = pageBodyMod.Replace("scri", "srci");
+            pageBodyMod = pageBodyMod.Replace("SCRI", "SRCI");
+            pageBodyMod = pageBodyMod.Replace("Scri", "Srci");
+            pageBodyMod = pageBodyMod.Replace("java", "jav");
+            pageBodyMod = pageBodyMod.Replace("JAVA", "JAV");
+            pageBodyMod = pageBodyMod.Replace("func", "fucn");
+            pageBodyMod = pageBodyMod.Replace("FUNC", "FUCN");
+            pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
+            pageBodyMod = pageBodyMod.Replace("over", "ovre");
+            pageBodyMod = pageBodyMod.Replace("OVER", "OVRE");
+            pageBodyMod = pageBodyMod.Replace("target", "tagret");
+            pageBodyMod = pageBodyMod.Replace("mouseout", "mouesout");
+            pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
+            pageBodyMod = pageBodyMod.Replace("widg", "wigd");
+            pageBodyMod = pageBodyMod.Replace("WIDG", "WIGD");
+            return pageBodyMod;
         }
 
         private string RemoveScriptCode(string pageBodyMod, string checkWord)
@@ -146,17 +163,20 @@ namespace WebLoader
             this.btnSpy.Image = null;
             stopClick = false;
             navLoopCount = 0;
+            clickedOnUrl = false;
             this.myBrowser.Navigate(homeLoc);
         }
 
         private void btnGoTo_Click(object sender, EventArgs e)
         {
+            stopPopUps = true;
             this.btnBack.Enabled = true;
             stopClick = false;
             this.lboxRecent.Items.Insert(0, myAddrBar.Text);
             isSpying = false;
             navLoopCount = 0;
             this.btnSpy.Image = null;
+            clickedOnUrl = false;
             myBrowser.Navigate(myAddrBar.Text);
         }
 
@@ -170,7 +190,26 @@ namespace WebLoader
         private void myBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             if (stopClick == true) { return; }
+            string reDirLoc = e.Url.ToString();
+            if (reDirLoc == "about:blank") { return; }
+
+            if ((clickedOnUrl) && (Control.ModifierKeys != Keys.Shift)
+                && (Control.ModifierKeys != Keys.Control))
+            {
+                if (stopPopUps)
+                { 
+                    e.Cancel = true;
+                    return;
+                }
+                string reDirect = FixAboutUrl(reDirLoc);
+                reDirLoc = FixDoubleSlash(reDirect);
+                StartnewForm(reDirLoc);
+                e.Cancel = true;
+                return;
+            }
+
             this.lblStatus.Text = "Navigating...";
+            stopPopUps = true;
             this.Refresh();
             navLoopCount++;
             if (navLoopCount > 10)
@@ -181,9 +220,16 @@ namespace WebLoader
                 navLoopCount = 0;
                 return;
             }
-            string reDirLoc = e.Url.ToString();
+          
             this.myBrowser.Visible = false;
-            if (reDirLoc.Substring(0,6) == "about:")
+            string newRouteTo = FixAboutUrl(reDirLoc);
+            myAddrBar.Text = FixDoubleSlash(newRouteTo);
+        }
+
+        private string FixAboutUrl(string reDirLoc)
+        {
+            string reDirect = reDirLoc;
+            if (reDirLoc.Substring(0, 6) == "about:")
             {
                 string baseAddr = myAddrBar.Text;
                 int lastSlashLoc = baseAddr.LastIndexOf("/");
@@ -193,14 +239,31 @@ namespace WebLoader
                     lastSlashLoc = shorterBase.LastIndexOf("/") - 1;
                 }
                 string newBaseAddr = baseAddr.Substring(0, lastSlashLoc + 1);
-                string reDirect = newBaseAddr + reDirLoc.Substring(6);
-                if (reDirect.IndexOf("blank") < 0) 
+                reDirect = newBaseAddr + reDirLoc.Substring(6);
+                if (reDirect.IndexOf("blank") < 0)
                 {
                     reDirect = RemoveDupsInPath(reDirect);
-                    myAddrBar.Text = FixDoubleSlash(reDirect);
+                    if (!clickedOnUrl)
+                    {
+                        myAddrBar.Text = FixDoubleSlash(reDirect);
+                    }
                     addrAllSelected = true;
                 }
             }
+            return reDirect;
+        }
+
+        private void StartnewForm(string reDirLoc)
+        {
+            WebBroForm anotherForm = new WebBroForm();
+            anotherForm.Show();
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(500);
+            anotherForm.myAddrBar.Text = reDirLoc;
+            anotherForm.chosenFont = chosenFont;
+            anotherForm.chosenSize = chosenSize;
+            anotherForm.stopPopUps = true;
+            tmrPopUps.Enabled = true;
         }
 
         private string RemoveDupsInPath(string inRedirect)
@@ -235,9 +298,9 @@ namespace WebLoader
             this.btnHistory.Visible = false;
             this.lboxRecent.Visible = false;
             navLoopCount = 0;
+            clickedOnUrl = false;
             myBrowser.Navigate(goToPage);
         }
-
 
         private void WebBroForm_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -301,6 +364,7 @@ namespace WebLoader
         {
             this.btnHistory.Visible = false;
             this.lboxRecent.Visible = false;
+            clickedOnUrl = false;
             string histHead = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">";
             histHead += "<HTML><HEAD>";
             histHead += "<META HTTP-EQUIV=\"CONTENT-TYPE\" CONTENT=\"text/html; charset=windows-1252\">";
@@ -326,6 +390,7 @@ namespace WebLoader
             this.btnSpy.Image = spyImg;
             isSpying = true;
             string goToPage = this.myAddrBar.Text;
+            clickedOnUrl = false;
             myBrowser.Navigate(goToPage);
         }
 
@@ -362,6 +427,19 @@ namespace WebLoader
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(pageBodyMod);
             this.myBrowser.Visible = true;
+        }
+
+        private void btnFont_Click(object sender, EventArgs e)
+        {
+            this.dlgGetFont.ShowDialog(this);
+            chosenFont = dlgGetFont.Font.FontFamily.Name.ToString();
+            chosenSize = dlgGetFont.Font.Size.ToString();
+        }
+
+        private void tmrPopUps_Tick(object sender, EventArgs e)
+        {
+            tmrPopUps.Enabled = false;
+            stopPopUps = false;
         }
     }
 }
