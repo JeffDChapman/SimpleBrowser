@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebBroForm));
             this.myBrowser = new System.Windows.Forms.WebBrowser();
             this.myAddrBar = new System.Windows.Forms.TextBox();
@@ -43,6 +44,9 @@
             this.picLoading = new System.Windows.Forms.PictureBox();
             this.btnSpy = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.dlgGetFont = new System.Windows.Forms.FontDialog();
+            this.btnFont = new System.Windows.Forms.Button();
+            this.tmrPopUps = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,10 +70,10 @@
             // 
             this.myAddrBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.myAddrBar.Location = new System.Drawing.Point(80, 0);
+            this.myAddrBar.Location = new System.Drawing.Point(121, 0);
             this.myAddrBar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.myAddrBar.Name = "myAddrBar";
-            this.myAddrBar.Size = new System.Drawing.Size(988, 26);
+            this.myAddrBar.Size = new System.Drawing.Size(908, 26);
             this.myAddrBar.TabIndex = 1;
             this.myAddrBar.Click += new System.EventHandler(this.myAddrBar_Click);
             // 
@@ -221,11 +225,34 @@
             this.lblStatus.TabIndex = 13;
             this.lblStatus.Text = "Ready";
             // 
+            // dlgGetFont
+            // 
+            this.dlgGetFont.Color = System.Drawing.Color.White;
+            this.dlgGetFont.FontMustExist = true;
+            // 
+            // btnFont
+            // 
+            this.btnFont.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnFont.Image = ((System.Drawing.Image)(resources.GetObject("btnFont.Image")));
+            this.btnFont.Location = new System.Drawing.Point(79, 0);
+            this.btnFont.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnFont.Name = "btnFont";
+            this.btnFont.Size = new System.Drawing.Size(42, 31);
+            this.btnFont.TabIndex = 14;
+            this.btnFont.UseVisualStyleBackColor = true;
+            this.btnFont.Click += new System.EventHandler(this.btnFont_Click);
+            // 
+            // tmrPopUps
+            // 
+            this.tmrPopUps.Interval = 5000;
+            this.tmrPopUps.Tick += new System.EventHandler(this.tmrPopUps_Tick);
+            // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1186, 1036);
+            this.Controls.Add(this.btnFont);
             this.Controls.Add(this.btnHistory);
             this.Controls.Add(this.lboxRecent);
             this.Controls.Add(this.lblStatus);
@@ -269,6 +296,9 @@
         private System.Windows.Forms.PictureBox picLoading;
         private System.Windows.Forms.Button btnSpy;
         private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.FontDialog dlgGetFont;
+        private System.Windows.Forms.Button btnFont;
+        private System.Windows.Forms.Timer tmrPopUps;
     }
 }
 
