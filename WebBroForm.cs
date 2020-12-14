@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -20,7 +20,6 @@ namespace WebLoader
         }
 
         private bool allowScripts = false;
-        private bool tbSkipNav = true;
         private bool isSpying = false;
         private bool stopClick = false;
         private Image spyImg;
@@ -30,40 +29,83 @@ namespace WebLoader
         private string histPath = @"wBhist.txt";
         public string chosenFont = "verdana";
         public string chosenSize = "12";
-        private bool clickedOnUrl;
+        private bool internalRedirect;
+        public bool stopPopUps = false;
+        private bool hadRecovery;
+        private string offLineFile = "nothing.htm";
+        private bool atHome;
+        private bool naviErr;
+        private string saveOldPage = "";
+        private bool docTooShort;
         public bool stopPopUps = false;
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
             this.btnBack.Enabled = false;
-            clickedOnUrl = false;
+            internalRedirect = false;
             this.myBrowser.Navigate(homeLoc);
-            spyImg = this.btnSpy.Image;
-            this.btnSpy.Image = null;
             this.Top = 15;
             this.Height = 700;
         }
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            if (e == null) { return; }
             if (isSpying)
                 { return; }
+
+            if (hadRecovery) { return; }
+            if (naviErr) { return; }
+
+            docTooShort = false;
+            CheckShortDoc(e.Url.ToString());
+            if (docTooShort) {return;}
 
             CleanHTML();
         }
 
+        private void CheckShortDoc(string GoToUrl)
+        {
+            if (myBrowser.DocumentText.Length < 200) 
+            {  
+                docTooShort = true;
+                if (!stopPopUps)
+                    { StartnewFormWseed(GoToUrl, myBrowser.DocumentText); }
+                myBrowser.DocumentText = saveOldPage;
+                MessageBox.Show("Short Reply Reroute");
+            }
+        }
+
         private void CleanHTML()
         {
+            if (hadRecovery) {return; }
+            if (naviErr) { return; }
+            hadRecovery = false;
+            string pageBodyMod = "";
             this.lblStatus.Text = "Code Replacement in process...";
             this.lblStatus.Refresh();
             HtmlDocument fixDoc = myBrowser.Document;
             if ((fixDoc.Body == null) || (fixDoc.Body.InnerHtml == null))
             {
-                this.lblStatus.Text = "Empty Document";
-                this.lblStatus.Refresh();
-                return;
+                string recovD = tryRecovery(myBrowser.DocumentStream);
+                int foundTitle = recovD.ToLower().IndexOf("<title");
+                if (foundTitle > 0)
+                {
+                    hadRecovery = true;
+                    pageBodyMod = recovD.Substring(foundTitle);
+                    SaveFileOffline(pageBodyMod, recovD, foundTitle);
+                }
+                else
+                {
+                    this.lblStatus.Text = "Empty Document";
+                    this.lblStatus.Refresh();
+                    return;
+                }
             }
-            string pageBodyMod = fixDoc.Body.InnerHtml.ToString();
+            else
+            {
+                pageBodyMod = fixDoc.Body.InnerHtml.ToString();
+            }
 
             pageBodyMod = RemoveScriptCode(pageBodyMod, "HEAD");
             pageBodyMod = RemoveScriptCode(pageBodyMod, "head");
@@ -73,12 +115,62 @@ namespace WebLoader
             {
                 this.myBrowser.Visible = true;
                 this.lblStatus.Text = "Ready";
+                internalRedirect = true;                
                 this.Refresh();
-                clickedOnUrl = true;
                 tmrPopUps.Enabled = true;
                 return;
             }
 
+            docTooShort = false;
+            CheckShortDoc(fixDoc.Url.ToString());
+            if (docTooShort) { return; }
+
+            string pageBodyModshow = MakeFinalAdjustments(ref pageBodyMod);
+            this.Text = myBrowser.DocumentTitle;
+            myBrowser.Document.OpenNew(false);
+            myBrowser.Document.Write(pageBodyModshow);
+
+            SetupEndFlagging();
+        }
+
+        private void SaveFileOffline(string pageBodyMod, string recovD, int foundTitle)
+        {
+            offLineFile = "C:\\Users\\JeffC\\Desktop\\";
+            offLineFile += recovD.Substring(foundTitle + 7, 8) + ".htm";
+            offLineFile = offLineFile.Replace("'", "");
+            offLineFile = offLineFile.Replace("\n", "");
+            offLineFile = offLineFile.Replace("\r", "");
+            try
+            {
+                File.AppendAllText(offLineFile, pageBodyMod);
+                cbSaveOfflineFile.Visible = true;
+            }
+            catch { }
+        }
+
+        private void SetupEndFlagging()
+        {
+            this.myBrowser.Visible = true;
+            this.lblStatus.Text = "Ready";
+            internalRedirect = true;            
+            this.Refresh();
+            myBrowser.Refresh();
+            hadRecovery = false;
+            tmrPopUps.Enabled = true;
+            if (myBrowser.Url != null)
+                { this.myAddrBar.Text = myBrowser.Url.ToString().Replace("ovre", "over"); }
+            if (this.myAddrBar.Text.Substring(0, 5) != "file:")
+            {
+                string appendText = this.myAddrBar.Text + "<br />" + Environment.NewLine;
+                File.AppendAllText(histPath, appendText);
+            }
+            atHome = false;
+            if (myAddrBar.Text == homeLoc) { atHome = true; }
+            addrAllSelected = false;
+        }
+
+        private string MakeFinalAdjustments(ref string pageBodyMod)
+        {
             pageBodyMod = pageBodyMod.Replace("font", "fnot");
             pageBodyMod = pageBodyMod.Replace("FONT", "FNOT");
             pageBodyMod = pageBodyMod.Replace("widt", "wdit");
@@ -94,24 +186,23 @@ namespace WebLoader
             string pageBodyModshow = "<!DOCTYPE html>";
             pageBodyModshow += "<font size=\"" + webSize + "\" face=\"" + chosenFont + "\"/>" + pageBodyMod;
             stopClick = false;
-            this.Text = myBrowser.DocumentTitle;
-            myBrowser.Document.OpenNew(false);
-            myBrowser.Document.Write(pageBodyModshow);
+            return pageBodyModshow;
+        }
 
-            this.myBrowser.Visible = true;
-            this.lblStatus.Text = "Ready";
-            this.Refresh();
-            myBrowser.Refresh();
-            clickedOnUrl = true;
-            tmrPopUps.Enabled = true;
-            if (myBrowser.Url != null)
-                { this.myAddrBar.Text = myBrowser.Url.ToString(); }
-            if (this.myAddrBar.Text.Substring(0, 5) != "file:")
+        private string tryRecovery(Stream htmlStream)
+        {
+            string RecoveredDoc = "";
+            byte[] bufferData =  new byte[2048];
+            int countRead = 1;
+            int lastread = 0;
+            while (countRead > 0)
             {
-                string appendText = this.myAddrBar.Text + Environment.NewLine;
-                File.AppendAllText(histPath, appendText);
+                countRead = htmlStream.Read(bufferData, 0, 2048);
+                lastread += countRead;
+                htmlStream.Position = lastread;
+                RecoveredDoc += Encoding.UTF8.GetString(bufferData);
             }
-            addrAllSelected = false;
+            return RecoveredDoc;
         }
 
         private string ScriptReplacements(string pageBodyMod)
@@ -141,30 +232,52 @@ namespace WebLoader
             pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
             pageBodyMod = pageBodyMod.Replace("widg", "wigd");
             pageBodyMod = pageBodyMod.Replace("WIDG", "WIGD");
+            pageBodyMod = pageBodyMod.Replace("img", "igm");
+            pageBodyMod = pageBodyMod.Replace("IMG", "IGM");
+            pageBodyMod = pageBodyMod.Replace("t>", "  ");
             return pageBodyMod;
         }
 
         private string RemoveScriptCode(string pageBodyMod, string checkWord)
         {
             string bodyReturn = pageBodyMod;
+            int skipSpaceOffset = 2;
+            int endScr = 0;
+            int startScr = 0 - skipSpaceOffset;
             while (true)
             {
-                int startScr = bodyReturn.IndexOf("<" + checkWord);
+                if (startScr > bodyReturn.Length - skipSpaceOffset - 1) { return bodyReturn; }
+                startScr = bodyReturn.IndexOf("<" + checkWord, startScr + skipSpaceOffset);
                 if (startScr < 0) { return bodyReturn; }
-                int endScr = bodyReturn.IndexOf("</" + checkWord);
-                bodyReturn = bodyReturn.Substring(0, startScr) + bodyReturn.Substring(endScr + 3 + checkWord.Length);
+                endScr = bodyReturn.IndexOf("</" + checkWord);
+                if (endScr < startScr)
+                { endScr = bodyReturn.IndexOf(checkWord, startScr + skipSpaceOffset + 1); }
+                if (endScr < 0) { return bodyReturn; }
+                bodyReturn = bodyReturn.Substring(0, startScr) + bodyReturn.Substring(endScr + 1 + checkWord.Length);
             }
             return bodyReturn;
         }
 
         private void btnHome_Click(object sender, EventArgs e)
         {
-            isSpying = false;
-            this.btnSpy.Image = null;
             stopClick = false;
             navLoopCount = 0;
-            clickedOnUrl = false;
+            ResetOfflineCkbox();
             this.myBrowser.Navigate(homeLoc);
+        }
+
+        private void ResetOfflineCkbox()
+        {
+            if (!cbSaveOfflineFile.Checked)
+            {
+                try { File.Delete(offLineFile); }
+                catch { }
+            }
+            cbSaveOfflineFile.Visible = false;
+            cbSaveOfflineFile.Checked = false;
+            internalRedirect = false;
+            tmrPopUps.Enabled = false;
+            tmrPopUps.Enabled = true;
         }
 
         private void btnGoTo_Click(object sender, EventArgs e)
@@ -175,8 +288,8 @@ namespace WebLoader
             this.lboxRecent.Items.Insert(0, myAddrBar.Text);
             isSpying = false;
             navLoopCount = 0;
+            ResetOfflineCkbox();
             this.btnSpy.Image = null;
-            clickedOnUrl = false;
             myBrowser.Navigate(myAddrBar.Text);
         }
 
@@ -189,7 +302,31 @@ namespace WebLoader
 
         private void myBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
+            naviErr = false;
             if (stopClick == true) { return; }
+            saveOldPage = myBrowser.DocumentText;
+            string reDirLoc = e.Url.ToString();
+            if (reDirLoc == "about:blank") 
+            {
+                naviErr = true;
+                string reDirect = FixAboutUrl(reDirLoc);
+                reDirLoc = FixDoubleSlash(reDirect);
+                if (!stopPopUps)
+                    { StartnewForm(reDirLoc); }
+                e.Cancel = true;
+                return; 
+            }
+
+            if ((stopPopUps) && (internalRedirect) 
+                && (Control.ModifierKeys != Keys.Control) && (!atHome))
+            { 
+                e.Cancel = true;
+                return;
+            }            
+            
+            if ((internalRedirect) && (Control.ModifierKeys != Keys.Shift)
+                && (Control.ModifierKeys != Keys.Control) && (!atHome))
+            {
             string reDirLoc = e.Url.ToString();
             if (reDirLoc == "about:blank") { return; }
 
@@ -208,6 +345,9 @@ namespace WebLoader
                 return;
             }
 
+            if ((Control.ModifierKeys == Keys.Control) || (atHome))
+                { ResetOfflineCkbox(); }
+
             this.lblStatus.Text = "Navigating...";
             stopPopUps = true;
             this.Refresh();
@@ -223,7 +363,7 @@ namespace WebLoader
           
             this.myBrowser.Visible = false;
             string newRouteTo = FixAboutUrl(reDirLoc);
-            myAddrBar.Text = FixDoubleSlash(newRouteTo);
+            myAddrBar.Text = FixDoubleSlash(newRouteTo).Replace("ovre", "over");
         }
 
         private string FixAboutUrl(string reDirLoc)
@@ -243,7 +383,7 @@ namespace WebLoader
                 if (reDirect.IndexOf("blank") < 0)
                 {
                     reDirect = RemoveDupsInPath(reDirect);
-                    if (!clickedOnUrl)
+                    if (!internalRedirect)
                     {
                         myAddrBar.Text = FixDoubleSlash(reDirect);
                     }
@@ -255,6 +395,30 @@ namespace WebLoader
 
         private void StartnewForm(string reDirLoc)
         {
+            if (reDirLoc.ToLower().IndexOf("blank") > -1) { return; }
+            WebBroForm anotherForm = new WebBroForm();
+            ShowNewWebform(reDirLoc, anotherForm);
+            tmrPopUps.Enabled = true;
+        }
+
+        private void StartnewFormWseed(string reDirLoc, string DocText)
+        {
+            WebBroForm anotherForm = new WebBroForm();
+            ShowNewWebform(reDirLoc, anotherForm);
+            tmrPopUps.Enabled = true;
+            anotherForm.myBrowser.DocumentText = DocText;
+        }
+
+        private void ShowNewWebform(string reDirLoc, WebBroForm anotherForm)
+        {
+            anotherForm.Show();
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(500);
+            anotherForm.myAddrBar.Text = reDirLoc.Replace("ovre", "over");
+            anotherForm.chosenFont = chosenFont;
+            anotherForm.chosenSize = chosenSize;
+            anotherForm.stopPopUps = true;
+
             WebBroForm anotherForm = new WebBroForm();
             anotherForm.Show();
             Application.DoEvents();
@@ -283,6 +447,7 @@ namespace WebLoader
 
         private string FixDoubleSlash(string inRedirect)
         {
+            if (inRedirect.Length < 8) { return inRedirect; }
             int dSloc = inRedirect.IndexOf("//", 8);
             if (dSloc < 0)
                 {return inRedirect;}
@@ -298,7 +463,7 @@ namespace WebLoader
             this.btnHistory.Visible = false;
             this.lboxRecent.Visible = false;
             navLoopCount = 0;
-            clickedOnUrl = false;
+            internalRedirect = false;
             myBrowser.Navigate(goToPage);
         }
 
@@ -333,9 +498,7 @@ namespace WebLoader
                 stopClick = false;
             }
             else 
-                {
-                    myBrowser_DocumentCompleted(this, null); 
-                }
+                { myBrowser_DocumentCompleted(this, null); }
             this.myBrowser.Visible = true;
         }
 
@@ -364,7 +527,8 @@ namespace WebLoader
         {
             this.btnHistory.Visible = false;
             this.lboxRecent.Visible = false;
-            clickedOnUrl = false;
+            internalRedirect = false;
+            string histHead = "<HTML><HEAD>";
             string histHead = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">";
             histHead += "<HTML><HEAD>";
             histHead += "<META HTTP-EQUIV=\"CONTENT-TYPE\" CONTENT=\"text/html; charset=windows-1252\">";
@@ -373,6 +537,7 @@ namespace WebLoader
             string histDocument = histHead + ConvertUrlsToLinks(histText) + "</BODY></HTML>";
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(histDocument);
+            CleanHTML();
             this.myBrowser.Visible = true;
             myBrowser.Refresh();
             this.myAddrBar.Text = "History";
@@ -390,12 +555,12 @@ namespace WebLoader
             this.btnSpy.Image = spyImg;
             isSpying = true;
             string goToPage = this.myAddrBar.Text;
-            clickedOnUrl = false;
             myBrowser.Navigate(goToPage);
         }
 
         private void myBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
+            if (naviErr) { return; }
             this.lblStatus.Text = "Navigation Done";
             this.lblStatus.Refresh();
 
@@ -421,6 +586,11 @@ namespace WebLoader
                 this.lblStatus.Refresh();
                 return;
             }
+
+            docTooShort = false;
+            CheckShortDoc(fixDoc.Url.ToString());
+            if (docTooShort) { return; }
+
             string pageBodyMod = fixDoc.Body.InnerHtml.ToString();
             pageBodyMod = pageBodyMod.Replace("<", "[");
             pageBodyMod = pageBodyMod.Replace(">", "]");
@@ -440,6 +610,18 @@ namespace WebLoader
         {
             tmrPopUps.Enabled = false;
             stopPopUps = false;
+        }
+
+        private void WebBroForm_Activated(object sender, EventArgs e)
+        {
+            myBrowser.Focus();
+        }
+
+        private void WebBroForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (cbSaveOfflineFile.Checked) { return; }
+            try { File.Delete(offLineFile); }
+            catch { }
         }
     }
 }
