@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -37,7 +37,7 @@ namespace WebLoader
         private bool naviErr;
         private string saveOldPage = "";
         private bool docTooShort;
-      
+        public bool stopPopUps = false;
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
@@ -289,6 +289,7 @@ namespace WebLoader
             isSpying = false;
             navLoopCount = 0;
             ResetOfflineCkbox();
+            this.btnSpy.Image = null;
             myBrowser.Navigate(myAddrBar.Text);
         }
 
@@ -326,6 +327,17 @@ namespace WebLoader
             if ((internalRedirect) && (Control.ModifierKeys != Keys.Shift)
                 && (Control.ModifierKeys != Keys.Control) && (!atHome))
             {
+            string reDirLoc = e.Url.ToString();
+            if (reDirLoc == "about:blank") { return; }
+
+            if ((clickedOnUrl) && (Control.ModifierKeys != Keys.Shift)
+                && (Control.ModifierKeys != Keys.Control))
+            {
+                if (stopPopUps)
+                { 
+                    e.Cancel = true;
+                    return;
+                }
                 string reDirect = FixAboutUrl(reDirLoc);
                 reDirLoc = FixDoubleSlash(reDirect);
                 StartnewForm(reDirLoc);
@@ -335,6 +347,7 @@ namespace WebLoader
 
             if ((Control.ModifierKeys == Keys.Control) || (atHome))
                 { ResetOfflineCkbox(); }
+
             this.lblStatus.Text = "Navigating...";
             stopPopUps = true;
             this.Refresh();
@@ -405,6 +418,16 @@ namespace WebLoader
             anotherForm.chosenFont = chosenFont;
             anotherForm.chosenSize = chosenSize;
             anotherForm.stopPopUps = true;
+
+            WebBroForm anotherForm = new WebBroForm();
+            anotherForm.Show();
+            Application.DoEvents();
+            System.Threading.Thread.Sleep(500);
+            anotherForm.myAddrBar.Text = reDirLoc;
+            anotherForm.chosenFont = chosenFont;
+            anotherForm.chosenSize = chosenSize;
+            anotherForm.stopPopUps = true;
+            tmrPopUps.Enabled = true;
         }
 
         private string RemoveDupsInPath(string inRedirect)
@@ -506,6 +529,9 @@ namespace WebLoader
             this.lboxRecent.Visible = false;
             internalRedirect = false;
             string histHead = "<HTML><HEAD>";
+            string histHead = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">";
+            histHead += "<HTML><HEAD>";
+            histHead += "<META HTTP-EQUIV=\"CONTENT-TYPE\" CONTENT=\"text/html; charset=windows-1252\">";
             histHead += "<TITLE>History</TITLE></HEAD><BODY LANG=\"en-US\" DIR=\"LTR\" bgcolor =\"BLACK\">";
             string histText = File.ReadAllText(histPath);
             string histDocument = histHead + ConvertUrlsToLinks(histText) + "</BODY></HTML>";
@@ -522,6 +548,14 @@ namespace WebLoader
             string regex = @"((www\.|(http|https|ftp|news|file)+\:\/\/)[&#95;.a-z0-9-]+\.[a-z0-9\/&#95;:@=.+?,##%&~-]*[^.|\'|\# |!|\(|?|,| |>|<|;|\)])";
             Regex r = new Regex(regex, RegexOptions.IgnoreCase);
             return r.Replace(msg, "<a href=\"$1\" title=\"Click to open in a new window or tab\" target=\"&#95;blank\">$1</a>").Replace("href=\"www", "href=\"http://www");
+        }
+
+        private void btnSpy_Click(object sender, EventArgs e)
+        {
+            this.btnSpy.Image = spyImg;
+            isSpying = true;
+            string goToPage = this.myAddrBar.Text;
+            myBrowser.Navigate(goToPage);
         }
 
         private void myBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
