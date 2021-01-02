@@ -42,11 +42,12 @@
             this.lblCheckedOn = new System.Windows.Forms.Label();
             this.btnHistory = new System.Windows.Forms.Button();
             this.picLoading = new System.Windows.Forms.PictureBox();
-            this.btnSpy = new System.Windows.Forms.Button();
             this.lblStatus = new System.Windows.Forms.Label();
             this.dlgGetFont = new System.Windows.Forms.FontDialog();
             this.btnFont = new System.Windows.Forms.Button();
             this.tmrPopUps = new System.Windows.Forms.Timer(this.components);
+            this.cbSaveOfflineFile = new System.Windows.Forms.CheckBox();
+            this.tmrReroute = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,7 +74,7 @@
             this.myAddrBar.Location = new System.Drawing.Point(121, 0);
             this.myAddrBar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.myAddrBar.Name = "myAddrBar";
-            this.myAddrBar.Size = new System.Drawing.Size(908, 26);
+            this.myAddrBar.Size = new System.Drawing.Size(942, 26);
             this.myAddrBar.TabIndex = 1;
             this.myAddrBar.Click += new System.EventHandler(this.myAddrBar_Click);
             // 
@@ -199,21 +200,6 @@
             this.picLoading.TabIndex = 11;
             this.picLoading.TabStop = false;
             // 
-            // btnSpy
-            // 
-            this.btnSpy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSpy.BackColor = System.Drawing.Color.LightCoral;
-            this.btnSpy.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Blue;
-            this.btnSpy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSpy.Image = ((System.Drawing.Image)(resources.GetObject("btnSpy.Image")));
-            this.btnSpy.Location = new System.Drawing.Point(1032, 2);
-            this.btnSpy.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnSpy.Name = "btnSpy";
-            this.btnSpy.Size = new System.Drawing.Size(36, 28);
-            this.btnSpy.TabIndex = 12;
-            this.btnSpy.UseVisualStyleBackColor = false;
-            this.btnSpy.Click += new System.EventHandler(this.btnSpy_Click);
-            // 
             // lblStatus
             // 
             this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -244,20 +230,38 @@
             // 
             // tmrPopUps
             // 
-            this.tmrPopUps.Interval = 5000;
+            this.tmrPopUps.Interval = 10000;
             this.tmrPopUps.Tick += new System.EventHandler(this.tmrPopUps_Tick);
+            // 
+            // cbSaveOfflineFile
+            // 
+            this.cbSaveOfflineFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbSaveOfflineFile.AutoSize = true;
+            this.cbSaveOfflineFile.Location = new System.Drawing.Point(1002, 38);
+            this.cbSaveOfflineFile.Name = "cbSaveOfflineFile";
+            this.cbSaveOfflineFile.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.cbSaveOfflineFile.Size = new System.Drawing.Size(150, 24);
+            this.cbSaveOfflineFile.TabIndex = 15;
+            this.cbSaveOfflineFile.Text = "Save Offline File";
+            this.cbSaveOfflineFile.UseVisualStyleBackColor = true;
+            this.cbSaveOfflineFile.Visible = false;
+            // 
+            // tmrReroute
+            // 
+            this.tmrReroute.Interval = 2000;
+            this.tmrReroute.Tick += new System.EventHandler(this.tmrReroute_Tick);
             // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1186, 1036);
+            this.Controls.Add(this.cbSaveOfflineFile);
             this.Controls.Add(this.btnFont);
             this.Controls.Add(this.btnHistory);
             this.Controls.Add(this.lboxRecent);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.myBrowser);
-            this.Controls.Add(this.btnSpy);
             this.Controls.Add(this.lblCheckedOn);
             this.Controls.Add(this.btnScriptOK);
             this.Controls.Add(this.btnStopLoad);
@@ -272,6 +276,7 @@
             this.Name = "WebBroForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "[Title Goes Here]";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WebBroForm_FormClosing);
             this.Load += new System.EventHandler(this.WebBroForm_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WebBroForm_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).EndInit();
@@ -294,11 +299,12 @@
         private System.Windows.Forms.Label lblCheckedOn;
         private System.Windows.Forms.Button btnHistory;
         private System.Windows.Forms.PictureBox picLoading;
-        private System.Windows.Forms.Button btnSpy;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.FontDialog dlgGetFont;
         private System.Windows.Forms.Button btnFont;
         private System.Windows.Forms.Timer tmrPopUps;
+        private System.Windows.Forms.CheckBox cbSaveOfflineFile;
+        private System.Windows.Forms.Timer tmrReroute;
     }
 }
 
