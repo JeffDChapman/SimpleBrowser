@@ -71,10 +71,10 @@
             // 
             this.myAddrBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.myAddrBar.Location = new System.Drawing.Point(121, 0);
+            this.myAddrBar.Location = new System.Drawing.Point(82, 0);
             this.myAddrBar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.myAddrBar.Name = "myAddrBar";
-            this.myAddrBar.Size = new System.Drawing.Size(942, 26);
+            this.myAddrBar.Size = new System.Drawing.Size(983, 26);
             this.myAddrBar.TabIndex = 1;
             this.myAddrBar.Click += new System.EventHandler(this.myAddrBar_Click);
             // 
@@ -91,9 +91,8 @@
             // 
             // btnGoTo
             // 
-            this.btnGoTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGoTo.Image = ((System.Drawing.Image)(resources.GetObject("btnGoTo.Image")));
-            this.btnGoTo.Location = new System.Drawing.Point(1108, 0);
+            this.btnGoTo.Location = new System.Drawing.Point(40, 0);
             this.btnGoTo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnGoTo.Name = "btnGoTo";
             this.btnGoTo.Size = new System.Drawing.Size(42, 31);
@@ -218,9 +217,10 @@
             // 
             // btnFont
             // 
+            this.btnFont.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnFont.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnFont.Image = ((System.Drawing.Image)(resources.GetObject("btnFont.Image")));
-            this.btnFont.Location = new System.Drawing.Point(79, 0);
+            this.btnFont.Location = new System.Drawing.Point(1108, 0);
             this.btnFont.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnFont.Name = "btnFont";
             this.btnFont.Size = new System.Drawing.Size(42, 31);
@@ -256,6 +256,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1186, 1036);
+            this.Controls.Add(this.btnGoTo);
             this.Controls.Add(this.cbSaveOfflineFile);
             this.Controls.Add(this.btnFont);
             this.Controls.Add(this.btnHistory);
@@ -266,7 +267,6 @@
             this.Controls.Add(this.btnScriptOK);
             this.Controls.Add(this.btnStopLoad);
             this.Controls.Add(this.btnBack);
-            this.Controls.Add(this.btnGoTo);
             this.Controls.Add(this.btnHome);
             this.Controls.Add(this.myAddrBar);
             this.Controls.Add(this.lblWorking);
