@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -37,8 +37,8 @@ namespace WebLoader
         private bool docTooShort;
         #endregion
 
-        public string chosenFont = "verdana";
-        public string chosenSize = "12";
+        public string chosenFont = "Candara";
+        public string chosenSize = "24";
         public bool stopPopUps = false;
         private bool intRptdFlag = false;
         private bool ctrlNavigated = false;
@@ -48,8 +48,8 @@ namespace WebLoader
             this.btnBack.Enabled = false;
             internalRedirect = false;
             this.myBrowser.Navigate(homeLoc);
-            this.Top = 15;
-            this.Height = 700;
+            this.Top = 0;
+            this.Height = Screen.PrimaryScreen.Bounds.Bottom;
         }
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -127,7 +127,8 @@ namespace WebLoader
             {
                 this.myBrowser.Visible = true;
                 this.lblStatus.Text = "Ready";
-                internalRedirect = true;                
+                internalRedirect = true;
+                this.btnGoTo.Visible = true;
                 this.Refresh();
                 tmrPopUps.Enabled = true;
                 return;
@@ -164,7 +165,8 @@ namespace WebLoader
         {
             this.myBrowser.Visible = true;
             this.lblStatus.Text = "Ready";
-            internalRedirect = true;            
+            internalRedirect = true;
+            this.btnGoTo.Visible = true;
             this.Refresh();
             myBrowser.Refresh();
             hadRecovery = false;
@@ -299,6 +301,7 @@ namespace WebLoader
         {
             stopPopUps = true;
             this.btnBack.Enabled = true;
+            this.btnGoTo.Visible = false;
             stopClick = false;
             this.lboxRecent.Items.Insert(0, myAddrBar.Text);
             isSpying = false;
@@ -355,6 +358,7 @@ namespace WebLoader
                 { ResetOfflineCkbox(); }
             this.lblStatus.Text = "Navigating...";
             stopPopUps = true;
+            this.btnGoTo.Visible = false;
             this.Refresh();
             navLoopCount++;
             if (navLoopCount > 10)
@@ -614,4 +618,3 @@ namespace WebLoader
         }
     }
 }
-  
