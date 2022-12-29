@@ -48,6 +48,7 @@
             this.tmrPopUps = new System.Windows.Forms.Timer(this.components);
             this.cbSaveOfflineFile = new System.Windows.Forms.CheckBox();
             this.tmrReroute = new System.Windows.Forms.Timer(this.components);
+            this.toolTipStop = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.SuspendLayout();
             // 
@@ -145,6 +146,7 @@
             this.btnStopLoad.Name = "btnStopLoad";
             this.btnStopLoad.Size = new System.Drawing.Size(42, 31);
             this.btnStopLoad.TabIndex = 7;
+            this.toolTipStop.SetToolTip(this.btnStopLoad, "Stop Loading");
             this.btnStopLoad.UseVisualStyleBackColor = true;
             this.btnStopLoad.Click += new System.EventHandler(this.btnStopLoad_Click);
             // 
@@ -305,6 +307,7 @@
         private System.Windows.Forms.Timer tmrPopUps;
         private System.Windows.Forms.CheckBox cbSaveOfflineFile;
         private System.Windows.Forms.Timer tmrReroute;
+        private System.Windows.Forms.ToolTip toolTipStop;
     }
 }
 

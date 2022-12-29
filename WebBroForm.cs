@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
@@ -35,13 +30,12 @@ namespace WebLoader
         private bool naviErr;
         private string saveOldPage = "";
         private bool docTooShort;
-        #endregion
-
-        public string chosenFont = "Candara";
-        public string chosenSize = "24";
-        public bool stopPopUps = false;
+        private string chosenFont = "Candara";
+        private string chosenSize = "24";
+        private bool stopPopUps = false;
         private bool intRptdFlag = false;
         private bool ctrlNavigated = false;
+        #endregion
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
@@ -97,22 +91,22 @@ namespace WebLoader
             this.lblStatus.Text = "Code Replacement in process...";
             this.lblStatus.Refresh();
             HtmlDocument fixDoc = myBrowser.Document;
-            if ((fixDoc.Body == null) || (fixDoc.Body.InnerHtml == null))
+            string recovD = tryRecovery(myBrowser.DocumentStream);
+            int foundTitle = recovD.ToLower().IndexOf("<title");
+            bool badLoad = (fixDoc.Body == null) || (fixDoc.Body.InnerHtml == null);
+
+            if ((badLoad) && (foundTitle <= 0))
             {
-                string recovD = tryRecovery(myBrowser.DocumentStream);
-                int foundTitle = recovD.ToLower().IndexOf("<title");
-                if (foundTitle > 0)
-                {
-                    hadRecovery = true;
-                    pageBodyMod = recovD.Substring(foundTitle);
-                    SaveFileOffline(pageBodyMod, recovD, foundTitle);
-                }
-                else
-                {
-                    this.lblStatus.Text = "Empty Document";
-                    this.lblStatus.Refresh();
-                    return;
-                }
+                this.lblStatus.Text = "Empty Document";
+                this.lblStatus.Refresh();
+                return;
+            }
+
+            if (badLoad)
+            {
+                hadRecovery = true;
+                pageBodyMod = recovD.Substring(foundTitle);
+                SaveFileOffline(pageBodyMod, recovD, foundTitle);
             }
             else
             {
