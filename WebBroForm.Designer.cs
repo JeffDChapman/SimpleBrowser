@@ -57,12 +57,12 @@
             this.myBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.myBrowser.Location = new System.Drawing.Point(-9, 48);
+            this.myBrowser.Location = new System.Drawing.Point(13, 40);
             this.myBrowser.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.myBrowser.MinimumSize = new System.Drawing.Size(33, 39);
             this.myBrowser.Name = "myBrowser";
             this.myBrowser.ScriptErrorsSuppressed = true;
-            this.myBrowser.Size = new System.Drawing.Size(1325, 964);
+            this.myBrowser.Size = new System.Drawing.Size(1292, 972);
             this.myBrowser.TabIndex = 0;
             this.myBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.myBrowser_DocumentCompleted);
             this.myBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.myBrowser_Navigated);
@@ -72,7 +72,7 @@
             // 
             this.myAddrBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.myAddrBar.Location = new System.Drawing.Point(91, 0);
+            this.myAddrBar.Location = new System.Drawing.Point(91, 4);
             this.myAddrBar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.myAddrBar.Name = "myAddrBar";
             this.myAddrBar.Size = new System.Drawing.Size(1092, 31);
@@ -193,7 +193,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.picLoading.Image = ((System.Drawing.Image)(resources.GetObject("picLoading.Image")));
-            this.picLoading.Location = new System.Drawing.Point(500, 481);
+            this.picLoading.Location = new System.Drawing.Point(360, 341);
             this.picLoading.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.picLoading.Name = "picLoading";
             this.picLoading.Size = new System.Drawing.Size(200, 200);
