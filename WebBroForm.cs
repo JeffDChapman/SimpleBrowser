@@ -1,12 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using System.IO;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.Xml;
-using System.Runtime.CompilerServices;
 
 namespace WebLoader
 {
@@ -39,6 +32,7 @@ namespace WebLoader
         private bool stopPopUps = false;
         private bool intRptdFlag = false;
         private bool ctrlNavigated = false;
+        private string GlobalFavs;
         #endregion
 
         private void WebBroForm_Load(object sender, EventArgs e)
@@ -48,6 +42,7 @@ namespace WebLoader
             this.myBrowser.Navigate(homeLoc);
             this.Top = 0;
             this.Height = Screen.PrimaryScreen.Bounds.Bottom;
+            GlobalFavs = File.ReadAllText(favsPath);
         }
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -182,6 +177,7 @@ namespace WebLoader
             ctrlNavigated = false;
             if (myAddrBar.Text == homeLoc) { atHome = true; }
             addrAllSelected = false;
+            if (GlobalFavs.Contains(myAddrBar.Text)) { btnFav.ImageIndex = 1; }
             saveOldPage = myBrowser.DocumentText;
         }
 
@@ -305,6 +301,7 @@ namespace WebLoader
             isSpying = false;
             navLoopCount = 0;
             ResetOfflineCkbox();
+            btnFav.ImageIndex = 0;
             myBrowser.Navigate(myAddrBar.Text);
         }
 
@@ -319,6 +316,7 @@ namespace WebLoader
         {
             naviErr = false;
             if (stopClick == true) { return; }
+            btnFav.ImageIndex = 0;
             ctrlNavigated = false;
             if (Control.ModifierKeys == Keys.Control) { ctrlNavigated = true; }
             
@@ -628,8 +626,21 @@ namespace WebLoader
                 FavsText += "<a href=\"" + this.myAddrBar.Text + "\">";
                 FavsText += this.Text + "</a><br />\n\r";
                 File.WriteAllText(favsPath, FavsText);
+                GlobalFavs = FavsText;
                 return;
             }
+
+            internalRedirect = false;
+            string favsHead = "<HTML><HEAD>";
+            favsHead += "<TITLE>Favorites</TITLE></HEAD><BODY LANG=\"en-US\" DIR=\"LTR\" bgcolor =\"BLACK\">";
+            string favText = File.ReadAllText(favsPath);
+            string favsDocument = favsHead + favText + "</BODY></HTML>";
+            myBrowser.Document.OpenNew(false);
+            myBrowser.Document.Write(favsDocument);
+            CleanHTML();
+            this.myBrowser.Visible = true;
+            myBrowser.Refresh();
+            this.myAddrBar.Text = "Favorites";
         }
     }
 }
