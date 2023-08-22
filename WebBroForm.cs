@@ -4,6 +4,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.IO;
+using System.Net.Http.Headers;
+using System.Security.Cryptography.Xml;
+using System.Runtime.CompilerServices;
 
 namespace WebLoader
 {
@@ -23,6 +26,7 @@ namespace WebLoader
         private int navLoopCount = 0;
         private string homeLoc = "file:///C:/Users/JeffC/Desktop/Stuff/Bookmarks.htm";
         private string histPath = @"wBhist.txt";
+        private string favsPath = @"myFavs.htm";
         private bool internalRedirect;
         private bool hadRecovery;
         private string offLineFile = "nothing.htm";
@@ -613,7 +617,19 @@ namespace WebLoader
 
         private void btnFav_Click(object sender, EventArgs e)
         {
+            bool SavingFav = false;
+            if (btnFav.ImageIndex == 0) { SavingFav = true; }
+
             btnFav.ImageIndex = 1 - btnFav.ImageIndex;
+
+            if (SavingFav)
+            {
+                string FavsText = File.ReadAllText(favsPath);
+                FavsText += "<a href=\"" + this.myAddrBar.Text + "\">";
+                FavsText += this.Text + "</a><br />\n\r";
+                File.WriteAllText(favsPath, FavsText);
+                return;
+            }
         }
     }
 }
