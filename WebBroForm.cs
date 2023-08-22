@@ -610,5 +610,10 @@ namespace WebLoader
             tmrReroute.Enabled = false;
             btnGoTo_Click(this, null);
         }
+
+        private void btnFav_Click(object sender, EventArgs e)
+        {
+            btnFav.ImageIndex = 1 - btnFav.ImageIndex;
+        }
     }
 }
