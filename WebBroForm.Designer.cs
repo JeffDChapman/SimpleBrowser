@@ -49,6 +49,8 @@
             this.cbSaveOfflineFile = new System.Windows.Forms.CheckBox();
             this.tmrReroute = new System.Windows.Forms.Timer(this.components);
             this.toolTipStop = new System.Windows.Forms.ToolTip(this.components);
+            this.btnFav = new System.Windows.Forms.Button();
+            this.imgLstars = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.SuspendLayout();
             // 
@@ -75,7 +77,7 @@
             this.myAddrBar.Location = new System.Drawing.Point(91, 4);
             this.myAddrBar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.myAddrBar.Name = "myAddrBar";
-            this.myAddrBar.Size = new System.Drawing.Size(1092, 31);
+            this.myAddrBar.Size = new System.Drawing.Size(1051, 31);
             this.myAddrBar.TabIndex = 1;
             this.myAddrBar.Click += new System.EventHandler(this.myAddrBar_Click);
             // 
@@ -254,6 +256,26 @@
             this.tmrReroute.Interval = 2000;
             this.tmrReroute.Tick += new System.EventHandler(this.tmrReroute_Tick);
             // 
+            // btnFav
+            // 
+            this.btnFav.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFav.ImageIndex = 0;
+            this.btnFav.ImageList = this.imgLstars;
+            this.btnFav.Location = new System.Drawing.Point(1141, 0);
+            this.btnFav.Name = "btnFav";
+            this.btnFav.Size = new System.Drawing.Size(47, 39);
+            this.btnFav.TabIndex = 16;
+            this.btnFav.UseVisualStyleBackColor = true;
+            this.btnFav.Click += new System.EventHandler(this.btnFav_Click);
+            // 
+            // imgLstars
+            // 
+            this.imgLstars.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imgLstars.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgLstars.ImageStream")));
+            this.imgLstars.TransparentColor = System.Drawing.Color.Transparent;
+            this.imgLstars.Images.SetKeyName(0, "SmStar.jpg");
+            this.imgLstars.Images.SetKeyName(1, "SmStarFill.png");
+            // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -261,7 +283,6 @@
             this.ClientSize = new System.Drawing.Size(1318, 1050);
             this.Controls.Add(this.btnGoTo);
             this.Controls.Add(this.cbSaveOfflineFile);
-            this.Controls.Add(this.btnFont);
             this.Controls.Add(this.btnHistory);
             this.Controls.Add(this.lboxRecent);
             this.Controls.Add(this.lblStatus);
@@ -274,6 +295,8 @@
             this.Controls.Add(this.myAddrBar);
             this.Controls.Add(this.lblWorking);
             this.Controls.Add(this.picLoading);
+            this.Controls.Add(this.btnFont);
+            this.Controls.Add(this.btnFav);
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.Name = "WebBroForm";
@@ -309,6 +332,8 @@
         private System.Windows.Forms.CheckBox cbSaveOfflineFile;
         private System.Windows.Forms.Timer tmrReroute;
         private System.Windows.Forms.ToolTip toolTipStop;
+        private Button btnFav;
+        private ImageList imgLstars;
     }
 }
 
