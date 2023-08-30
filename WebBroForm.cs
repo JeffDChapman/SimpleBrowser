@@ -1,4 +1,7 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace WebLoader
@@ -86,6 +89,7 @@ namespace WebLoader
             if (hadRecovery) {return; }
             if ((naviErr) && (!intRptdFlag)) { return; }
             hadRecovery = false;
+            CloseAllSocks();
             string pageBodyMod = "";
             this.lblStatus.Text = "Code Replacement in process...";
             this.lblStatus.Refresh();
@@ -137,6 +141,46 @@ namespace WebLoader
             myBrowser.Document.Write(pageBodyModshow);
 
             SetupEndFlagging();
+        }
+
+        private void CloseAllSocks()
+        {
+            this.lblStatus.Text = "Closing sockets...";
+            this.lblStatus.Refresh();
+            int nProcessID = Process.GetCurrentProcess().Id;
+
+            var p = new Process { StartInfo = { FileName = @"cmd.exe",
+                    Arguments = "/C netstat -a -n -o >activeSocks.txt", UseShellExecute = false } };
+            p.Start();
+            p.WaitForExit();
+            p.Close();
+
+            var lines = File.ReadLines("activeSocks.txt");
+            foreach (var line in lines)
+            {
+                string[] sockParms = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                if (sockParms.Length < 5) { continue; }
+                if (sockParms[4] != nProcessID.ToString()) { continue; }
+                string myEndPoint = sockParms[1];
+                string[] myIPsplit = myEndPoint.Split(new char[] { ':' });
+                using Socket aSocket = new Socket(SocketType.Stream, ProtocolType.Tcp);
+                {
+                    int myPort = 8080;
+                    if (myIPsplit.Length > 0) { myPort = Convert.ToInt32(myIPsplit[myIPsplit.Length - 1]); }
+                    var myEP = new IPEndPoint(IPAddress.Parse(myEndPoint), myPort);
+                    try
+                    {
+                        aSocket.Bind(myEP);
+                        aSocket.Close(10);
+                    }
+                    catch
+                    {
+                        bool debugstop = true;
+                    }
+
+                }
+
+            }
         }
 
         private void SaveFileOffline(string pageBodyMod, string recovD, int foundTitle)
@@ -302,6 +346,11 @@ namespace WebLoader
             navLoopCount = 0;
             ResetOfflineCkbox();
             btnFav.ImageIndex = 0;
+            if (myAddrBar.Text.Contains(" "))
+            {
+                string holdAddr = myAddrBar.Text;
+                myAddrBar.Text = "www.google.com/search?q=" + holdAddr.Replace(" ", "+");
+            }
             myBrowser.Navigate(myAddrBar.Text);
         }
 
