@@ -149,8 +149,12 @@ namespace WebLoader
             this.lblStatus.Refresh();
             int nProcessID = Process.GetCurrentProcess().Id;
 
-            var p = new Process { StartInfo = { FileName = @"cmd.exe",
-                    Arguments = "/C netstat -a -n -o >activeSocks.txt", UseShellExecute = false } };
+            var p = new Process
+            {
+                StartInfo = { FileName = @"cmd.exe",
+                    Arguments = "/C netstat -a -n -o >activeSocks.txt", UseShellExecute = false,
+                    CreateNoWindow = true}
+            };
             p.Start();
             p.WaitForExit();
             p.Close();
@@ -173,13 +177,8 @@ namespace WebLoader
                         aSocket.Bind(myEP);
                         aSocket.Close(10);
                     }
-                    catch
-                    {
-                        bool debugstop = true;
-                    }
-
+                    catch { bool debugstop = true; }
                 }
-
             }
         }
 
