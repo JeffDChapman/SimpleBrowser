@@ -274,7 +274,7 @@
             this.imgLstars.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgLstars.ImageStream")));
             this.imgLstars.TransparentColor = System.Drawing.Color.Transparent;
             this.imgLstars.Images.SetKeyName(0, "SmStar.jpg");
-            this.imgLstars.Images.SetKeyName(1, "SmStarFill.png");
+            this.imgLstars.Images.SetKeyName(1, "ShowStar.png");
             // 
             // WebBroForm
             // 

@@ -89,7 +89,8 @@ namespace WebLoader
             if (hadRecovery) {return; }
             if ((naviErr) && (!intRptdFlag)) { return; }
             hadRecovery = false;
-            CloseAllSocks();
+            try { CloseAllSocks(); }
+            catch { }
             string pageBodyMod = "";
             this.lblStatus.Text = "Code Replacement in process...";
             this.lblStatus.Refresh();
