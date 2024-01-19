@@ -466,6 +466,8 @@ namespace WebLoader
         private void ShowNewWebform(string reDirLoc, WebBroForm anotherForm)
         {
             anotherForm.Show();
+            anotherForm.Left = this.Left + 50;
+            anotherForm.Width = this.Width;           
             Application.DoEvents();
             System.Threading.Thread.Sleep(500);
             anotherForm.myAddrBar.Text = reDirLoc.Replace("ovre", "over");

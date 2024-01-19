@@ -120,7 +120,7 @@
             this.lboxRecent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lboxRecent.FormattingEnabled = true;
             this.lboxRecent.ItemHeight = 25;
-            this.lboxRecent.Location = new System.Drawing.Point(656, 0);
+            this.lboxRecent.Location = new System.Drawing.Point(659, 0);
             this.lboxRecent.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.lboxRecent.Name = "lboxRecent";
             this.lboxRecent.Size = new System.Drawing.Size(657, 329);
@@ -281,13 +281,13 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1318, 1050);
+            this.Controls.Add(this.lblCheckedOn);
             this.Controls.Add(this.btnGoTo);
             this.Controls.Add(this.cbSaveOfflineFile);
             this.Controls.Add(this.btnHistory);
             this.Controls.Add(this.lboxRecent);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.myBrowser);
-            this.Controls.Add(this.lblCheckedOn);
             this.Controls.Add(this.btnScriptOK);
             this.Controls.Add(this.btnStopLoad);
             this.Controls.Add(this.btnBack);
