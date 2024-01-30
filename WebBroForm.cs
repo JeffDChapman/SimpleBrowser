@@ -13,16 +13,23 @@ namespace WebLoader
             InitializeComponent();
         }
 
+        public WebBroForm(string startDoc)
+        {
+            InitializeComponent();
+            passedStartDoc = startDoc;
+        }
+
         #region Private Variables
         private bool allowScripts = false;
-        private bool isSpying = false;
         private bool stopClick = false;
-        private Image spyImg;
+        private bool isSpying;
         private bool addrAllSelected = false;
+        private string passedStartDoc = "";
         private int navLoopCount = 0;
         private string homeLoc = "file:///C:/Users/JeffC/Desktop/Stuff/Bookmarks.htm";
         private string histPath = @"wBhist.txt";
         private string favsPath = @"myFavs.htm";
+        private string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
         private bool internalRedirect;
         private bool hadRecovery;
         private string offLineFile = "nothing.htm";
@@ -35,17 +42,22 @@ namespace WebLoader
         private bool stopPopUps = false;
         private bool intRptdFlag = false;
         private bool ctrlNavigated = false;
-        private string GlobalFavs;
+        private string GlobalFavs = "";
         #endregion
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
+            int findWL = strExeFilePath.IndexOf("WebLoader", strExeFilePath.Length - 15);
+            strExeFilePath = strExeFilePath.Substring(0, findWL);
             this.btnBack.Enabled = false;
             internalRedirect = false;
-            this.myBrowser.Navigate(homeLoc);
+
+            if (passedStartDoc == "") { this.myBrowser.Navigate(homeLoc); }
+            else { this.myBrowser.Navigate(passedStartDoc); }
+
             this.Top = 0;
             this.Height = Screen.PrimaryScreen.Bounds.Bottom;
-            GlobalFavs = File.ReadAllText(favsPath);
+            GlobalFavs = File.ReadAllText(strExeFilePath + favsPath);
         }
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -213,7 +225,7 @@ namespace WebLoader
             if (this.myAddrBar.Text.Substring(0, 5) != "file:")
             {
                 string appendText = this.myAddrBar.Text + "<br />" + Environment.NewLine;
-                File.AppendAllText(histPath, appendText);
+                File.AppendAllText(strExeFilePath + histPath, appendText);
             }
             atHome = false;
             stopClick = false;
@@ -466,6 +478,8 @@ namespace WebLoader
         private void ShowNewWebform(string reDirLoc, WebBroForm anotherForm)
         {
             anotherForm.Show();
+            anotherForm.Left = this.Left + 50;
+            anotherForm.Width = this.Width;           
             Application.DoEvents();
             System.Threading.Thread.Sleep(500);
             anotherForm.myAddrBar.Text = reDirLoc.Replace("ovre", "over");
@@ -577,7 +591,7 @@ namespace WebLoader
             internalRedirect = false;
             string histHead = "<HTML><HEAD>";
             histHead += "<TITLE>History</TITLE></HEAD><BODY LANG=\"en-US\" DIR=\"LTR\" bgcolor =\"BLACK\">";
-            string histText = File.ReadAllText(histPath);
+            string histText = File.ReadAllText(strExeFilePath + histPath);
             string histDocument = histHead + ConvertUrlsToLinks(histText) + "</BODY></HTML>";
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(histDocument);
@@ -671,10 +685,10 @@ namespace WebLoader
 
             if (SavingFav)
             {
-                string FavsText = File.ReadAllText(favsPath);
+                string FavsText = File.ReadAllText(strExeFilePath + favsPath);
                 FavsText += "<a href=\"" + this.myAddrBar.Text + "\">";
                 FavsText += this.Text + "</a><br />\n\r";
-                File.WriteAllText(favsPath, FavsText);
+                File.WriteAllText(strExeFilePath + favsPath, FavsText);
                 GlobalFavs = FavsText;
                 return;
             }
@@ -682,7 +696,7 @@ namespace WebLoader
             internalRedirect = false;
             string favsHead = "<HTML><HEAD>";
             favsHead += "<TITLE>Favorites</TITLE></HEAD><BODY LANG=\"en-US\" DIR=\"LTR\" bgcolor =\"BLACK\">";
-            string favText = File.ReadAllText(favsPath);
+            string favText = File.ReadAllText(strExeFilePath + favsPath);
             string favsDocument = favsHead + favText + "</BODY></HTML>";
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(favsDocument);
