@@ -11,15 +11,11 @@ namespace WebLoader
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            string startDoc = args[0];
-            if (startDoc == null)
-            {
-                Application.Run(new WebBroForm());
-            }
+            string startDoc = "";
+            if (args.Length > 0) { startDoc = args[0]; }
+            if (startDoc == "") { Application.Run(new WebBroForm()); }
             else
-            {
-                Application.Run(new WebBroForm(startDoc));
-            }
+                { Application.Run(new WebBroForm(startDoc)); }
         }
     }
 }
