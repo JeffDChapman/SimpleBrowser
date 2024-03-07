@@ -7,6 +7,11 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>WebLoader.Program</StartupObject>
+    <Title>Simple Browser</Title>
+    <Version>1.2.0</Version>
+    <Product>Simple Browser</Product>
+    <Copyright>(c) 2024 J.D. Chapman (All Rights Reserved)</Copyright>
+    <PackageIcon>SimpleBrowser.ico</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +27,17 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SimpleBrowser.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="SimpleBrowser.jpg">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

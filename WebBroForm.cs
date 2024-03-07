@@ -26,7 +26,7 @@ namespace WebLoader
         private bool addrAllSelected = false;
         private string passedStartDoc = "";
         private int navLoopCount = 0;
-        private string homeLoc = "file:///C:/Users/JeffC/Desktop/Stuff/Bookmarks.htm";
+        private string homeLoc = @"Bookmarks.htm";
         private string histPath = @"wBhist.txt";
         private string favsPath = @"myFavs.htm";
         private string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -43,16 +43,23 @@ namespace WebLoader
         private bool intRptdFlag = false;
         private bool ctrlNavigated = false;
         private string GlobalFavs = "";
+        private bool hasAhome;
         #endregion
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
             int findWL = strExeFilePath.IndexOf("WebLoader", strExeFilePath.Length - 15);
             strExeFilePath = strExeFilePath.Substring(0, findWL);
+            homeLoc = strExeFilePath + "Bookmarks.htm";
             this.btnBack.Enabled = false;
             internalRedirect = false;
 
-            if (passedStartDoc == "") { this.myBrowser.Navigate(homeLoc); }
+            // TODO: fix this, user may not have same homeLoc
+            if (passedStartDoc == "") 
+            {
+                hasAhome = true;
+                myBrowser.Navigate(homeLoc);
+            }
             else { this.myBrowser.Navigate(passedStartDoc); }
 
             this.Top = 0;
@@ -62,6 +69,16 @@ namespace WebLoader
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
+            if (myBrowser.Document.Body.InnerText.Contains("Navigation to the webpage was canceled"))
+            {
+                hasAhome = false;
+                btnHome.Enabled = false;
+                btnAddHome.BringToFront();
+                btnAddHome.Enabled = false;
+                this.myBrowser.Navigate("about:blank");
+                SetupEndFlagging();
+                return;
+            }
             if ((e == null) && (!intRptdFlag)) { return; }
             if (isSpying)
                 { return; }
@@ -197,6 +214,7 @@ namespace WebLoader
 
         private void SaveFileOffline(string pageBodyMod, string recovD, int foundTitle)
         {
+            // TODO: fix this, need user's desktop
             offLineFile = "C:\\Users\\JeffC\\Desktop\\";
             offLineFile += recovD.Substring(foundTitle + 7, 8) + ".htm";
             offLineFile = offLineFile.Replace("'", "");
@@ -376,6 +394,7 @@ namespace WebLoader
         private void myBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             naviErr = false;
+            if (!hasAhome) { btnAddHome.Enabled = true; }
             if (stopClick == true) { return; }
             btnFav.ImageIndex = 0;
             ctrlNavigated = false;
@@ -704,6 +723,11 @@ namespace WebLoader
             this.myBrowser.Visible = true;
             myBrowser.Refresh();
             this.myAddrBar.Text = "Favorites";
+        }
+
+        private void btnAddHome_Click(object sender, EventArgs e)
+        {
+            // TODO: set home page here
         }
     }
 }
