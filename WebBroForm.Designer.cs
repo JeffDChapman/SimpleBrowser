@@ -51,6 +51,8 @@
             this.toolTipStop = new System.Windows.Forms.ToolTip(this.components);
             this.btnFav = new System.Windows.Forms.Button();
             this.imgLstars = new System.Windows.Forms.ImageList(this.components);
+            this.btnAddHome = new System.Windows.Forms.Button();
+            this.tmrShowAddHome = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.SuspendLayout();
             // 
@@ -120,7 +122,7 @@
             this.lboxRecent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lboxRecent.FormattingEnabled = true;
             this.lboxRecent.ItemHeight = 25;
-            this.lboxRecent.Location = new System.Drawing.Point(656, 0);
+            this.lboxRecent.Location = new System.Drawing.Point(659, 0);
             this.lboxRecent.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.lboxRecent.Name = "lboxRecent";
             this.lboxRecent.Size = new System.Drawing.Size(657, 329);
@@ -276,22 +278,39 @@
             this.imgLstars.Images.SetKeyName(0, "SmStar.jpg");
             this.imgLstars.Images.SetKeyName(1, "ShowStar.png");
             // 
+            // btnAddHome
+            // 
+            this.btnAddHome.Image = ((System.Drawing.Image)(resources.GetObject("btnAddHome.Image")));
+            this.btnAddHome.Location = new System.Drawing.Point(0, 0);
+            this.btnAddHome.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnAddHome.Name = "btnAddHome";
+            this.btnAddHome.Size = new System.Drawing.Size(47, 39);
+            this.btnAddHome.TabIndex = 17;
+            this.btnAddHome.UseVisualStyleBackColor = true;
+            this.btnAddHome.Click += new System.EventHandler(this.btnAddHome_Click);
+            // 
+            // tmrShowAddHome
+            // 
+            this.tmrShowAddHome.Interval = 5000;
+            this.tmrShowAddHome.Tick += new System.EventHandler(this.tmrShowAddHome_Tick);
+            // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1318, 1050);
+            this.Controls.Add(this.btnHome);
+            this.Controls.Add(this.btnAddHome);
+            this.Controls.Add(this.lblCheckedOn);
             this.Controls.Add(this.btnGoTo);
             this.Controls.Add(this.cbSaveOfflineFile);
             this.Controls.Add(this.btnHistory);
             this.Controls.Add(this.lboxRecent);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.myBrowser);
-            this.Controls.Add(this.lblCheckedOn);
             this.Controls.Add(this.btnScriptOK);
             this.Controls.Add(this.btnStopLoad);
             this.Controls.Add(this.btnBack);
-            this.Controls.Add(this.btnHome);
             this.Controls.Add(this.myAddrBar);
             this.Controls.Add(this.lblWorking);
             this.Controls.Add(this.picLoading);
@@ -334,6 +353,8 @@
         private System.Windows.Forms.ToolTip toolTipStop;
         private Button btnFav;
         private ImageList imgLstars;
+        private Button btnAddHome;
+        private System.Windows.Forms.Timer tmrShowAddHome;
     }
 }
 
