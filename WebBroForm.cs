@@ -29,6 +29,7 @@ namespace WebLoader
         private string homeLoc = @"Bookmarks.htm";
         private string histPath = @"wBhist.txt";
         private string favsPath = @"myFavs.htm";
+        private string homeUrlPath = @"homeUrl.txt";
         private string strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
         private bool internalRedirect;
         private bool hadRecovery;
@@ -48,19 +49,23 @@ namespace WebLoader
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
+            hasAhome = true;
             int findWL = strExeFilePath.IndexOf("WebLoader", strExeFilePath.Length - 15);
             strExeFilePath = strExeFilePath.Substring(0, findWL);
-            homeLoc = strExeFilePath + "Bookmarks.htm";
+            try { homeLoc = File.ReadAllText(strExeFilePath + homeUrlPath); }
+            catch 
+            { 
+                hasAhome = false;
+                btnHome.Enabled = false;
+                btnAddHome.BringToFront();
+                btnAddHome.Enabled = false;
+            }
             this.btnBack.Enabled = false;
             internalRedirect = false;
 
-            // TODO: fix this, user may not have same homeLoc
-            if (passedStartDoc == "") 
-            {
-                hasAhome = true;
-                myBrowser.Navigate(homeLoc);
-            }
-            else { this.myBrowser.Navigate(passedStartDoc); }
+            if (passedStartDoc != "")
+                { this.myBrowser.Navigate(passedStartDoc); }
+            else { if (hasAhome) { myBrowser.Navigate(homeLoc); } }
 
             this.Top = 0;
             this.Height = Screen.PrimaryScreen.Bounds.Bottom;
@@ -71,10 +76,6 @@ namespace WebLoader
         {
             if (myBrowser.Document.Body.InnerText.Contains("Navigation to the webpage was canceled"))
             {
-                hasAhome = false;
-                btnHome.Enabled = false;
-                btnAddHome.BringToFront();
-                btnAddHome.Enabled = false;
                 this.myBrowser.Navigate("about:blank");
                 SetupEndFlagging();
                 return;
@@ -253,6 +254,8 @@ namespace WebLoader
             addrAllSelected = false;
             if (GlobalFavs.Contains(myAddrBar.Text)) { btnFav.ImageIndex = 1; }
             saveOldPage = myBrowser.DocumentText;
+            if (!atHome) { btnAddHome.BringToFront(); }
+            tmrShowAddHome.Enabled = true;
         }
 
         private string MakeFinalAdjustments(ref string pageBodyMod)
@@ -727,7 +730,17 @@ namespace WebLoader
 
         private void btnAddHome_Click(object sender, EventArgs e)
         {
-            // TODO: set home page here
+            File.WriteAllText(strExeFilePath + homeUrlPath, this.myAddrBar.Text);
+            homeLoc = this.myAddrBar.Text;
+            btnHome.BringToFront();
+            btnHome.Enabled = true;
+            hasAhome = true;
+        }
+
+        private void tmrShowAddHome_Tick(object sender, EventArgs e)
+        {
+            if (hasAhome) { btnHome.BringToFront(); }
+            tmrShowAddHome.Enabled = false;
         }
     }
 }

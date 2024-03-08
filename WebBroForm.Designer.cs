@@ -52,6 +52,7 @@
             this.btnFav = new System.Windows.Forms.Button();
             this.imgLstars = new System.Windows.Forms.ImageList(this.components);
             this.btnAddHome = new System.Windows.Forms.Button();
+            this.tmrShowAddHome = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
             this.SuspendLayout();
             // 
@@ -288,6 +289,11 @@
             this.btnAddHome.UseVisualStyleBackColor = true;
             this.btnAddHome.Click += new System.EventHandler(this.btnAddHome_Click);
             // 
+            // tmrShowAddHome
+            // 
+            this.tmrShowAddHome.Interval = 5000;
+            this.tmrShowAddHome.Tick += new System.EventHandler(this.tmrShowAddHome_Tick);
+            // 
             // WebBroForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
@@ -348,6 +354,7 @@
         private Button btnFav;
         private ImageList imgLstars;
         private Button btnAddHome;
+        private System.Windows.Forms.Timer tmrShowAddHome;
     }
 }
 
