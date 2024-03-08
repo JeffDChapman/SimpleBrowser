@@ -69,7 +69,8 @@ namespace WebLoader
 
             this.Top = 0;
             this.Height = Screen.PrimaryScreen.Bounds.Bottom;
-            GlobalFavs = File.ReadAllText(strExeFilePath + favsPath);
+            try { GlobalFavs = File.ReadAllText(strExeFilePath + favsPath); }
+            catch { }
         }
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
