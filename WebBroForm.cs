@@ -75,10 +75,22 @@ namespace WebLoader
 
         private void myBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            if (myBrowser.Document.Body.InnerText.Contains("Navigation to the webpage was canceled"))
+            try
             {
+                if (myBrowser.Document.Body.InnerText.Contains("Navigation to the webpage was canceled"))
+                {
+                    this.myBrowser.Navigate("about:blank");
+                    SetupEndFlagging();
+                    return;
+                }
+            }
+            catch
+            {
+                this.Text = "(Empty Document)";
                 this.myBrowser.Navigate("about:blank");
                 SetupEndFlagging();
+                this.lblStatus.Text = "Empty Document";
+                this.lblStatus.Refresh();
                 return;
             }
             if ((e == null) && (!intRptdFlag)) { return; }
@@ -130,17 +142,11 @@ namespace WebLoader
             int foundTitle = recovD.ToLower().IndexOf("<title");
             bool badLoad = (fixDoc.Body == null) || (fixDoc.Body.InnerHtml == null);
 
-            if ((badLoad) && (foundTitle <= 0))
-            {
-                this.lblStatus.Text = "Empty Document";
-                this.lblStatus.Refresh();
-                return;
-            }
-
             if (badLoad)
             {
                 hadRecovery = true;
-                pageBodyMod = recovD.Substring(foundTitle);
+                try { pageBodyMod = recovD.Substring(foundTitle); }
+                catch { pageBodyMod = recovD; }
                 SaveFileOffline(pageBodyMod, recovD, foundTitle);
             }
             else
@@ -215,10 +221,12 @@ namespace WebLoader
         }
 
         private void SaveFileOffline(string pageBodyMod, string recovD, int foundTitle)
-        {
-            // TODO: fix this, need user's desktop
-            offLineFile = "C:\\Users\\JeffC\\Desktop\\";
-            offLineFile += recovD.Substring(foundTitle + 7, 8) + ".htm";
+        {            
+            offLineFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\";
+            if (foundTitle < 0)
+                { offLineFile += "noName.htm"; }
+            else 
+                { offLineFile += recovD.Substring(foundTitle + 7, 8) + ".htm"; }
             offLineFile = offLineFile.Replace("'", "");
             offLineFile = offLineFile.Replace("\n", "");
             offLineFile = offLineFile.Replace("\r", "");
@@ -570,20 +578,24 @@ namespace WebLoader
             stopClick = true;
             this.lblStatus.Text = "Interrupting...";
             this.Refresh();
-            this.myBrowser.Stop();
-           
+            try { this.myBrowser.Stop(); }
+            catch { }
+
             if (isSpying)
             {
                 PoshPageBrackets();
                 myBrowser.Refresh();
                 stopClick = false;
             }
-            else
-            {
-                intRptdFlag = true;
-                myBrowser_DocumentCompleted(this, null); 
-            }
-            this.myBrowser.Visible = true;
+            else try
+                {
+                    {
+                        intRptdFlag = true;
+                        myBrowser_DocumentCompleted(this, null);
+                    }
+                    this.myBrowser.Visible = true;
+                }
+                catch { }
         }
 
         private void btnScriptOK_Click(object sender, EventArgs e)
