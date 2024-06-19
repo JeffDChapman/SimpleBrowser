@@ -242,6 +242,7 @@ namespace WebLoader
         {
             this.myBrowser.Visible = true;
             this.lblStatus.Text = "Ready";
+            tmrNavDone.Enabled = false;
             internalRedirect = true;
             this.btnGoTo.Visible = true;
             this.Refresh();
@@ -577,6 +578,7 @@ namespace WebLoader
             }
             stopClick = true;
             this.lblStatus.Text = "Interrupting...";
+            tmrNavDone.Enabled = false;
             this.Refresh();
             try { this.myBrowser.Stop(); }
             catch { }
@@ -655,9 +657,12 @@ namespace WebLoader
                 return;
             }
 
+            tmrNavDone.Enabled = true;
+
             if (!isSpying)
                 { return; }
 
+            tmrNavDone.Enabled = false;
             PoshPageBrackets();
             myBrowser.Refresh();
          }
@@ -754,6 +759,15 @@ namespace WebLoader
         {
             if (hasAhome) { btnHome.BringToFront(); }
             tmrShowAddHome.Enabled = false;
+        }
+
+        private void tmrNavDone_Tick(object sender, EventArgs e)
+        {
+            tmrNavDone.Enabled = false;
+            HtmlDocument fixDoc = myBrowser.Document;
+            if ((fixDoc.Body == null) || (fixDoc.Body.InnerHtml == null))
+                {  return; }
+            btnStopLoad_Click(this, new EventArgs());
         }
     }
 }
