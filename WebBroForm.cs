@@ -45,6 +45,7 @@ namespace WebLoader
         private bool ctrlNavigated = false;
         private string GlobalFavs = "";
         private bool hasAhome;
+        private bool googleFailed = false;
         #endregion
 
         private void WebBroForm_Load(object sender, EventArgs e)
@@ -173,6 +174,10 @@ namespace WebLoader
             CheckShortDoc(fixDoc.Url.ToString(), 3);
             if (docTooShort) { return; }
 
+            string checkGoogle = fixDoc.Body.InnerHtml.ToString().ToLower();
+            string searchFail = "trouble accessing Google Search";
+            if (checkGoogle.IndexOf(searchFail.ToLower()) > -1) { googleFailed = true; }
+
             string pageBodyModshow = MakeFinalAdjustments(ref pageBodyMod);
             this.Text = myBrowser.DocumentTitle;
             myBrowser.Document.OpenNew(false);
@@ -266,6 +271,14 @@ namespace WebLoader
             saveOldPage = myBrowser.DocumentText;
             if (!atHome) { btnAddHome.BringToFront(); }
             tmrShowAddHome.Enabled = true;
+            if (googleFailed)
+            {
+                googleFailed = false;
+                string saveUrl = myAddrBar.Text;
+                myAddrBar.Text = saveUrl.Replace("google", "bing");
+                this.lblStatus.Text = "Google failed, click again to Bing...";
+                this.lblStatus.Refresh();
+            }
         }
 
         private string MakeFinalAdjustments(ref string pageBodyMod)
