@@ -46,6 +46,7 @@ namespace WebLoader
         private string GlobalFavs = "";
         private bool hasAhome;
         private bool googleFailed = false;
+        private bool isAsearch;
         #endregion
 
         private void WebBroForm_Load(object sender, EventArgs e)
@@ -271,6 +272,19 @@ namespace WebLoader
             saveOldPage = myBrowser.DocumentText;
             if (!atHome) { btnAddHome.BringToFront(); }
             tmrShowAddHome.Enabled = true;
+            if (isAsearch)
+            {
+                isAsearch = false;
+                btnSearchEng.Visible = true;
+                myAddrBar.Left = 91 + 49;
+                myAddrBar.Width = myAddrBar.Width - 49;
+            }
+            else 
+            { 
+                btnSearchEng.Visible = false;
+                myAddrBar.Left = 91;
+                myAddrBar.Width = this.Width - 289;
+            }
             if (googleFailed)
             {
                 googleFailed = false;
@@ -404,8 +418,10 @@ namespace WebLoader
             btnFav.ImageIndex = 0;
             if (myAddrBar.Text.Contains(" "))
             {
+                isAsearch = true;
                 string holdAddr = myAddrBar.Text;
-                myAddrBar.Text = "www.google.com/search?q=" + holdAddr.Replace(" ", "+");
+                myAddrBar.Text = "www.bing.com/search?q=" + holdAddr.Replace(" ", "+");
+                //myAddrBar.Text = "www.google.com/search?q=" + holdAddr.Replace(" ", "+");
             }
             myBrowser.Navigate(myAddrBar.Text);
         }
