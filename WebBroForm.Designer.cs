@@ -305,6 +305,7 @@
             btnSearchEng.TabIndex = 18;
             btnSearchEng.UseVisualStyleBackColor = true;
             btnSearchEng.Visible = false;
+            btnSearchEng.Click += btnSearchEng_Click;
             // 
             // WebBroForm
             // 
