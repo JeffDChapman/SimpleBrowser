@@ -49,11 +49,17 @@ namespace WebLoader
         private bool googleFailed = false;
         private bool isAsearch;
         private string currentSearchEng = "bing";
+        private string searchEngines = "bing;google;duckduckgo;yahoo;ecosia;qwant;startpage;searx";
+        string[] sEngList;
+        private int sEngIndex;
         #endregion
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
             hasAhome = true;
+            sEngList = searchEngines.Split(new char[] { ';' });
+            sEngIndex = sEngList.ToList().IndexOf(currentSearchEng);
+
             int findWL = strExeFilePath.IndexOf("WebLoader", strExeFilePath.Length - 15);
             strExeFilePath = strExeFilePath.Substring(0, findWL);
             try { homeLoc = File.ReadAllText(strExeFilePath + homeUrlPath); }
@@ -297,9 +303,9 @@ namespace WebLoader
             {
                 googleFailed = false;
                 string saveUrl = myAddrBar.Text;
-                myAddrBar.Text = saveUrl.Replace("google", currentSearchEng);
+                myAddrBar.Text = saveUrl.Replace("google", "bing");
                 string cseCapitalized = currentSearchEng[0].ToString().ToUpper() + currentSearchEng.Substring(1);
-                this.lblStatus.Text = "Google failed, click again to " + cseCapitalized + "...";
+                this.lblStatus.Text = "Google failed, click again to Bing...";
                 this.lblStatus.Refresh();
             }
         }
@@ -429,7 +435,7 @@ namespace WebLoader
             {
                 isAsearch = true;
                 string holdAddr = myAddrBar.Text;
-                myAddrBar.Text = "www.bing.com/search?q=" + holdAddr.Replace(" ", "+");
+                myAddrBar.Text = "www." + currentSearchEng + ".com/search?q=" + holdAddr.Replace(" ", "+");
             }
             myBrowser.Navigate(myAddrBar.Text);
         }
@@ -811,7 +817,13 @@ namespace WebLoader
 
         private void btnSearchEng_Click(object sender, EventArgs e)
         {
-            btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\google.png");
+            sEngIndex++;
+            if (sEngIndex >= sEngList.Length) {sEngIndex = 0;}
+            string priorSearchEng = currentSearchEng;
+            currentSearchEng = sEngList[sEngIndex];
+            btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\" + currentSearchEng + ".png");
+            string savedAddrBar = myAddrBar.Text;
+            myAddrBar.Text = savedAddrBar.Replace(priorSearchEng, currentSearchEng);
         }
     }
 }
