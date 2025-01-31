@@ -3,7 +3,6 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Forms.VisualStyles;
 
 namespace WebLoader
 {
@@ -49,8 +48,10 @@ namespace WebLoader
         private bool googleFailed = false;
         private bool isAsearch;
         private string currentSearchEng = "bing";
-        private string searchEngines = "bing;google;duckduckgo;yahoo;ecosia;qwant;startpage;searx";
+        private string searchEngines = "bing;google;duckduckgo;metasearx";
+        private string searchNeedsSearch = "1,1,0,0";
         string[] sEngList;
+        string[] sNsList;
         private int sEngIndex;
         #endregion
 
@@ -59,6 +60,7 @@ namespace WebLoader
             hasAhome = true;
             sEngList = searchEngines.Split(new char[] { ';' });
             sEngIndex = sEngList.ToList().IndexOf(currentSearchEng);
+            sNsList = searchNeedsSearch.Split(new char[] { ',' });
 
             int findWL = strExeFilePath.IndexOf("WebLoader", strExeFilePath.Length - 15);
             strExeFilePath = strExeFilePath.Substring(0, findWL);
@@ -281,6 +283,8 @@ namespace WebLoader
             if (!atHome) { btnAddHome.BringToFront(); }
             tmrShowAddHome.Enabled = true;
             CheckSearchSitch();
+            currentSearchEng = "bing"; sEngIndex = 0;
+            btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\" + currentSearchEng + ".png");
         }
 
         private void CheckSearchSitch()
@@ -824,6 +828,19 @@ namespace WebLoader
             btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\" + currentSearchEng + ".png");
             string savedAddrBar = myAddrBar.Text;
             myAddrBar.Text = savedAddrBar.Replace(priorSearchEng, currentSearchEng);
+            bool hasSearch = myAddrBar.Text.Contains("search");
+            if ((sNsList[sEngIndex] == "0") && hasSearch)
+            {
+                savedAddrBar = myAddrBar.Text;
+                myAddrBar.Text = savedAddrBar.Replace("search", "");
+            }
+            if ((sNsList[sEngIndex] == "1") && !hasSearch)
+            {
+                savedAddrBar = myAddrBar.Text;
+                int qLoc = savedAddrBar.IndexOf("?");
+                myAddrBar.Text = savedAddrBar.Substring(0, qLoc) + "search" + savedAddrBar.Substring(qLoc);    
+            }
+
         }
     }
 }
