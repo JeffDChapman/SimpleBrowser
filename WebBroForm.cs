@@ -53,6 +53,7 @@ namespace WebLoader
         string[] sEngList;
         string[] sNsList;
         private int sEngIndex;
+        private string savedAddrBar;
         #endregion
 
         private void WebBroForm_Load(object sender, EventArgs e)
@@ -283,8 +284,6 @@ namespace WebLoader
             if (!atHome) { btnAddHome.BringToFront(); }
             tmrShowAddHome.Enabled = true;
             CheckSearchSitch();
-            currentSearchEng = "bing"; sEngIndex = 0;
-            btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\SearchLogos\\" + currentSearchEng + ".png");
         }
 
         private void CheckSearchSitch()
@@ -296,6 +295,7 @@ namespace WebLoader
                 btnSearchEng.Visible = true;
                 myAddrBar.Left = 91 + moveOffset;
                 myAddrBar.Width = this.Width - 289 - moveOffset;
+                myAddrBar.Text = savedAddrBar;
             }
             else
             {
@@ -435,11 +435,13 @@ namespace WebLoader
             navLoopCount = 0;
             ResetOfflineCkbox();
             btnFav.ImageIndex = 0;
+            if (btnSearchEng.Visible) { isAsearch = true; }
             if (myAddrBar.Text.Contains(" "))
             {
                 isAsearch = true;
                 string holdAddr = myAddrBar.Text;
-                myAddrBar.Text = "www." + currentSearchEng + ".com/search?q=" + holdAddr.Replace(" ", "+");
+                myAddrBar.Text = "https://www." + currentSearchEng + ".com/search?q=" + holdAddr.Replace(" ", "+");
+                ChckReqsForSearchWord(true);
             }
             myBrowser.Navigate(myAddrBar.Text);
         }
@@ -823,25 +825,28 @@ namespace WebLoader
         private void btnSearchEng_Click(object sender, EventArgs e)
         {
             sEngIndex++;
-            if (sEngIndex >= sEngList.Length) {sEngIndex = 0;}
+            if (sEngIndex >= sEngList.Length) { sEngIndex = 0; }
             string priorSearchEng = currentSearchEng;
             currentSearchEng = sEngList[sEngIndex];
             btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\SearchLogos\\" + currentSearchEng + ".png");
-            string savedAddrBar = myAddrBar.Text;
+            savedAddrBar = myAddrBar.Text;
             myAddrBar.Text = savedAddrBar.Replace(priorSearchEng, currentSearchEng);
             bool hasSearch = myAddrBar.Text.Contains("search");
+            savedAddrBar = ChckReqsForSearchWord(hasSearch);
+        }
+
+        private string ChckReqsForSearchWord(bool hasSearch)
+        {
+            savedAddrBar = myAddrBar.Text;
             if ((sNsList[sEngIndex] == "0") && hasSearch)
-            {
-                savedAddrBar = myAddrBar.Text;
-                myAddrBar.Text = savedAddrBar.Replace("search", "");
-            }
+                { myAddrBar.Text = savedAddrBar.Replace("search", ""); }
             if ((sNsList[sEngIndex] == "1") && !hasSearch)
             {
-                savedAddrBar = myAddrBar.Text;
                 int qLoc = savedAddrBar.IndexOf("?");
-                myAddrBar.Text = savedAddrBar.Substring(0, qLoc) + "search" + savedAddrBar.Substring(qLoc);    
+                myAddrBar.Text = savedAddrBar.Substring(0, qLoc) + "search" + savedAddrBar.Substring(qLoc);
             }
 
+            return savedAddrBar;
         }
     }
 }
