@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v6.0": {
-      "WebLoader/1.2.3": {
+      "WebLoader/1.2.4": {
         "runtime": {
           "WebLoader.dll": {}
         }
@@ -14,7 +14,7 @@
     }
   },
   "libraries": {
-    "WebLoader/1.2.3": {
+    "WebLoader/1.2.4": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
