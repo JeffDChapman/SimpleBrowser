@@ -46,16 +46,28 @@ namespace WebLoader
         private string GlobalFavs = "";
         private bool hasAhome;
         private bool googleFailed = false;
+        private bool isAsearch;
+        private string currentSearchEng = "bing";
+        private string searchEngines = "bing;google;duckduckgo;metasearx;mojeek";
+        private string searchNeedsSearch = "1,1,0,0,1";
+        string[] sEngList;
+        string[] sNsList;
+        private int sEngIndex;
+        private string savedAddrBar;
         #endregion
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
             hasAhome = true;
+            sEngList = searchEngines.Split(new char[] { ';' });
+            sEngIndex = sEngList.ToList().IndexOf(currentSearchEng);
+            sNsList = searchNeedsSearch.Split(new char[] { ',' });
+
             int findWL = strExeFilePath.IndexOf("WebLoader", strExeFilePath.Length - 15);
             strExeFilePath = strExeFilePath.Substring(0, findWL);
             try { homeLoc = File.ReadAllText(strExeFilePath + homeUrlPath); }
-            catch 
-            { 
+            catch
+            {
                 hasAhome = false;
                 btnHome.Enabled = false;
                 btnAddHome.BringToFront();
@@ -65,7 +77,7 @@ namespace WebLoader
             internalRedirect = false;
 
             if (passedStartDoc != "")
-                { this.myBrowser.Navigate(passedStartDoc); }
+            { this.myBrowser.Navigate(passedStartDoc); }
             else { if (hasAhome) { myBrowser.Navigate(homeLoc); } }
 
             this.Top = 0;
@@ -96,31 +108,31 @@ namespace WebLoader
             }
             if ((e == null) && (!intRptdFlag)) { return; }
             if (isSpying)
-                { return; }
+            { return; }
 
             if (hadRecovery) { return; }
             if ((naviErr) && (!intRptdFlag)) { return; }
 
             docTooShort = false;
-            CheckShortDoc(myAddrBar.Text, 2); 
+            CheckShortDoc(myAddrBar.Text, 2);
             if ((docTooShort) && (ctrlNavigated))
             {
                 this.lblStatus.Text = "Delay reroute ...";
                 tmrReroute.Enabled = true;
                 return;
             }
-            if (docTooShort) {return;}
+            if (docTooShort) { return; }
 
             CleanHTML();
         }
 
         private void CheckShortDoc(string GoToUrl, int Occurrence)
         {
-            if (myBrowser.DocumentText.Length < 200) 
-            {  
+            if (myBrowser.DocumentText.Length < 200)
+            {
                 docTooShort = true;
                 if (!stopPopUps)
-                    { StartnewFormWseed(GoToUrl, myBrowser.DocumentText); }
+                { StartnewFormWseed(GoToUrl, myBrowser.DocumentText); }
                 myBrowser.DocumentText = saveOldPage;
                 if ((ctrlNavigated) && (Occurrence == 2)) { return; }
                 string boxMsg = "Short Reply Reroute (" + Occurrence.ToString() + ")";
@@ -130,7 +142,7 @@ namespace WebLoader
 
         private void CleanHTML()
         {
-            if (hadRecovery) {return; }
+            if (hadRecovery) { return; }
             if ((naviErr) && (!intRptdFlag)) { return; }
             hadRecovery = false;
             try { CloseAllSocks(); }
@@ -226,12 +238,12 @@ namespace WebLoader
         }
 
         private void SaveFileOffline(string pageBodyMod, string recovD, int foundTitle)
-        {            
+        {
             offLineFile = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\";
             if (foundTitle < 0)
-                { offLineFile += "noName.htm"; }
-            else 
-                { offLineFile += recovD.Substring(foundTitle + 7, 8) + ".htm"; }
+            { offLineFile += "noName.htm"; }
+            else
+            { offLineFile += recovD.Substring(foundTitle + 7, 8) + ".htm"; }
             offLineFile = offLineFile.Replace("'", "");
             offLineFile = offLineFile.Replace("\n", "");
             offLineFile = offLineFile.Replace("\r", "");
@@ -255,7 +267,7 @@ namespace WebLoader
             hadRecovery = false;
             tmrPopUps.Enabled = true;
             if (myBrowser.Url != null)
-                { this.myAddrBar.Text = myBrowser.Url.ToString().Replace("ovre", "over"); }
+            { this.myAddrBar.Text = myBrowser.Url.ToString().Replace("ovre", "over"); }
             if (this.myAddrBar.Text.Substring(0, 5) != "file:")
             {
                 string appendText = this.myAddrBar.Text + "<br />" + Environment.NewLine;
@@ -271,11 +283,32 @@ namespace WebLoader
             saveOldPage = myBrowser.DocumentText;
             if (!atHome) { btnAddHome.BringToFront(); }
             tmrShowAddHome.Enabled = true;
+            CheckSearchSitch();
+        }
+
+        private void CheckSearchSitch()
+        {
+            int moveOffset = 46;
+            if (isAsearch)
+            {
+                isAsearch = false;
+                btnSearchEng.Visible = true;
+                myAddrBar.Left = 91 + moveOffset;
+                myAddrBar.Width = this.Width - 289 - moveOffset;
+                myAddrBar.Text = savedAddrBar;
+            }
+            else
+            {
+                btnSearchEng.Visible = false;
+                myAddrBar.Left = 91;
+                myAddrBar.Width = this.Width - 289;
+            }
             if (googleFailed)
             {
                 googleFailed = false;
                 string saveUrl = myAddrBar.Text;
                 myAddrBar.Text = saveUrl.Replace("google", "bing");
+                string cseCapitalized = currentSearchEng[0].ToString().ToUpper() + currentSearchEng.Substring(1);
                 this.lblStatus.Text = "Google failed, click again to Bing...";
                 this.lblStatus.Refresh();
             }
@@ -303,7 +336,7 @@ namespace WebLoader
         private string tryRecovery(Stream htmlStream)
         {
             string RecoveredDoc = "";
-            byte[] bufferData =  new byte[2048];
+            byte[] bufferData = new byte[2048];
             int countRead = 1;
             int lastread = 0;
             while (countRead > 0)
@@ -402,10 +435,13 @@ namespace WebLoader
             navLoopCount = 0;
             ResetOfflineCkbox();
             btnFav.ImageIndex = 0;
+            if (btnSearchEng.Visible) { isAsearch = true; }
             if (myAddrBar.Text.Contains(" "))
             {
+                isAsearch = true;
                 string holdAddr = myAddrBar.Text;
-                myAddrBar.Text = "www.google.com/search?q=" + holdAddr.Replace(" ", "+");
+                myAddrBar.Text = "https://www." + currentSearchEng + ".com/search?q=" + holdAddr.Replace(" ", "+");
+                ChckReqsForSearchWord(true);
             }
             myBrowser.Navigate(myAddrBar.Text);
         }
@@ -425,24 +461,24 @@ namespace WebLoader
             btnFav.ImageIndex = 0;
             ctrlNavigated = false;
             if (Control.ModifierKeys == Keys.Control) { ctrlNavigated = true; }
-            
+
             string reDirLoc = e.Url.ToString();
-            if (reDirLoc == "about:blank") 
+            if (reDirLoc == "about:blank")
             {
                 naviErr = true;
                 string reDirect = FixAboutUrl(reDirLoc);
                 reDirLoc = FixDoubleSlash(reDirect);
                 if (!stopPopUps)
-                    { StartnewForm(reDirLoc); }
+                { StartnewForm(reDirLoc); }
                 e.Cancel = true;
-                return; 
+                return;
             }
 
             bool regularNonHomeClick = false;
             if ((internalRedirect) && (!ctrlNavigated) && (!atHome)) { regularNonHomeClick = true; }
 
             if ((stopPopUps) && (regularNonHomeClick))
-            { 
+            {
                 e.Cancel = true;
                 return;
             }
@@ -457,7 +493,7 @@ namespace WebLoader
             }
 
             if ((ctrlNavigated) || (atHome))
-                { ResetOfflineCkbox(); }
+            { ResetOfflineCkbox(); }
             this.lblStatus.Text = "Navigating...";
             stopPopUps = true;
             this.btnGoTo.Visible = false;
@@ -471,7 +507,7 @@ namespace WebLoader
                 navLoopCount = 0;
                 return;
             }
-          
+
             this.myBrowser.Visible = false;
             string newRouteTo = FixAboutUrl(reDirLoc);
             myAddrBar.Text = FixDoubleSlash(newRouteTo).Replace("ovre", "over");
@@ -524,10 +560,11 @@ namespace WebLoader
         {
             anotherForm.Show();
             anotherForm.Left = this.Left + 50;
-            anotherForm.Width = this.Width;           
+            anotherForm.Width = this.Width;
             Application.DoEvents();
             System.Threading.Thread.Sleep(500);
-            anotherForm.myAddrBar.Text = reDirLoc.Replace("ovre", "over");
+            string holdAddr = reDirLoc.Replace("ovre", "over");
+            anotherForm.myAddrBar.Text = holdAddr.Replace("%2F", "/");
             anotherForm.chosenFont = chosenFont;
             anotherForm.chosenSize = chosenSize;
             anotherForm.stopPopUps = true;
@@ -542,7 +579,7 @@ namespace WebLoader
             foreach (string oneSet in result)
             {
                 if (oneSet != priorSet)
-                    { reDirectBack += oneSet + "/"; }
+                { reDirectBack += oneSet + "/"; }
                 priorSet = oneSet;
             }
             return (reDirectBack.Substring(0, reDirectBack.Length - 1));
@@ -553,7 +590,7 @@ namespace WebLoader
             if (inRedirect.Length < 8) { return inRedirect; }
             int dSloc = inRedirect.IndexOf("//", 8);
             if (dSloc < 0)
-                {return inRedirect;}
+            { return inRedirect; }
             int fSloc = inRedirect.IndexOf("/", 8);
             string reDirectBack = "";
             reDirectBack = inRedirect.Substring(0, fSloc) + inRedirect.Substring(dSloc + 1);
@@ -616,13 +653,15 @@ namespace WebLoader
         private void btnScriptOK_Click(object sender, EventArgs e)
         {
             if (allowScripts == true)
-                { allowScripts = false;
+            {
+                allowScripts = false;
                 this.lblCheckedOn.Visible = false;
-                }
+            }
             else
-                { allowScripts = true;
+            {
+                allowScripts = true;
                 this.lblCheckedOn.Visible = true;
-                }
+            }
         }
 
         private void myAddrBar_Click(object sender, EventArgs e)
@@ -673,12 +712,12 @@ namespace WebLoader
             tmrNavDone.Enabled = true;
 
             if (!isSpying)
-                { return; }
+            { return; }
 
             tmrNavDone.Enabled = false;
             PoshPageBrackets();
             myBrowser.Refresh();
-         }
+        }
 
         private void PoshPageBrackets()
         {
@@ -779,8 +818,35 @@ namespace WebLoader
             tmrNavDone.Enabled = false;
             HtmlDocument fixDoc = myBrowser.Document;
             if ((fixDoc.Body == null) || (fixDoc.Body.InnerHtml == null))
-                {  return; }
+            { return; }
             btnStopLoad_Click(this, new EventArgs());
+        }
+
+        private void btnSearchEng_Click(object sender, EventArgs e)
+        {
+            sEngIndex++;
+            if (sEngIndex >= sEngList.Length) { sEngIndex = 0; }
+            string priorSearchEng = currentSearchEng;
+            currentSearchEng = sEngList[sEngIndex];
+            btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\SearchLogos\\" + currentSearchEng + ".png");
+            savedAddrBar = myAddrBar.Text;
+            myAddrBar.Text = savedAddrBar.Replace(priorSearchEng, currentSearchEng);
+            bool hasSearch = myAddrBar.Text.Contains("search");
+            savedAddrBar = ChckReqsForSearchWord(hasSearch);
+        }
+
+        private string ChckReqsForSearchWord(bool hasSearch)
+        {
+            savedAddrBar = myAddrBar.Text;
+            if ((sNsList[sEngIndex] == "0") && hasSearch)
+                { myAddrBar.Text = savedAddrBar.Replace("search", ""); }
+            if ((sNsList[sEngIndex] == "1") && !hasSearch)
+            {
+                int qLoc = savedAddrBar.IndexOf("?");
+                myAddrBar.Text = savedAddrBar.Substring(0, qLoc) + "search" + savedAddrBar.Substring(qLoc);
+            }
+
+            return savedAddrBar;
         }
     }
 }

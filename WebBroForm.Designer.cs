@@ -28,312 +28,319 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebBroForm));
-            this.myBrowser = new System.Windows.Forms.WebBrowser();
-            this.myAddrBar = new System.Windows.Forms.TextBox();
-            this.btnHome = new System.Windows.Forms.Button();
-            this.btnGoTo = new System.Windows.Forms.Button();
-            this.btnBack = new System.Windows.Forms.Button();
-            this.lboxRecent = new System.Windows.Forms.ListBox();
-            this.lblWorking = new System.Windows.Forms.Label();
-            this.btnStopLoad = new System.Windows.Forms.Button();
-            this.btnScriptOK = new System.Windows.Forms.Button();
-            this.lblCheckedOn = new System.Windows.Forms.Label();
-            this.btnHistory = new System.Windows.Forms.Button();
-            this.picLoading = new System.Windows.Forms.PictureBox();
-            this.lblStatus = new System.Windows.Forms.Label();
-            this.dlgGetFont = new System.Windows.Forms.FontDialog();
-            this.btnFont = new System.Windows.Forms.Button();
-            this.tmrPopUps = new System.Windows.Forms.Timer(this.components);
-            this.cbSaveOfflineFile = new System.Windows.Forms.CheckBox();
-            this.tmrReroute = new System.Windows.Forms.Timer(this.components);
-            this.toolTipStop = new System.Windows.Forms.ToolTip(this.components);
-            this.btnFav = new System.Windows.Forms.Button();
-            this.imgLstars = new System.Windows.Forms.ImageList(this.components);
-            this.btnAddHome = new System.Windows.Forms.Button();
-            this.tmrShowAddHome = new System.Windows.Forms.Timer(this.components);
-            this.tmrNavDone = new System.Windows.Forms.Timer(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.picLoading)).BeginInit();
-            this.SuspendLayout();
+            myBrowser = new WebBrowser();
+            myAddrBar = new TextBox();
+            btnHome = new Button();
+            btnGoTo = new Button();
+            btnBack = new Button();
+            lboxRecent = new ListBox();
+            lblWorking = new Label();
+            btnStopLoad = new Button();
+            btnScriptOK = new Button();
+            lblCheckedOn = new Label();
+            btnHistory = new Button();
+            picLoading = new PictureBox();
+            lblStatus = new Label();
+            dlgGetFont = new FontDialog();
+            btnFont = new Button();
+            tmrPopUps = new System.Windows.Forms.Timer(components);
+            cbSaveOfflineFile = new CheckBox();
+            tmrReroute = new System.Windows.Forms.Timer(components);
+            toolTipStop = new ToolTip(components);
+            btnFav = new Button();
+            imgLstars = new ImageList(components);
+            btnAddHome = new Button();
+            tmrShowAddHome = new System.Windows.Forms.Timer(components);
+            tmrNavDone = new System.Windows.Forms.Timer(components);
+            btnSearchEng = new Button();
+            ((System.ComponentModel.ISupportInitialize)picLoading).BeginInit();
+            SuspendLayout();
             // 
             // myBrowser
             // 
-            this.myBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.myBrowser.Location = new System.Drawing.Point(13, 40);
-            this.myBrowser.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.myBrowser.MinimumSize = new System.Drawing.Size(33, 39);
-            this.myBrowser.Name = "myBrowser";
-            this.myBrowser.ScriptErrorsSuppressed = true;
-            this.myBrowser.Size = new System.Drawing.Size(1292, 972);
-            this.myBrowser.TabIndex = 0;
-            this.myBrowser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.myBrowser_DocumentCompleted);
-            this.myBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.myBrowser_Navigated);
-            this.myBrowser.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.myBrowser_Navigating);
+            myBrowser.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            myBrowser.Location = new Point(13, 40);
+            myBrowser.Margin = new Padding(4, 6, 4, 6);
+            myBrowser.MinimumSize = new Size(33, 39);
+            myBrowser.Name = "myBrowser";
+            myBrowser.ScriptErrorsSuppressed = true;
+            myBrowser.Size = new Size(1292, 972);
+            myBrowser.TabIndex = 0;
+            myBrowser.DocumentCompleted += myBrowser_DocumentCompleted;
+            myBrowser.Navigated += myBrowser_Navigated;
+            myBrowser.Navigating += myBrowser_Navigating;
             // 
             // myAddrBar
             // 
-            this.myAddrBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.myAddrBar.Location = new System.Drawing.Point(91, 4);
-            this.myAddrBar.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.myAddrBar.Name = "myAddrBar";
-            this.myAddrBar.Size = new System.Drawing.Size(1051, 31);
-            this.myAddrBar.TabIndex = 1;
-            this.myAddrBar.Click += new System.EventHandler(this.myAddrBar_Click);
+            myAddrBar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            myAddrBar.Location = new Point(91, 4);
+            myAddrBar.Margin = new Padding(4, 6, 4, 6);
+            myAddrBar.Name = "myAddrBar";
+            myAddrBar.Size = new Size(1051, 31);
+            myAddrBar.TabIndex = 1;
+            myAddrBar.Click += myAddrBar_Click;
             // 
             // btnHome
             // 
-            this.btnHome.Image = ((System.Drawing.Image)(resources.GetObject("btnHome.Image")));
-            this.btnHome.Location = new System.Drawing.Point(0, 0);
-            this.btnHome.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnHome.Name = "btnHome";
-            this.btnHome.Size = new System.Drawing.Size(47, 39);
-            this.btnHome.TabIndex = 2;
-            this.btnHome.UseVisualStyleBackColor = true;
-            this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
+            btnHome.Image = (Image)resources.GetObject("btnHome.Image");
+            btnHome.Location = new Point(0, 0);
+            btnHome.Margin = new Padding(4, 6, 4, 6);
+            btnHome.Name = "btnHome";
+            btnHome.Size = new Size(47, 39);
+            btnHome.TabIndex = 2;
+            btnHome.UseVisualStyleBackColor = true;
+            btnHome.Click += btnHome_Click;
             // 
             // btnGoTo
             // 
-            this.btnGoTo.Image = ((System.Drawing.Image)(resources.GetObject("btnGoTo.Image")));
-            this.btnGoTo.Location = new System.Drawing.Point(44, 0);
-            this.btnGoTo.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnGoTo.Name = "btnGoTo";
-            this.btnGoTo.Size = new System.Drawing.Size(47, 39);
-            this.btnGoTo.TabIndex = 3;
-            this.btnGoTo.UseVisualStyleBackColor = true;
-            this.btnGoTo.Click += new System.EventHandler(this.btnGoTo_Click);
+            btnGoTo.Image = (Image)resources.GetObject("btnGoTo.Image");
+            btnGoTo.Location = new Point(44, 0);
+            btnGoTo.Margin = new Padding(4, 6, 4, 6);
+            btnGoTo.Name = "btnGoTo";
+            btnGoTo.Size = new Size(47, 39);
+            btnGoTo.TabIndex = 3;
+            btnGoTo.UseVisualStyleBackColor = true;
+            btnGoTo.Click += btnGoTo_Click;
             // 
             // btnBack
             // 
-            this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBack.Image = ((System.Drawing.Image)(resources.GetObject("btnBack.Image")));
-            this.btnBack.Location = new System.Drawing.Point(1277, 0);
-            this.btnBack.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(47, 39);
-            this.btnBack.TabIndex = 4;
-            this.btnBack.UseVisualStyleBackColor = true;
-            this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
+            btnBack.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnBack.Image = (Image)resources.GetObject("btnBack.Image");
+            btnBack.Location = new Point(1277, 0);
+            btnBack.Margin = new Padding(4, 6, 4, 6);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(47, 39);
+            btnBack.TabIndex = 4;
+            btnBack.UseVisualStyleBackColor = true;
+            btnBack.Click += btnBack_Click;
             // 
             // lboxRecent
             // 
-            this.lboxRecent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lboxRecent.FormattingEnabled = true;
-            this.lboxRecent.ItemHeight = 25;
-            this.lboxRecent.Location = new System.Drawing.Point(659, 0);
-            this.lboxRecent.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.lboxRecent.Name = "lboxRecent";
-            this.lboxRecent.Size = new System.Drawing.Size(657, 329);
-            this.lboxRecent.TabIndex = 5;
-            this.lboxRecent.Visible = false;
-            this.lboxRecent.Click += new System.EventHandler(this.lboxRecent_Click);
+            lboxRecent.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lboxRecent.FormattingEnabled = true;
+            lboxRecent.ItemHeight = 25;
+            lboxRecent.Location = new Point(659, 0);
+            lboxRecent.Margin = new Padding(4, 6, 4, 6);
+            lboxRecent.Name = "lboxRecent";
+            lboxRecent.Size = new Size(657, 329);
+            lboxRecent.TabIndex = 5;
+            lboxRecent.Visible = false;
+            lboxRecent.Click += lboxRecent_Click;
             // 
             // lblWorking
             // 
-            this.lblWorking.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblWorking.AutoSize = true;
-            this.lblWorking.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblWorking.Location = new System.Drawing.Point(962, 48);
-            this.lblWorking.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblWorking.Name = "lblWorking";
-            this.lblWorking.Size = new System.Drawing.Size(278, 55);
-            this.lblWorking.TabIndex = 6;
-            this.lblWorking.Text = "Working . . .";
+            lblWorking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblWorking.AutoSize = true;
+            lblWorking.Font = new Font("Microsoft Sans Serif", 24F, FontStyle.Regular, GraphicsUnit.Point);
+            lblWorking.Location = new Point(962, 48);
+            lblWorking.Margin = new Padding(4, 0, 4, 0);
+            lblWorking.Name = "lblWorking";
+            lblWorking.Size = new Size(278, 55);
+            lblWorking.TabIndex = 6;
+            lblWorking.Text = "Working . . .";
             // 
             // btnStopLoad
             // 
-            this.btnStopLoad.Image = ((System.Drawing.Image)(resources.GetObject("btnStopLoad.Image")));
-            this.btnStopLoad.Location = new System.Drawing.Point(43, 0);
-            this.btnStopLoad.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnStopLoad.Name = "btnStopLoad";
-            this.btnStopLoad.Size = new System.Drawing.Size(47, 39);
-            this.btnStopLoad.TabIndex = 7;
-            this.toolTipStop.SetToolTip(this.btnStopLoad, "Stop Loading");
-            this.btnStopLoad.UseVisualStyleBackColor = true;
-            this.btnStopLoad.Click += new System.EventHandler(this.btnStopLoad_Click);
+            btnStopLoad.Image = (Image)resources.GetObject("btnStopLoad.Image");
+            btnStopLoad.Location = new Point(43, 0);
+            btnStopLoad.Margin = new Padding(4, 6, 4, 6);
+            btnStopLoad.Name = "btnStopLoad";
+            btnStopLoad.Size = new Size(47, 39);
+            btnStopLoad.TabIndex = 7;
+            toolTipStop.SetToolTip(btnStopLoad, "Stop Loading");
+            btnStopLoad.UseVisualStyleBackColor = true;
+            btnStopLoad.Click += btnStopLoad_Click;
             // 
             // btnScriptOK
             // 
-            this.btnScriptOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnScriptOK.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Blue;
-            this.btnScriptOK.Image = ((System.Drawing.Image)(resources.GetObject("btnScriptOK.Image")));
-            this.btnScriptOK.Location = new System.Drawing.Point(1187, 0);
-            this.btnScriptOK.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnScriptOK.Name = "btnScriptOK";
-            this.btnScriptOK.Size = new System.Drawing.Size(47, 39);
-            this.btnScriptOK.TabIndex = 8;
-            this.btnScriptOK.UseVisualStyleBackColor = true;
-            this.btnScriptOK.Click += new System.EventHandler(this.btnScriptOK_Click);
+            btnScriptOK.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnScriptOK.FlatAppearance.MouseDownBackColor = Color.Blue;
+            btnScriptOK.Image = (Image)resources.GetObject("btnScriptOK.Image");
+            btnScriptOK.Location = new Point(1187, 0);
+            btnScriptOK.Margin = new Padding(4, 6, 4, 6);
+            btnScriptOK.Name = "btnScriptOK";
+            btnScriptOK.Size = new Size(47, 39);
+            btnScriptOK.TabIndex = 8;
+            btnScriptOK.UseVisualStyleBackColor = true;
+            btnScriptOK.Click += btnScriptOK_Click;
             // 
             // lblCheckedOn
             // 
-            this.lblCheckedOn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblCheckedOn.BackColor = System.Drawing.Color.Olive;
-            this.lblCheckedOn.Location = new System.Drawing.Point(1193, 40);
-            this.lblCheckedOn.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblCheckedOn.Name = "lblCheckedOn";
-            this.lblCheckedOn.Size = new System.Drawing.Size(33, 11);
-            this.lblCheckedOn.TabIndex = 9;
-            this.lblCheckedOn.Visible = false;
+            lblCheckedOn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            lblCheckedOn.BackColor = Color.Olive;
+            lblCheckedOn.Location = new Point(1193, 40);
+            lblCheckedOn.Margin = new Padding(4, 0, 4, 0);
+            lblCheckedOn.Name = "lblCheckedOn";
+            lblCheckedOn.Size = new Size(33, 11);
+            lblCheckedOn.TabIndex = 9;
+            lblCheckedOn.Visible = false;
             // 
             // btnHistory
             // 
-            this.btnHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnHistory.Location = new System.Drawing.Point(1283, 2);
-            this.btnHistory.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnHistory.Name = "btnHistory";
-            this.btnHistory.Size = new System.Drawing.Size(33, 44);
-            this.btnHistory.TabIndex = 10;
-            this.btnHistory.Text = "H";
-            this.btnHistory.UseVisualStyleBackColor = true;
-            this.btnHistory.Visible = false;
-            this.btnHistory.Click += new System.EventHandler(this.btnHistory_Click);
+            btnHistory.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnHistory.Location = new Point(1283, 2);
+            btnHistory.Margin = new Padding(4, 6, 4, 6);
+            btnHistory.Name = "btnHistory";
+            btnHistory.Size = new Size(33, 44);
+            btnHistory.TabIndex = 10;
+            btnHistory.Text = "H";
+            btnHistory.UseVisualStyleBackColor = true;
+            btnHistory.Visible = false;
+            btnHistory.Click += btnHistory_Click;
             // 
             // picLoading
             // 
-            this.picLoading.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.picLoading.Image = ((System.Drawing.Image)(resources.GetObject("picLoading.Image")));
-            this.picLoading.Location = new System.Drawing.Point(360, 341);
-            this.picLoading.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.picLoading.Name = "picLoading";
-            this.picLoading.Size = new System.Drawing.Size(200, 200);
-            this.picLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picLoading.TabIndex = 11;
-            this.picLoading.TabStop = false;
+            picLoading.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            picLoading.Image = (Image)resources.GetObject("picLoading.Image");
+            picLoading.Location = new Point(360, 341);
+            picLoading.Margin = new Padding(4, 6, 4, 6);
+            picLoading.Name = "picLoading";
+            picLoading.Size = new Size(200, 200);
+            picLoading.SizeMode = PictureBoxSizeMode.AutoSize;
+            picLoading.TabIndex = 11;
+            picLoading.TabStop = false;
             // 
             // lblStatus
             // 
-            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblStatus.Location = new System.Drawing.Point(0, 1018);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(1292, 31);
-            this.lblStatus.TabIndex = 13;
-            this.lblStatus.Text = "Ready";
+            lblStatus.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lblStatus.BorderStyle = BorderStyle.FixedSingle;
+            lblStatus.Location = new Point(0, 1018);
+            lblStatus.Name = "lblStatus";
+            lblStatus.Size = new Size(1292, 31);
+            lblStatus.TabIndex = 13;
+            lblStatus.Text = "Ready";
             // 
             // dlgGetFont
             // 
-            this.dlgGetFont.Color = System.Drawing.Color.White;
-            this.dlgGetFont.FontMustExist = true;
+            dlgGetFont.Color = Color.White;
+            dlgGetFont.FontMustExist = true;
             // 
             // btnFont
             // 
-            this.btnFont.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFont.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnFont.Image = ((System.Drawing.Image)(resources.GetObject("btnFont.Image")));
-            this.btnFont.Location = new System.Drawing.Point(1231, 0);
-            this.btnFont.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnFont.Name = "btnFont";
-            this.btnFont.Size = new System.Drawing.Size(47, 39);
-            this.btnFont.TabIndex = 14;
-            this.btnFont.UseVisualStyleBackColor = true;
-            this.btnFont.Click += new System.EventHandler(this.btnFont_Click);
+            btnFont.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnFont.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnFont.Image = (Image)resources.GetObject("btnFont.Image");
+            btnFont.Location = new Point(1231, 0);
+            btnFont.Margin = new Padding(4, 6, 4, 6);
+            btnFont.Name = "btnFont";
+            btnFont.Size = new Size(47, 39);
+            btnFont.TabIndex = 14;
+            btnFont.UseVisualStyleBackColor = true;
+            btnFont.Click += btnFont_Click;
             // 
             // tmrPopUps
             // 
-            this.tmrPopUps.Interval = 10000;
-            this.tmrPopUps.Tick += new System.EventHandler(this.tmrPopUps_Tick);
+            tmrPopUps.Interval = 10000;
+            tmrPopUps.Tick += tmrPopUps_Tick;
             // 
             // cbSaveOfflineFile
             // 
-            this.cbSaveOfflineFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbSaveOfflineFile.AutoSize = true;
-            this.cbSaveOfflineFile.Location = new System.Drawing.Point(1116, 48);
-            this.cbSaveOfflineFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbSaveOfflineFile.Name = "cbSaveOfflineFile";
-            this.cbSaveOfflineFile.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.cbSaveOfflineFile.Size = new System.Drawing.Size(164, 29);
-            this.cbSaveOfflineFile.TabIndex = 15;
-            this.cbSaveOfflineFile.Text = "Save Offline File";
-            this.cbSaveOfflineFile.UseVisualStyleBackColor = true;
-            this.cbSaveOfflineFile.Visible = false;
+            cbSaveOfflineFile.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            cbSaveOfflineFile.AutoSize = true;
+            cbSaveOfflineFile.Location = new Point(1116, 48);
+            cbSaveOfflineFile.Margin = new Padding(3, 4, 3, 4);
+            cbSaveOfflineFile.Name = "cbSaveOfflineFile";
+            cbSaveOfflineFile.RightToLeft = RightToLeft.Yes;
+            cbSaveOfflineFile.Size = new Size(164, 29);
+            cbSaveOfflineFile.TabIndex = 15;
+            cbSaveOfflineFile.Text = "Save Offline File";
+            cbSaveOfflineFile.UseVisualStyleBackColor = true;
+            cbSaveOfflineFile.Visible = false;
             // 
             // tmrReroute
             // 
-            this.tmrReroute.Interval = 2000;
-            this.tmrReroute.Tick += new System.EventHandler(this.tmrReroute_Tick);
+            tmrReroute.Interval = 2000;
+            tmrReroute.Tick += tmrReroute_Tick;
             // 
             // btnFav
             // 
-            this.btnFav.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnFav.ImageIndex = 0;
-            this.btnFav.ImageList = this.imgLstars;
-            this.btnFav.Location = new System.Drawing.Point(1141, 0);
-            this.btnFav.Name = "btnFav";
-            this.btnFav.Size = new System.Drawing.Size(47, 39);
-            this.btnFav.TabIndex = 16;
-            this.btnFav.UseVisualStyleBackColor = true;
-            this.btnFav.Click += new System.EventHandler(this.btnFav_Click);
+            btnFav.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnFav.ImageIndex = 0;
+            btnFav.ImageList = imgLstars;
+            btnFav.Location = new Point(1141, 0);
+            btnFav.Name = "btnFav";
+            btnFav.Size = new Size(47, 39);
+            btnFav.TabIndex = 16;
+            btnFav.UseVisualStyleBackColor = true;
+            btnFav.Click += btnFav_Click;
             // 
             // imgLstars
             // 
-            this.imgLstars.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imgLstars.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imgLstars.ImageStream")));
-            this.imgLstars.TransparentColor = System.Drawing.Color.Transparent;
-            this.imgLstars.Images.SetKeyName(0, "SmStar.jpg");
-            this.imgLstars.Images.SetKeyName(1, "ShowStar.png");
+            imgLstars.ColorDepth = ColorDepth.Depth8Bit;
+            imgLstars.ImageStream = (ImageListStreamer)resources.GetObject("imgLstars.ImageStream");
+            imgLstars.TransparentColor = Color.Transparent;
+            imgLstars.Images.SetKeyName(0, "SmStar.jpg");
+            imgLstars.Images.SetKeyName(1, "ShowStar.png");
             // 
             // btnAddHome
             // 
-            this.btnAddHome.Image = ((System.Drawing.Image)(resources.GetObject("btnAddHome.Image")));
-            this.btnAddHome.Location = new System.Drawing.Point(0, 0);
-            this.btnAddHome.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnAddHome.Name = "btnAddHome";
-            this.btnAddHome.Size = new System.Drawing.Size(47, 39);
-            this.btnAddHome.TabIndex = 17;
-            this.btnAddHome.UseVisualStyleBackColor = true;
-            this.btnAddHome.Click += new System.EventHandler(this.btnAddHome_Click);
+            btnAddHome.Image = (Image)resources.GetObject("btnAddHome.Image");
+            btnAddHome.Location = new Point(0, 0);
+            btnAddHome.Margin = new Padding(4, 6, 4, 6);
+            btnAddHome.Name = "btnAddHome";
+            btnAddHome.Size = new Size(47, 39);
+            btnAddHome.TabIndex = 17;
+            btnAddHome.UseVisualStyleBackColor = true;
+            btnAddHome.Click += btnAddHome_Click;
             // 
             // tmrShowAddHome
             // 
-            this.tmrShowAddHome.Interval = 5000;
-            this.tmrShowAddHome.Tick += new System.EventHandler(this.tmrShowAddHome_Tick);
+            tmrShowAddHome.Interval = 5000;
+            tmrShowAddHome.Tick += tmrShowAddHome_Tick;
             // 
             // tmrNavDone
             // 
-            this.tmrNavDone.Interval = 3000;
-            this.tmrNavDone.Tick += new System.EventHandler(this.tmrNavDone_Tick);
+            tmrNavDone.Interval = 3000;
+            tmrNavDone.Tick += tmrNavDone_Tick;
+            // 
+            // btnSearchEng
+            // 
+            btnSearchEng.Image = (Image)resources.GetObject("btnSearchEng.Image");
+            btnSearchEng.Location = new Point(90, 0);
+            btnSearchEng.Margin = new Padding(4, 6, 4, 6);
+            btnSearchEng.Name = "btnSearchEng";
+            btnSearchEng.Size = new Size(47, 39);
+            btnSearchEng.TabIndex = 18;
+            btnSearchEng.UseVisualStyleBackColor = true;
+            btnSearchEng.Visible = false;
+            btnSearchEng.Click += btnSearchEng_Click;
             // 
             // WebBroForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1318, 1050);
-            this.Controls.Add(this.btnHome);
-            this.Controls.Add(this.btnAddHome);
-            this.Controls.Add(this.lblCheckedOn);
-            this.Controls.Add(this.btnGoTo);
-            this.Controls.Add(this.cbSaveOfflineFile);
-            this.Controls.Add(this.btnHistory);
-            this.Controls.Add(this.lboxRecent);
-            this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.myBrowser);
-            this.Controls.Add(this.btnScriptOK);
-            this.Controls.Add(this.btnStopLoad);
-            this.Controls.Add(this.btnBack);
-            this.Controls.Add(this.myAddrBar);
-            this.Controls.Add(this.lblWorking);
-            this.Controls.Add(this.picLoading);
-            this.Controls.Add(this.btnFont);
-            this.Controls.Add(this.btnFav);
-            this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.Name = "WebBroForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "[Title Goes Here]";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WebBroForm_FormClosing);
-            this.Load += new System.EventHandler(this.WebBroForm_Load);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.WebBroForm_KeyPress);
-            ((System.ComponentModel.ISupportInitialize)(this.picLoading)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1318, 1050);
+            Controls.Add(btnSearchEng);
+            Controls.Add(btnHome);
+            Controls.Add(btnAddHome);
+            Controls.Add(lblCheckedOn);
+            Controls.Add(btnGoTo);
+            Controls.Add(cbSaveOfflineFile);
+            Controls.Add(btnHistory);
+            Controls.Add(lboxRecent);
+            Controls.Add(lblStatus);
+            Controls.Add(myBrowser);
+            Controls.Add(btnScriptOK);
+            Controls.Add(btnStopLoad);
+            Controls.Add(btnBack);
+            Controls.Add(myAddrBar);
+            Controls.Add(lblWorking);
+            Controls.Add(picLoading);
+            Controls.Add(btnFont);
+            Controls.Add(btnFav);
+            KeyPreview = true;
+            Margin = new Padding(4, 6, 4, 6);
+            Name = "WebBroForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "[Title Goes Here]";
+            FormClosing += WebBroForm_FormClosing;
+            Load += WebBroForm_Load;
+            KeyPress += WebBroForm_KeyPress;
+            ((System.ComponentModel.ISupportInitialize)picLoading).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -362,6 +369,7 @@
         private Button btnAddHome;
         private System.Windows.Forms.Timer tmrShowAddHome;
         private System.Windows.Forms.Timer tmrNavDone;
+        private Button btnSearchEng;
     }
 }
 
