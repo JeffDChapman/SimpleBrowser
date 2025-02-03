@@ -48,8 +48,8 @@ namespace WebLoader
         private bool googleFailed = false;
         private bool isAsearch;
         private string currentSearchEng = "bing";
-        private string searchEngines = "bing;google;duckduckgo;metasearx";
-        private string searchNeedsSearch = "1,1,0,0";
+        private string searchEngines = "bing;google;duckduckgo;metasearx;mojeek";
+        private string searchNeedsSearch = "1,1,0,0,1";
         string[] sEngList;
         string[] sNsList;
         private int sEngIndex;
@@ -284,7 +284,7 @@ namespace WebLoader
             tmrShowAddHome.Enabled = true;
             CheckSearchSitch();
             currentSearchEng = "bing"; sEngIndex = 0;
-            btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\" + currentSearchEng + ".png");
+            btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\SearchLogos\\" + currentSearchEng + ".png");
         }
 
         private void CheckSearchSitch()
@@ -561,7 +561,8 @@ namespace WebLoader
             anotherForm.Width = this.Width;
             Application.DoEvents();
             System.Threading.Thread.Sleep(500);
-            anotherForm.myAddrBar.Text = reDirLoc.Replace("ovre", "over");
+            string holdAddr = reDirLoc.Replace("ovre", "over");
+            anotherForm.myAddrBar.Text = holdAddr.Replace("%2F", "/");
             anotherForm.chosenFont = chosenFont;
             anotherForm.chosenSize = chosenSize;
             anotherForm.stopPopUps = true;
@@ -825,7 +826,7 @@ namespace WebLoader
             if (sEngIndex >= sEngList.Length) {sEngIndex = 0;}
             string priorSearchEng = currentSearchEng;
             currentSearchEng = sEngList[sEngIndex];
-            btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\" + currentSearchEng + ".png");
+            btnSearchEng.Image = Image.FromFile(strExeFilePath + "\\SearchLogos\\" + currentSearchEng + ".png");
             string savedAddrBar = myAddrBar.Text;
             myAddrBar.Text = savedAddrBar.Replace(priorSearchEng, currentSearchEng);
             bool hasSearch = myAddrBar.Text.Contains("search");
