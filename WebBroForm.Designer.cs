@@ -292,7 +292,7 @@
             // 
             // tmrNavDone
             // 
-            tmrNavDone.Interval = 3000;
+            tmrNavDone.Interval = 2000;
             tmrNavDone.Tick += tmrNavDone_Tick;
             // 
             // btnSearchEng

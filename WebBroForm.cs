@@ -564,7 +564,9 @@ namespace WebLoader
             Application.DoEvents();
             System.Threading.Thread.Sleep(500);
             string holdAddr = reDirLoc.Replace("ovre", "over");
-            anotherForm.myAddrBar.Text = holdAddr.Replace("%2F", "/");
+            string holdAddr2 = holdAddr.Replace("%2F", "/");
+            string holdAddr3 = holdAddr2.Replace("stlye", "style");
+            anotherForm.myAddrBar.Text = holdAddr3.Replace("%2f", "/");
             anotherForm.chosenFont = chosenFont;
             anotherForm.chosenSize = chosenSize;
             anotherForm.stopPopUps = true;
