@@ -185,7 +185,7 @@ namespace WebLoader
             }
 
             docTooShort = false;
-            CheckShortDoc(fixDoc.Url.ToString(), 3);
+            CheckShortDoc(fixDoc.Url.ToString(), 1);
             if (docTooShort) { return; }
 
             string checkGoogle = fixDoc.Body.InnerHtml.ToString().ToLower();
