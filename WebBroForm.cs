@@ -135,8 +135,10 @@ namespace WebLoader
                 { StartnewFormWseed(GoToUrl, myBrowser.DocumentText); }
                 myBrowser.DocumentText = saveOldPage;
                 if ((ctrlNavigated) && (Occurrence == 2)) { return; }
-                string boxMsg = "Short Reply Reroute (" + Occurrence.ToString() + ")";
+                string boxMsg = "Load Delayed at Server (" + Occurrence.ToString() + ")"
+                    + "\nPage Script still Enabled!";
                 MessageBox.Show(boxMsg);
+                SetupEndFlagging();
             }
         }
 
@@ -739,9 +741,9 @@ namespace WebLoader
                 return;
             }
 
-            docTooShort = false;
-            CheckShortDoc(fixDoc.Url.ToString(), 1);
-            if (docTooShort) { return; }
+            //docTooShort = false;
+            //CheckShortDoc(fixDoc.Url.ToString(), 1);
+            //if (docTooShort) { return; }
 
             string pageBodyMod = fixDoc.Body.InnerHtml.ToString();
             pageBodyMod = pageBodyMod.Replace("<", "[");
