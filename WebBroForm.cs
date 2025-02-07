@@ -789,9 +789,13 @@ namespace WebLoader
 
             if (SavingFav)
             {
+                EditFavDesc SaveDescForm = new EditFavDesc();
+                SaveDescForm.tbSaveName.Text = this.Text;
+                SaveDescForm.ShowDialog();
+                string newFavsTitle = SaveDescForm.tbSaveName.Text;
                 string FavsText = File.ReadAllText(strExeFilePath + favsPath);
                 FavsText += "<a href=\"" + this.myAddrBar.Text + "\">";
-                FavsText += this.Text + "</a><br />\n\r";
+                FavsText += newFavsTitle + "</a><br />\n\r";
                 File.WriteAllText(strExeFilePath + favsPath, FavsText);
                 GlobalFavs = FavsText;
                 return;
