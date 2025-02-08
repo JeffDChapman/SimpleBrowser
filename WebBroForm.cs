@@ -119,6 +119,7 @@ namespace WebLoader
             {
                 this.lblStatus.Text = "Delay reroute ...";
                 tmrReroute.Enabled = true;
+                tmrNavDone.Enabled = false;
                 return;
             }
             if (docTooShort) { return; }
@@ -186,7 +187,7 @@ namespace WebLoader
             CheckShortDoc(fixDoc.Url.ToString(), 3);
             if (docTooShort) { return; }
 
-            string checkGoogle = fixDoc.Body.InnerHtml.ToString().ToLower();
+            string checkGoogle = pageBodyMod.ToLower();
             string searchFail = "trouble accessing Google Search";
             if (checkGoogle.IndexOf(searchFail.ToLower()) > -1) { googleFailed = true; }
 

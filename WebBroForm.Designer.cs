@@ -251,7 +251,7 @@
             // 
             // tmrReroute
             // 
-            tmrReroute.Interval = 2000;
+            tmrReroute.Interval = 1000;
             tmrReroute.Tick += tmrReroute_Tick;
             // 
             // btnFav
