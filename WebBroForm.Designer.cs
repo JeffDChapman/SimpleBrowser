@@ -251,7 +251,7 @@
             // 
             // tmrReroute
             // 
-            tmrReroute.Interval = 2000;
+            tmrReroute.Interval = 1000;
             tmrReroute.Tick += tmrReroute_Tick;
             // 
             // btnFav
@@ -292,7 +292,7 @@
             // 
             // tmrNavDone
             // 
-            tmrNavDone.Interval = 3000;
+            tmrNavDone.Interval = 2000;
             tmrNavDone.Tick += tmrNavDone_Tick;
             // 
             // btnSearchEng

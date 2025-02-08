@@ -119,6 +119,7 @@ namespace WebLoader
             {
                 this.lblStatus.Text = "Delay reroute ...";
                 tmrReroute.Enabled = true;
+                tmrNavDone.Enabled = false;
                 return;
             }
             if (docTooShort) { return; }
@@ -186,7 +187,7 @@ namespace WebLoader
             CheckShortDoc(fixDoc.Url.ToString(), 3);
             if (docTooShort) { return; }
 
-            string checkGoogle = fixDoc.Body.InnerHtml.ToString().ToLower();
+            string checkGoogle = pageBodyMod.ToLower();
             string searchFail = "trouble accessing Google Search";
             if (checkGoogle.IndexOf(searchFail.ToLower()) > -1) { googleFailed = true; }
 
@@ -232,7 +233,7 @@ namespace WebLoader
                         aSocket.Bind(myEP);
                         aSocket.Close(10);
                     }
-                    catch { bool debugstop = true; }
+                    catch { }
                 }
             }
         }
@@ -267,7 +268,8 @@ namespace WebLoader
             hadRecovery = false;
             tmrPopUps.Enabled = true;
             if (myBrowser.Url != null)
-            { this.myAddrBar.Text = myBrowser.Url.ToString().Replace("ovre", "over"); }
+            {
+                this.myAddrBar.Text = fixURLspellings(myBrowser.Url.ToString()); }
             if (this.myAddrBar.Text.Substring(0, 5) != "file:")
             {
                 string appendText = this.myAddrBar.Text + "<br />" + Environment.NewLine;
@@ -391,11 +393,11 @@ namespace WebLoader
             while (true)
             {
                 if (startScr > bodyReturn.Length - skipSpaceOffset - 1) { return bodyReturn; }
-                startScr = bodyReturn.IndexOf("<" + checkWord, startScr + skipSpaceOffset);
+                    startScr = bodyReturn.IndexOf("<" + checkWord, startScr + skipSpaceOffset);
                 if (startScr < 0) { return bodyReturn; }
-                endScr = bodyReturn.IndexOf("</" + checkWord);
+                    endScr = bodyReturn.IndexOf("</" + checkWord);
                 if (endScr < startScr)
-                { endScr = bodyReturn.IndexOf(checkWord, startScr + skipSpaceOffset + 1); }
+                    { endScr = bodyReturn.IndexOf(checkWord, startScr + skipSpaceOffset + 1); }
                 if (endScr < 0) { return bodyReturn; }
                 bodyReturn = bodyReturn.Substring(0, startScr) + bodyReturn.Substring(endScr + 1 + checkWord.Length);
             }
@@ -493,7 +495,7 @@ namespace WebLoader
             }
 
             if ((ctrlNavigated) || (atHome))
-            { ResetOfflineCkbox(); }
+                { ResetOfflineCkbox(); }
             this.lblStatus.Text = "Navigating...";
             stopPopUps = true;
             this.btnGoTo.Visible = false;
@@ -510,7 +512,8 @@ namespace WebLoader
 
             this.myBrowser.Visible = false;
             string newRouteTo = FixAboutUrl(reDirLoc);
-            myAddrBar.Text = FixDoubleSlash(newRouteTo).Replace("ovre", "over");
+            string newRouteTo2 = FixDoubleSlash(newRouteTo);
+            myAddrBar.Text = fixURLspellings(newRouteTo2);
         }
 
         private string FixAboutUrl(string reDirLoc)
@@ -563,11 +566,19 @@ namespace WebLoader
             anotherForm.Width = this.Width;
             Application.DoEvents();
             System.Threading.Thread.Sleep(500);
-            string holdAddr = reDirLoc.Replace("ovre", "over");
-            anotherForm.myAddrBar.Text = holdAddr.Replace("%2F", "/");
+            anotherForm.myAddrBar.Text = fixURLspellings(reDirLoc);
             anotherForm.chosenFont = chosenFont;
             anotherForm.chosenSize = chosenSize;
             anotherForm.stopPopUps = true;
+        }
+
+        private static string fixURLspellings(string inputAddr)
+        {
+            string holdAddr = inputAddr.Replace("ovre", "over");
+            string holdAddr2 = holdAddr.Replace("%2F", "/");
+            string holdAddr3 = holdAddr2.Replace("stlye", "style");
+            string fixedAddrBack = holdAddr3.Replace("%2f", "/");
+            return fixedAddrBack;
         }
 
         private string RemoveDupsInPath(string inRedirect)
