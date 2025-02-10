@@ -152,6 +152,7 @@ namespace WebLoader
             catch { }
             string pageBodyMod = "";
             this.lblStatus.Text = "Code Replacement in process...";
+            this.btnBack.Enabled = true;
             this.lblStatus.Refresh();
             HtmlDocument fixDoc = myBrowser.Document;
             string recovD = tryRecovery(myBrowser.DocumentStream);
@@ -271,7 +272,9 @@ namespace WebLoader
             tmrPopUps.Enabled = true;
             if (myBrowser.Url != null)
             {
-                this.myAddrBar.Text = fixURLspellings(myBrowser.Url.ToString()); }
+                this.myAddrBar.Text = fixURLspellings(myBrowser.Url.ToString());
+                this.lboxRecent.Items.Insert(0, myAddrBar.Text);
+            }
             if (this.myAddrBar.Text.Substring(0, 5) != "file:")
             {
                 string appendText = this.myAddrBar.Text + "<br />" + Environment.NewLine;
@@ -431,10 +434,8 @@ namespace WebLoader
         private void btnGoTo_Click(object sender, EventArgs e)
         {
             stopPopUps = true;
-            this.btnBack.Enabled = true;
             this.btnGoTo.Visible = false;
             stopClick = false;
-            this.lboxRecent.Items.Insert(0, myAddrBar.Text);
             isSpying = false;
             navLoopCount = 0;
             ResetOfflineCkbox();
