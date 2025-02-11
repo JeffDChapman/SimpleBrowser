@@ -235,6 +235,8 @@ namespace WebLoader
             if (hadRecovery) { return; }
             if ((naviErr) && (!intRptdFlag)) { return; }
             hadRecovery = false;
+            this.lblStatus.Text = "Closing sockets...";
+            this.lblStatus.Refresh();
             try { CloseAllSocks(); }
             catch { }
             string pageBodyMod = "";
@@ -286,13 +288,16 @@ namespace WebLoader
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(pageBodyModshow);
 
+            this.lblStatus.Text = "Closing sockets again...";
+            this.lblStatus.Refresh();
+            try { CloseAllSocks(); }
+            catch { }
+
             SetupEndFlagging();
         }
 
-        private void CloseAllSocks()
+        private static void CloseAllSocks()
         {
-            this.lblStatus.Text = "Closing sockets...";
-            this.lblStatus.Refresh();
             int nProcessID = Process.GetCurrentProcess().Id;
 
             var p = new Process
