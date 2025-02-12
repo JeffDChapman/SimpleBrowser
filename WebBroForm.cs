@@ -323,12 +323,15 @@ namespace WebLoader
                     int myPort = 8080;
                     if (myIPsplit.Length > 0) { myPort = Convert.ToInt32(myIPsplit[myIPsplit.Length - 1]); }
                     var myEP = new IPEndPoint(IPAddress.Parse(myEndPoint), myPort);
+                    TcpClient tcpClient = new TcpClient(myEP);
+                    aSocket.Bind(myEP);
                     try
-                    {
-                        aSocket.Bind(myEP);
-                        aSocket.Close(10);
+                        { aSocket.Shutdown(SocketShutdown.Both); }
+                    finally
+                    { 
+                        aSocket.Close();
+                        tcpClient.Close();
                     }
-                    catch { }
                 }
             }
         }
