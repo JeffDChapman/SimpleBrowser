@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace WebLoader
 {
@@ -18,21 +14,7 @@ namespace WebLoader
 
         private void btnGoTo_Click(object sender, EventArgs e)
         {
-            stopPopUps = true;
-            this.btnGoTo.Visible = false;
-            stopClick = false;
-            isSpying = false;
-            navLoopCount = 0;
-            ResetOfflineCkbox();
-            btnFav.ImageIndex = 0;
-            if (btnSearchEng.Visible) { isAsearch = true; }
-            if (myAddrBar.Text.Contains(" "))
-            {
-                isAsearch = true;
-                string holdAddr = myAddrBar.Text;
-                myAddrBar.Text = "https://www." + currentSearchEng + ".com/search?q=" + holdAddr.Replace(" ", "+");
-                ChckReqsForSearchWord(true);
-            }
+            SetupNavigAddress();
             myBrowser.Navigate(myAddrBar.Text);
         }
 
@@ -65,35 +47,7 @@ namespace WebLoader
 
         private void btnStopLoad_Click(object sender, EventArgs e)
         {
-            if (stopClick == true)
-            {
-                PoshPageBrackets();
-                myBrowser.Refresh();
-                stopClick = false;
-                return;
-            }
-            stopClick = true;
-            this.lblStatus.Text = "Interrupting...";
-            tmrNavDone.Enabled = false;
-            this.Refresh();
-            try { this.myBrowser.Stop(); }
-            catch { }
-
-            if (isSpying)
-            {
-                PoshPageBrackets();
-                myBrowser.Refresh();
-                stopClick = false;
-            }
-            else try
-                {
-                    {
-                        intRptdFlag = true;
-                        myBrowser_DocumentCompleted(this, null);
-                    }
-                    this.myBrowser.Visible = true;
-                }
-                catch { }
+            processAforceStop();
         }
 
         private void btnScriptOK_Click(object sender, EventArgs e)
@@ -201,20 +155,6 @@ namespace WebLoader
         }
 
         //--------- button pushing subroutines ---------//
-
-        private string ChckReqsForSearchWord(bool hasSearch)
-        {
-            savedAddrBar = myAddrBar.Text;
-            if ((sNsList[sEngIndex] == "0") && hasSearch)
-            { myAddrBar.Text = savedAddrBar.Replace("search", ""); }
-            if ((sNsList[sEngIndex] == "1") && !hasSearch)
-            {
-                int qLoc = savedAddrBar.IndexOf("?");
-                myAddrBar.Text = savedAddrBar.Substring(0, qLoc) + "search" + savedAddrBar.Substring(qLoc);
-            }
-
-            return savedAddrBar;
-        }
 
         private string ConvertUrlsToLinks(string msg)
         {

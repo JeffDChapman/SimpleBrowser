@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>WebLoader.Program</StartupObject>
     <Title>Simple Browser</Title>
-    <Version>1.2.7</Version>
+    <Version>1.3.1</Version>
     <Product>Simple Browser</Product>
     <Copyright>(c) 2024 J.D. Chapman (All Rights Reserved)</Copyright>
     <PackageIcon>SimpleBrowser.ico</PackageIcon>
