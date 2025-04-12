@@ -510,6 +510,7 @@ namespace WebLoader
             cbSaveOfflineFile.Visible = false;
             cbSaveOfflineFile.Checked = false;
             internalRedirect = false;
+            tmrPopUps.Enabled = false;   // reset time to full value
             tmrPopUps.Enabled = true;
         }
 
