@@ -154,6 +154,13 @@ namespace WebLoader
             savedAddrBar = ChckReqsForSearchWord(hasSearch);
         }
 
+        private void WebBroForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (cbSaveOfflineFile.Checked) { return; }
+            try { File.Delete(offLineFile); }
+            catch { }
+        }
+
         //--------- button pushing subroutines ---------//
 
         private string ConvertUrlsToLinks(string msg)
@@ -163,5 +170,23 @@ namespace WebLoader
             return r.Replace(msg, "<a href=\"$1\" title=\"Click to open in a new window or tab\" target=\"&#95;blank\">$1</a>").Replace("href=\"www", "href=\"http://www");
         }
 
+        //--------- UI timer events ---------//
+
+        private void tmrShowAddHome_Tick(object sender, EventArgs e)
+        {
+            if (hasAhome) { btnHome.BringToFront(); }
+            tmrShowAddHome.Enabled = false;
+        }
+
+        private void tmrShowStatus_Tick(object sender, EventArgs e)
+        {
+            this.lblStatus.Text = CurrentStatus;
+            this.lblStatus.Refresh();
+            if (CurrentStatus == "Ready") { tmrShowStatus.Enabled = false; }
+            ;
+            if (CurrentStatus == "Empty Document") { tmrShowStatus.Enabled = false; }
+            ;
+            if (CurrentStatus == "Google failed, click again to Bing...") { tmrNavDone.Enabled = false; }
+        }
     }
 }

@@ -370,12 +370,12 @@
         private System.Windows.Forms.CheckBox cbSaveOfflineFile;
         private System.Windows.Forms.Timer tmrReroute;
         private System.Windows.Forms.ToolTip toolTipStop;
-        private Button btnFav;
-        private ImageList imgLstars;
-        private Button btnAddHome;
+        private System.Windows.Forms.Button btnFav;
+        private System.Windows.Forms.ImageList imgLstars;
+        private System.Windows.Forms.Button btnAddHome;
         private System.Windows.Forms.Timer tmrShowAddHome;
         private System.Windows.Forms.Timer tmrNavDone;
-        private Button btnSearchEng;
+        private System.Windows.Forms.Button btnSearchEng;
         private System.Windows.Forms.Timer tmrShowStatus;
     }
 }

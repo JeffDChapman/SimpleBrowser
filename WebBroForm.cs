@@ -510,7 +510,6 @@ namespace WebLoader
             cbSaveOfflineFile.Visible = false;
             cbSaveOfflineFile.Checked = false;
             internalRedirect = false;
-            tmrPopUps.Enabled = false;
             tmrPopUps.Enabled = true;
         }
 
@@ -709,12 +708,6 @@ namespace WebLoader
             //btnGoTo_Click(this, null);
         }
 
-        private void tmrShowAddHome_Tick(object sender, EventArgs e)
-        {
-            if (hasAhome) { btnHome.BringToFront(); }
-            tmrShowAddHome.Enabled = false;
-        }
-
         private void tmrNavDone_Tick(object sender, EventArgs e)
         {
             tmrNavDone.Enabled = false;
@@ -725,20 +718,5 @@ namespace WebLoader
             //btnStopLoad_Click(this, new EventArgs());
         }
 
-        private void WebBroForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (cbSaveOfflineFile.Checked) { return; }
-            try { File.Delete(offLineFile); }
-            catch { }
-        }
-
-        private void tmrShowStatus_Tick(object sender, EventArgs e)
-        {
-            this.lblStatus.Text = CurrentStatus;
-            this.lblStatus.Refresh();
-            if (CurrentStatus == "Ready") { tmrShowStatus.Enabled = false; }; 
-            if (CurrentStatus == "Empty Document") { tmrShowStatus.Enabled = false; };
-            if (CurrentStatus == "Google failed, click again to Bing...") { tmrNavDone.Enabled = false; }
-        }
     }
 }
