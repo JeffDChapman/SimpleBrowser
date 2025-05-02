@@ -29,6 +29,7 @@ namespace WebLoader
         private bool docTooShort;
         private string chosenFont = "Candara";
         private string chosenSize = "24";
+        private string CurrentStatus = "Ready";
         private bool stopPopUps = false;
         private bool intRptdFlag = false;
         private bool ctrlNavigated = false;
@@ -90,6 +91,7 @@ namespace WebLoader
 
         private void myBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
+            tmrShowStatus.Enabled = true;
             naviErr = false;
             if (!hasAhome) { btnAddHome.Enabled = true; }
             if (stopClick == true) { return; }
@@ -129,14 +131,14 @@ namespace WebLoader
 
             if ((ctrlNavigated) || (atHome))
             { ResetOfflineCkbox(); }
-            this.lblStatus.Text = "Navigating...";
+            CurrentStatus = "Navigating...";
             stopPopUps = true;
             this.btnGoTo.Visible = false;
             this.Refresh();
             navLoopCount++;
             if (navLoopCount > 10)
             {
-                this.lblStatus.Text = "Loop Count Exceeded...";
+                CurrentStatus = "Loop Count Exceeded...";
                 PoshPageBrackets();
                 myBrowser.Refresh();
                 navLoopCount = 0;
@@ -152,8 +154,7 @@ namespace WebLoader
         private void myBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
             if (naviErr) { return; }
-            this.lblStatus.Text = "Navigation Done";
-            this.lblStatus.Refresh();
+            CurrentStatus = "Navigation Done";
 
             if (stopClick)
             {
@@ -187,8 +188,7 @@ namespace WebLoader
                 this.Text = "(Empty Document)";
                 this.myBrowser.Navigate("about:blank");
                 SetupEndFlagging();
-                this.lblStatus.Text = "Empty Document";
-                this.lblStatus.Refresh();
+                CurrentStatus = "Empty Document";
                 return;
             }
             if ((e == null) && (!intRptdFlag)) { return; }
@@ -202,7 +202,7 @@ namespace WebLoader
             CheckShortDoc(myAddrBar.Text, 2);
             if ((docTooShort) && (ctrlNavigated))
             {
-                this.lblStatus.Text = "Delay reroute ...";
+                CurrentStatus = "Delay reroute ...";
                 tmrReroute.Enabled = true;
                 tmrNavDone.Enabled = false;
                 return;
@@ -235,14 +235,12 @@ namespace WebLoader
             if (hadRecovery) { return; }
             if ((naviErr) && (!intRptdFlag)) { return; }
             hadRecovery = false;
-            this.lblStatus.Text = "Closing sockets...";
-            this.lblStatus.Refresh();
+            CurrentStatus = "Closing sockets...";
             try { CloseAllSocks(); }
             catch { }
             string pageBodyMod = "";
-            this.lblStatus.Text = "Code Replacement in process...";
+            CurrentStatus = "Code Replacement in process...";
             this.btnBack.Enabled = true;
-            this.lblStatus.Refresh();
             HtmlDocument fixDoc = myBrowser.Document;
             string recovD = tryRecovery(myBrowser.DocumentStream);
             int foundTitle = recovD.ToLower().IndexOf("<title");
@@ -267,7 +265,7 @@ namespace WebLoader
             if (StopRecur == "font")
             {
                 this.myBrowser.Visible = true;
-                this.lblStatus.Text = "Ready";
+                CurrentStatus = "Ready";
                 internalRedirect = true;
                 this.btnGoTo.Visible = true;
                 this.Refresh();
@@ -288,8 +286,7 @@ namespace WebLoader
             myBrowser.Document.OpenNew(false);
             myBrowser.Document.Write(pageBodyModshow);
 
-            this.lblStatus.Text = "Closing sockets again...";
-            this.lblStatus.Refresh();
+            CurrentStatus = "Closing sockets again...";
             try { CloseAllSocks(); }
             catch { }
 
@@ -326,9 +323,9 @@ namespace WebLoader
                     TcpClient tcpClient = new TcpClient(myEP);
                     aSocket.Bind(myEP);
                     try
-                        { aSocket.Shutdown(SocketShutdown.Both); }
+                    { aSocket.Shutdown(SocketShutdown.Both); }
                     finally
-                    { 
+                    {
                         aSocket.Close();
                         tcpClient.Close();
                     }
@@ -357,7 +354,7 @@ namespace WebLoader
         private void SetupEndFlagging()
         {
             this.myBrowser.Visible = true;
-            this.lblStatus.Text = "Ready";
+            CurrentStatus = "Ready";
             tmrNavDone.Enabled = false;
             internalRedirect = true;
             this.btnGoTo.Visible = true;
@@ -411,8 +408,7 @@ namespace WebLoader
                 string saveUrl = myAddrBar.Text;
                 myAddrBar.Text = saveUrl.Replace("google", "bing");
                 string cseCapitalized = currentSearchEng[0].ToString().ToUpper() + currentSearchEng.Substring(1);
-                this.lblStatus.Text = "Google failed, click again to Bing...";
-                this.lblStatus.Refresh();
+                CurrentStatus = "Google failed, click again to Bing...";
             }
         }
 
@@ -493,11 +489,11 @@ namespace WebLoader
             while (true)
             {
                 if (startScr > bodyReturn.Length - skipSpaceOffset - 1) { return bodyReturn; }
-                    startScr = bodyReturn.IndexOf("<" + checkWord, startScr + skipSpaceOffset);
+                startScr = bodyReturn.IndexOf("<" + checkWord, startScr + skipSpaceOffset);
                 if (startScr < 0) { return bodyReturn; }
-                    endScr = bodyReturn.IndexOf("</" + checkWord);
+                endScr = bodyReturn.IndexOf("</" + checkWord);
                 if (endScr < startScr)
-                    { endScr = bodyReturn.IndexOf(checkWord, startScr + skipSpaceOffset + 1); }
+                { endScr = bodyReturn.IndexOf(checkWord, startScr + skipSpaceOffset + 1); }
                 if (endScr < 0) { return bodyReturn; }
                 bodyReturn = bodyReturn.Substring(0, startScr) + bodyReturn.Substring(endScr + 1 + checkWord.Length);
             }
@@ -514,7 +510,7 @@ namespace WebLoader
             cbSaveOfflineFile.Visible = false;
             cbSaveOfflineFile.Checked = false;
             internalRedirect = false;
-            tmrPopUps.Enabled = false;
+            tmrPopUps.Enabled = false;   // reset time to full value
             tmrPopUps.Enabled = true;
         }
 
@@ -615,8 +611,7 @@ namespace WebLoader
             HtmlDocument fixDoc = myBrowser.Document;
             if ((fixDoc.Body == null) || (fixDoc.Body.InnerHtml == null))
             {
-                this.lblStatus.Text = "Empty Document";
-                this.lblStatus.Refresh();
+                CurrentStatus = "Empty Document";
                 return;
             }
 
@@ -632,6 +627,72 @@ namespace WebLoader
             this.myBrowser.Visible = true;
         }
 
+        private void SetupNavigAddress()
+        {
+            stopPopUps = true;
+            this.btnGoTo.Visible = false;
+            stopClick = false;
+            isSpying = false;
+            navLoopCount = 0;
+            ResetOfflineCkbox();
+            btnFav.ImageIndex = 0;
+            if (btnSearchEng.Visible) { isAsearch = true; }
+            if (myAddrBar.Text.Contains(" "))
+            {
+                isAsearch = true;
+                string holdAddr = myAddrBar.Text;
+                myAddrBar.Text = "https://www." + currentSearchEng + ".com/search?q=" + holdAddr.Replace(" ", "+");
+                ChckReqsForSearchWord(true);
+            }
+        }
+
+        private void processAforceStop()
+        {
+            if (stopClick == true)
+            {
+                PoshPageBrackets();
+                myBrowser.Refresh();
+                stopClick = false;
+                return;
+            }
+            stopClick = true;
+            CurrentStatus = "Interrupting...";
+            tmrNavDone.Enabled = false;
+            this.Refresh();
+            try { this.myBrowser.Stop(); }
+            catch { }
+
+            if (isSpying)
+            {
+                PoshPageBrackets();
+                myBrowser.Refresh();
+                stopClick = false;
+            }
+            else try
+                {
+                    {
+                        intRptdFlag = true;
+                        myBrowser_DocumentCompleted(this, null);
+                    }
+                    this.myBrowser.Visible = true;
+                }
+                catch { }
+        }
+
+        private string ChckReqsForSearchWord(bool hasSearch)
+        {
+            savedAddrBar = myAddrBar.Text;
+            if ((sNsList[sEngIndex] == "0") && hasSearch)
+            { myAddrBar.Text = savedAddrBar.Replace("search", ""); }
+            if ((sNsList[sEngIndex] == "1") && !hasSearch)
+            {
+                int qLoc = savedAddrBar.IndexOf("?");
+                myAddrBar.Text = savedAddrBar.Substring(0, qLoc) + "search" + savedAddrBar.Substring(qLoc);
+            }
+
+            return savedAddrBar;
+        }
+
         //--------- timer events ---------//
 
         private void tmrPopUps_Tick(object sender, EventArgs e)
@@ -643,13 +704,9 @@ namespace WebLoader
         private void tmrReroute_Tick(object sender, EventArgs e)
         {
             tmrReroute.Enabled = false;
-            btnGoTo_Click(this, null);
-        }
-
-        private void tmrShowAddHome_Tick(object sender, EventArgs e)
-        {
-            if (hasAhome) { btnHome.BringToFront(); }
-            tmrShowAddHome.Enabled = false;
+            SetupNavigAddress();
+            myBrowser.Navigate(myAddrBar.Text);
+            //btnGoTo_Click(this, null);
         }
 
         private void tmrNavDone_Tick(object sender, EventArgs e)
@@ -658,14 +715,8 @@ namespace WebLoader
             HtmlDocument fixDoc = myBrowser.Document;
             if ((fixDoc.Body == null) || (fixDoc.Body.InnerHtml == null))
             { return; }
-            btnStopLoad_Click(this, new EventArgs());
-        }
-
-        private void WebBroForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (cbSaveOfflineFile.Checked) { return; }
-            try { File.Delete(offLineFile); }
-            catch { }
+            processAforceStop();
+            //btnStopLoad_Click(this, new EventArgs());
         }
 
     }

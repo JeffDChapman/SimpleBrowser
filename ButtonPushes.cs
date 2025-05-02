@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace WebLoader
 {
@@ -18,21 +14,7 @@ namespace WebLoader
 
         private void btnGoTo_Click(object sender, EventArgs e)
         {
-            stopPopUps = true;
-            this.btnGoTo.Visible = false;
-            stopClick = false;
-            isSpying = false;
-            navLoopCount = 0;
-            ResetOfflineCkbox();
-            btnFav.ImageIndex = 0;
-            if (btnSearchEng.Visible) { isAsearch = true; }
-            if (myAddrBar.Text.Contains(" "))
-            {
-                isAsearch = true;
-                string holdAddr = myAddrBar.Text;
-                myAddrBar.Text = "https://www." + currentSearchEng + ".com/search?q=" + holdAddr.Replace(" ", "+");
-                ChckReqsForSearchWord(true);
-            }
+            SetupNavigAddress();
             myBrowser.Navigate(myAddrBar.Text);
         }
 
@@ -65,35 +47,7 @@ namespace WebLoader
 
         private void btnStopLoad_Click(object sender, EventArgs e)
         {
-            if (stopClick == true)
-            {
-                PoshPageBrackets();
-                myBrowser.Refresh();
-                stopClick = false;
-                return;
-            }
-            stopClick = true;
-            this.lblStatus.Text = "Interrupting...";
-            tmrNavDone.Enabled = false;
-            this.Refresh();
-            try { this.myBrowser.Stop(); }
-            catch { }
-
-            if (isSpying)
-            {
-                PoshPageBrackets();
-                myBrowser.Refresh();
-                stopClick = false;
-            }
-            else try
-                {
-                    {
-                        intRptdFlag = true;
-                        myBrowser_DocumentCompleted(this, null);
-                    }
-                    this.myBrowser.Visible = true;
-                }
-                catch { }
+            processAforceStop();
         }
 
         private void btnScriptOK_Click(object sender, EventArgs e)
@@ -200,21 +154,14 @@ namespace WebLoader
             savedAddrBar = ChckReqsForSearchWord(hasSearch);
         }
 
-        //--------- button pushing subroutines ---------//
-
-        private string ChckReqsForSearchWord(bool hasSearch)
+        private void WebBroForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            savedAddrBar = myAddrBar.Text;
-            if ((sNsList[sEngIndex] == "0") && hasSearch)
-            { myAddrBar.Text = savedAddrBar.Replace("search", ""); }
-            if ((sNsList[sEngIndex] == "1") && !hasSearch)
-            {
-                int qLoc = savedAddrBar.IndexOf("?");
-                myAddrBar.Text = savedAddrBar.Substring(0, qLoc) + "search" + savedAddrBar.Substring(qLoc);
-            }
-
-            return savedAddrBar;
+            if (cbSaveOfflineFile.Checked) { return; }
+            try { File.Delete(offLineFile); }
+            catch { }
         }
+
+        //--------- button pushing subroutines ---------//
 
         private string ConvertUrlsToLinks(string msg)
         {
@@ -223,5 +170,23 @@ namespace WebLoader
             return r.Replace(msg, "<a href=\"$1\" title=\"Click to open in a new window or tab\" target=\"&#95;blank\">$1</a>").Replace("href=\"www", "href=\"http://www");
         }
 
+        //--------- UI timer events ---------//
+
+        private void tmrShowAddHome_Tick(object sender, EventArgs e)
+        {
+            if (hasAhome) { btnHome.BringToFront(); }
+            tmrShowAddHome.Enabled = false;
+        }
+
+        private void tmrShowStatus_Tick(object sender, EventArgs e)
+        {
+            this.lblStatus.Text = CurrentStatus;
+            this.lblStatus.Refresh();
+            if (CurrentStatus == "Ready") { tmrShowStatus.Enabled = false; }
+            ;
+            if (CurrentStatus == "Empty Document") { tmrShowStatus.Enabled = false; }
+            ;
+            if (CurrentStatus == "Google failed, click again to Bing...") { tmrNavDone.Enabled = false; }
+        }
     }
 }
