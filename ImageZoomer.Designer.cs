@@ -47,6 +47,7 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             ClientSize = new Size(289, 625);
             Controls.Add(pictureBox1);
             Name = "ImageZoomer";

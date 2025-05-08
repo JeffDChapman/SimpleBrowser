@@ -214,6 +214,41 @@ namespace WebLoader
 
         //--------- internal subroutines ---------//
 
+        private int ProcessImages()
+        {
+            int imgCount = 0;
+            string bodyOfPage = myBrowser.DocumentText.ToString();
+            string[] imageTypes = new string[] { ".jpg", ".bmp", ".png" };
+            foreach (string imageType in imageTypes) 
+            {
+                int imgCountBack = getImagesOf(imageType, bodyOfPage);
+                imgCount += imgCountBack;
+            }
+            return imgCount;
+        }
+
+        private int getImagesOf(string imageType, string bodyOfPage)
+        {
+            int imgCount = 0;
+            int lastFound = 0;
+            int nextImg;
+
+            while (true)
+            {
+                nextImg = bodyOfPage.IndexOf(imageType, lastFound);
+                if (nextImg == -1) { return imgCount; }
+                int i;
+                for (i = nextImg; i > 1; i--)
+                    { if (bodyOfPage[i] == '\"') { break; } }
+                string imageFullName = bodyOfPage.Substring(i + 1, nextImg - i + 4);
+                MessageBox.Show(imageFullName);
+                imgCount++;
+                lastFound = nextImg + 4;
+            }
+
+            return imgCount;
+        }
+
         private void CheckShortDoc(string GoToUrl, int Occurrence)
         {
             if (myBrowser.DocumentText.Length < 200)
@@ -289,6 +324,8 @@ namespace WebLoader
             CurrentStatus = "Closing sockets again...";
             try { CloseAllSocks(); }
             catch { }
+
+            int imgCount = ProcessImages();
 
             SetupEndFlagging();
         }
