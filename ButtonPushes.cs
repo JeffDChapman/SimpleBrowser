@@ -154,6 +154,17 @@ namespace WebLoader
             savedAddrBar = ChckReqsForSearchWord(hasSearch);
         }
 
+        private void btnImages_Click(object sender, EventArgs e)
+        {
+            ImageZoomer myImageZoom = new ImageZoomer();
+            myImageZoom.Top = Top;
+            myImageZoom.Left = Left + Width - 12;
+            myImageZoom.Height = Height;
+            myImageZoom.lbImageList.Items.Clear();
+            myImageZoom.lbImageList.Height = Height - myImageZoom.lbImageList.Top - 60;
+            myImageZoom.Show();
+        }
+
         private void WebBroForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (cbSaveOfflineFile.Checked) { return; }

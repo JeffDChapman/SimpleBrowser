@@ -16,5 +16,10 @@ namespace WebLoader
         {
             InitializeComponent();
         }
+
+        private void lbImageList_SelectedValueChanged(object sender, EventArgs e)
+        {
+            // stuff here to load image
+        }
     }
 }

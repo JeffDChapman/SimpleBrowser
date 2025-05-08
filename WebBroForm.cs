@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Collections;
 
 namespace WebLoader
 {
@@ -45,6 +46,8 @@ namespace WebLoader
         private int sEngIndex;
         private string savedAddrBar;
         #endregion
+
+        public ArrayList webpageImages = new ArrayList();
 
         //--------- system fired events ---------//
 
@@ -216,14 +219,17 @@ namespace WebLoader
 
         private int ProcessImages()
         {
+            btnImages.Visible = false;
             int imgCount = 0;
+            webpageImages.Clear();
             string bodyOfPage = myBrowser.DocumentText.ToString();
             string[] imageTypes = new string[] { ".jpg", ".bmp", ".png" };
-            foreach (string imageType in imageTypes) 
+            foreach (string imageType in imageTypes)
             {
                 int imgCountBack = getImagesOf(imageType, bodyOfPage);
                 imgCount += imgCountBack;
             }
+            if (imgCount > 0) { btnImages.Visible = true; }
             return imgCount;
         }
 
@@ -239,9 +245,15 @@ namespace WebLoader
                 if (nextImg == -1) { return imgCount; }
                 int i;
                 for (i = nextImg; i > 1; i--)
-                    { if (bodyOfPage[i] == '\"') { break; } }
+                {
+                    if (bodyOfPage[i] == '\"') { break; }
+                    if (bodyOfPage[i] == '\n') { break; }
+                    if (bodyOfPage[i] == '\r') { break; }
+                    if (bodyOfPage[i] == ' ') { break; }
+                }
                 string imageFullName = bodyOfPage.Substring(i + 1, nextImg - i + 4);
-                MessageBox.Show(imageFullName);
+
+                webpageImages.Add(imageFullName.Replace("\"", ""));
                 imgCount++;
                 lastFound = nextImg + 4;
             }
@@ -755,6 +767,5 @@ namespace WebLoader
             processAforceStop();
             //btnStopLoad_Click(this, new EventArgs());
         }
-
     }
 }

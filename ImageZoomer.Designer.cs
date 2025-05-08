@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageZoomer));
             pictureBox1 = new PictureBox();
+            lbImageList = new ListBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -43,14 +44,25 @@
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
+            // lbImageList
+            // 
+            lbImageList.FormattingEnabled = true;
+            lbImageList.ItemHeight = 25;
+            lbImageList.Location = new Point(40, 245);
+            lbImageList.Name = "lbImageList";
+            lbImageList.Size = new Size(213, 354);
+            lbImageList.TabIndex = 1;
+            lbImageList.SelectedValueChanged += lbImageList_SelectedValueChanged;
+            // 
             // ImageZoomer
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            AutoScroll = true;
             ClientSize = new Size(289, 625);
+            Controls.Add(lbImageList);
             Controls.Add(pictureBox1);
             Name = "ImageZoomer";
+            StartPosition = FormStartPosition.Manual;
             Text = "ImageZoomer";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
@@ -59,5 +71,6 @@
         #endregion
 
         private PictureBox pictureBox1;
+        public ListBox lbImageList;
     }
 }
