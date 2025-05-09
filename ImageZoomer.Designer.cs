@@ -46,6 +46,7 @@
             // 
             // lbImageList
             // 
+            lbImageList.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             lbImageList.FormattingEnabled = true;
             lbImageList.ItemHeight = 25;
             lbImageList.Location = new Point(40, 245);

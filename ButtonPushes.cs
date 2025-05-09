@@ -156,12 +156,23 @@ namespace WebLoader
 
         private void btnImages_Click(object sender, EventArgs e)
         {
-            ImageZoomer myImageZoom = new ImageZoomer();
+            ImageZoomer myImageZoom = new ImageZoomer(this);
             myImageZoom.Top = Top;
             myImageZoom.Left = Left + Width - 12;
             myImageZoom.Height = Height;
+            myImageZoom.imageBase = myBrowser.Url.Host;
             myImageZoom.lbImageList.Items.Clear();
             myImageZoom.lbImageList.Height = Height - myImageZoom.lbImageList.Top - 60;
+            foreach (string webpageImage in webpageImages)
+            {
+                int i;
+                for (i = webpageImage.Length - 2; i > 1; i--)
+                    { if (webpageImage[i] == '\\') { break; }
+                      if (webpageImage[i] == '/') { break; }
+                }
+                string imageToShow = webpageImage.Substring(i+1);
+                myImageZoom.lbImageList.Items.Add(imageToShow);
+            }
             myImageZoom.Show();
         }
 
@@ -180,6 +191,7 @@ namespace WebLoader
             Regex r = new Regex(regex, RegexOptions.IgnoreCase);
             return r.Replace(msg, "<a href=\"$1\" title=\"Click to open in a new window or tab\" target=\"&#95;blank\">$1</a>").Replace("href=\"www", "href=\"http://www");
         }
+
 
         //--------- UI timer events ---------//
 
