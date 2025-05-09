@@ -12,7 +12,12 @@
     <Product>Simple Browser</Product>
     <Copyright>(c) 2024 J.D. Chapman (All Rights Reserved)</Copyright>
     <PackageIcon>SimpleBrowser.ico</PackageIcon>
+    <ApplicationIcon>SimpleBrowser.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="SimpleBrowser.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -38,6 +43,10 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="System.Web" />
   </ItemGroup>
 
 </Project>

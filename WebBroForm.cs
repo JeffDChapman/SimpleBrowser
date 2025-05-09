@@ -223,7 +223,7 @@ namespace WebLoader
             int imgCount = 0;
             webpageImages.Clear();
             string bodyOfPage = myBrowser.DocumentText.ToString();
-            string[] imageTypes = new string[] { ".jpg", ".bmp", ".png" };
+            string[] imageTypes = new string[] { ".jpg", ".bmp", ".png", ".gif" };
             foreach (string imageType in imageTypes)
             {
                 int imgCountBack = getImagesOf(imageType, bodyOfPage);
