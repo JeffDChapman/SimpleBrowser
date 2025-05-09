@@ -21,7 +21,9 @@ namespace WebLoader
             int imageIndex = lbImageList.SelectedIndex;
             string actualImagePath = myParent.webpageImages[imageIndex].ToString();
             // string pageImage = "https://" + imageBase + actualImagePath;
-            string pageImage = "https:" + actualImagePath;
+            string pageImage = actualImagePath;
+            if (actualImagePath.ToLower().IndexOf("http") == -1)
+                { pageImage = "https:" + actualImagePath; }
             string fileReturned = getLocalImage(pageImage);
             FileInfo fileInfo = new FileInfo(fileReturned);
             Application.DoEvents();

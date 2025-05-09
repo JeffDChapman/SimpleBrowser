@@ -156,7 +156,7 @@ namespace WebLoader
 
         private void btnImages_Click(object sender, EventArgs e)
         {
-            ImageZoomer myImageZoom = new ImageZoomer(this);
+            myImageZoom = new ImageZoomer(this);
             myImageZoom.Top = Top;
             myImageZoom.Left = Left + Width - 12;
             myImageZoom.Height = Height;

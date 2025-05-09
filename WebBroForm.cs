@@ -45,6 +45,7 @@ namespace WebLoader
         string[] sNsList;
         private int sEngIndex;
         private string savedAddrBar;
+        private ImageZoomer myImageZoom;
         #endregion
 
         public ArrayList webpageImages = new ArrayList();
@@ -100,6 +101,7 @@ namespace WebLoader
             if (stopClick == true) { return; }
             btnFav.ImageIndex = 0;
             ctrlNavigated = false;
+            try { myImageZoom.Close(); } catch { }
             if (Control.ModifierKeys == Keys.Control) { ctrlNavigated = true; }
 
             string reDirLoc = e.Url.ToString();
