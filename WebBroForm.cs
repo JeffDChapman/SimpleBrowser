@@ -217,6 +217,16 @@ namespace WebLoader
             CleanHTML();
         }
 
+        private void WebBroForm_Resize(object sender, EventArgs e)
+        {
+            try { ResizePicZoomer(); } catch { }
+        }
+
+        private void WebBroForm_LocationChanged(object sender, EventArgs e)
+        {
+            try { ResizePicZoomer(); } catch { }
+        }
+
         //--------- internal subroutines ---------//
 
         private int ProcessImages()
@@ -769,5 +779,6 @@ namespace WebLoader
             processAforceStop();
             //btnStopLoad_Click(this, new EventArgs());
         }
+
     }
 }

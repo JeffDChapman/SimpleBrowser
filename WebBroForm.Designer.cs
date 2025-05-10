@@ -359,7 +359,9 @@
             Text = "[Title Goes Here]";
             FormClosing += WebBroForm_FormClosing;
             Load += WebBroForm_Load;
+            LocationChanged += WebBroForm_LocationChanged;
             KeyPress += WebBroForm_KeyPress;
+            Resize += WebBroForm_Resize;
             ((System.ComponentModel.ISupportInitialize)picLoading).EndInit();
             ResumeLayout(false);
             PerformLayout();

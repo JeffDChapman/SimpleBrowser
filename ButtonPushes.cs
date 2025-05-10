@@ -157,30 +157,38 @@ namespace WebLoader
         private void btnImages_Click(object sender, EventArgs e)
         {
             myImageZoom = new ImageZoomer(this);
-            myImageZoom.Top = Top;
-            myImageZoom.Left = Left + Width - 12;
-            myImageZoom.Height = Height;
+            ResizePicZoomer();
+
             myImageZoom.imageBase = myBrowser.Url.Host;
             myImageZoom.lbImageList.Items.Clear();
-            myImageZoom.lbImageList.Height = Height - myImageZoom.lbImageList.Top - 60;
+
             foreach (string webpageImage in webpageImages)
             {
                 int i;
                 for (i = webpageImage.Length - 2; i > 1; i--)
-                    { if (webpageImage[i] == '\\') { break; }
-                      if (webpageImage[i] == '/') { break; }
+                {
+                    if (webpageImage[i] == '\\') { break; }
+                    if (webpageImage[i] == '/') { break; }
                 }
-                string imageToShow = webpageImage.Substring(i+1);
+                string imageToShow = webpageImage.Substring(i + 1);
                 myImageZoom.lbImageList.Items.Add(imageToShow);
             }
             myImageZoom.Show();
         }
 
+        private void ResizePicZoomer()
+        {
+            myImageZoom.Top = Top;
+            myImageZoom.Left = Left + Width - 12;
+            myImageZoom.Height = Height;
+            myImageZoom.lbImageList.Height = Height - myImageZoom.lbImageList.Top - 60;
+        }
+
         private void WebBroForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (cbSaveOfflineFile.Checked) { return; }
-            try { File.Delete(offLineFile); }
-            catch { }
+            try { File.Delete(offLineFile); } catch { }
+            try { myImageZoom.Close(); } catch { }
         }
 
         //--------- button pushing subroutines ---------//
