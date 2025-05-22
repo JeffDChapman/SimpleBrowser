@@ -56,6 +56,7 @@
             tmrNavDone = new System.Windows.Forms.Timer(components);
             btnSearchEng = new Button();
             tmrShowStatus = new System.Windows.Forms.Timer(components);
+            btnImages = new Button();
             ((System.ComponentModel.ISupportInitialize)picLoading).BeginInit();
             SuspendLayout();
             // 
@@ -67,7 +68,7 @@
             myBrowser.MinimumSize = new Size(33, 39);
             myBrowser.Name = "myBrowser";
             myBrowser.ScriptErrorsSuppressed = true;
-            myBrowser.Size = new Size(1292, 972);
+            myBrowser.Size = new Size(1303, 972);
             myBrowser.TabIndex = 0;
             myBrowser.DocumentCompleted += myBrowser_DocumentCompleted;
             myBrowser.Navigated += myBrowser_Navigated;
@@ -134,7 +135,7 @@
             // 
             lblWorking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lblWorking.AutoSize = true;
-            lblWorking.Font = new Font("Microsoft Sans Serif", 24F, FontStyle.Regular, GraphicsUnit.Point);
+            lblWorking.Font = new Font("Microsoft Sans Serif", 24F);
             lblWorking.Location = new Point(962, 48);
             lblWorking.Margin = new Padding(4, 0, 4, 0);
             lblWorking.Name = "lblWorking";
@@ -313,11 +314,26 @@
             tmrShowStatus.Interval = 250;
             tmrShowStatus.Tick += tmrShowStatus_Tick;
             // 
+            // btnImages
+            // 
+            btnImages.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnImages.FlatStyle = FlatStyle.Flat;
+            btnImages.Location = new Point(1203, 959);
+            btnImages.Name = "btnImages";
+            btnImages.Size = new Size(77, 37);
+            btnImages.TabIndex = 19;
+            btnImages.Text = "Imgs";
+            btnImages.TextAlign = ContentAlignment.TopCenter;
+            btnImages.UseVisualStyleBackColor = true;
+            btnImages.Visible = false;
+            btnImages.Click += btnImages_Click;
+            // 
             // WebBroForm
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1318, 1050);
+            Controls.Add(btnImages);
             Controls.Add(btnSearchEng);
             Controls.Add(btnHome);
             Controls.Add(btnAddHome);
@@ -343,7 +359,9 @@
             Text = "[Title Goes Here]";
             FormClosing += WebBroForm_FormClosing;
             Load += WebBroForm_Load;
+            LocationChanged += WebBroForm_LocationChanged;
             KeyPress += WebBroForm_KeyPress;
+            Resize += WebBroForm_Resize;
             ((System.ComponentModel.ISupportInitialize)picLoading).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -377,6 +395,7 @@
         private System.Windows.Forms.Timer tmrNavDone;
         private System.Windows.Forms.Button btnSearchEng;
         private System.Windows.Forms.Timer tmrShowStatus;
+        private Button btnImages;
     }
 }
 

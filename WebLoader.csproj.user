@@ -7,6 +7,9 @@
     <Compile Update="EditFavDesc.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="ImageZoomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="WebBroForm.cs">
       <SubType>Form</SubType>
     </Compile>
