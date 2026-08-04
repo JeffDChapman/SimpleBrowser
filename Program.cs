@@ -2,10 +2,10 @@ namespace WebLoader
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
+        static public int imageCounter = 0;
+
         [STAThread]
+       
         static void Main(string[] args)
         {
             // To customize application configuration such as set high DPI settings or default font,

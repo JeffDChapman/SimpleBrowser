@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using Microsoft.Win32;
 using System.Collections;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace WebLoader
 {
@@ -65,6 +65,7 @@ namespace WebLoader
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
+            RestoreCoordinates();
             hasAhome = true;
             sEngList = searchEngines.Split(new char[] { ';' });
             sEngIndex = sEngList.ToList().IndexOf(currentSearchEng);
@@ -87,9 +88,24 @@ namespace WebLoader
             { this.myBrowser.Navigate(passedStartDoc); }
             else { if (hasAhome) { myBrowser.Navigate(homeLoc); } }
 
-            this.Top = 0;
-            this.Height = Screen.PrimaryScreen.Bounds.Bottom;
             try { GlobalFavs = File.ReadAllText(strExeFilePath + favsPath); }
+            catch { }
+        }
+
+        private void RestoreCoordinates()
+        {
+            RegistryKey ThisUser = Registry.CurrentUser;
+            try
+            {
+                RegistryKey ScreenLoc = ThisUser.OpenSubKey("Software\\WebLoader\\ScreenLocation", true);
+                Top = Convert.ToInt32(ScreenLoc.GetValue("Top", 1));
+                Left = Convert.ToInt32(ScreenLoc.GetValue("Left", 1));
+                RegistryKey ScreenSize = ThisUser.OpenSubKey("Software\\WebLoader\\ScreenSize", true);
+                Height = Convert.ToInt32(ScreenSize.GetValue("Height", 532));
+                if (Height < 300) { Height = 300; }
+                Width = Convert.ToInt32(ScreenSize.GetValue("Width", 728));
+                if (Width < 300) { Width = 300; }
+            }
             catch { }
         }
 

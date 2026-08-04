@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Microsoft.Win32;
+using System.Text.RegularExpressions;
 
 namespace WebLoader
 {
@@ -178,14 +179,33 @@ namespace WebLoader
 
         private void ResizePicZoomer()
         {
-            myImageZoom.Top = Top;
-            myImageZoom.Left = Left + Width - 12;
-            myImageZoom.Height = Height;
-            myImageZoom.lbImageList.Height = Height - myImageZoom.lbImageList.Top - 60;
+            try
+            {
+                myImageZoom.Top = Top;
+                myImageZoom.Left = Left + Width - 12;
+                myImageZoom.Height = Height;
+                myImageZoom.lbImageList.Height = Height - myImageZoom.lbImageList.Top - 60;
+            }
+            catch { }
         }
 
         private void WebBroForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Opacity = 0;
+                this.WindowState = FormWindowState.Normal;
+                Application.DoEvents();
+            }
+
+            RegistryKey ThisUser = Registry.CurrentUser;
+            RegistryKey ScreenLoc = ThisUser.CreateSubKey("Software\\WebLoader\\ScreenLocation");
+            ScreenLoc.SetValue("Top", this.Top);
+            ScreenLoc.SetValue("Left", this.Left);
+            RegistryKey ScreenSize = ThisUser.CreateSubKey("Software\\WebLoader\\ScreenSize");
+            ScreenSize.SetValue("Height", this.Height);
+            ScreenSize.SetValue("Width", this.Width);
+
             if (cbSaveOfflineFile.Checked) { return; }
             try { File.Delete(offLineFile); } catch { }
             try { myImageZoom.Close(); } catch { }
