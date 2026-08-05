@@ -2,7 +2,7 @@ namespace WebLoader
 {
     internal static class Program
     {
-        static public int imageCounter = 0;
+        static public int imageCounter = -1;
 
         [STAThread]
        

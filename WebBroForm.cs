@@ -65,6 +65,7 @@ namespace WebLoader
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
+            if (Program.imageCounter == -1) { DeleteOldImages(); }
             RestoreCoordinates();
             hasAhome = true;
             sEngList = searchEngines.Split(new char[] { ';' });
@@ -90,6 +91,26 @@ namespace WebLoader
 
             try { GlobalFavs = File.ReadAllText(strExeFilePath + favsPath); }
             catch { }
+        }
+
+        private void DeleteOldImages()
+        {
+            string cmdArgs = "/C del image*.* >null";
+            runCmdLine(cmdArgs);
+            Program.imageCounter++;
+        }
+
+        private static void runCmdLine(string cmdArgs)
+        {
+            var p = new Process
+            {
+                StartInfo = { FileName = @"cmd.exe",
+                    Arguments = cmdArgs, UseShellExecute = false,
+                    CreateNoWindow = true}
+            };
+            p.Start();
+            p.WaitForExit();
+            p.Close();
         }
 
         private void RestoreCoordinates()
@@ -373,16 +394,8 @@ namespace WebLoader
         private static void CloseAllSocks()
         {
             int nProcessID = Process.GetCurrentProcess().Id;
-
-            var p = new Process
-            {
-                StartInfo = { FileName = @"cmd.exe",
-                    Arguments = "/C netstat -a -n -o >activeSocks.txt", UseShellExecute = false,
-                    CreateNoWindow = true}
-            };
-            p.Start();
-            p.WaitForExit();
-            p.Close();
+            string cmdArgs = "/C netstat -a -n -o >activeSocks.txt";
+            runCmdLine(cmdArgs);
 
             var lines = File.ReadLines("activeSocks.txt");
             foreach (var line in lines)
