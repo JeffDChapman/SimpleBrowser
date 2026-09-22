@@ -41,10 +41,12 @@ namespace WebLoader
         private string currentSearchEng = "bing";
         private string searchEngines = "bing;google;duckduckgo;metasearx;mojeek";
         private string searchNeedsSearch = "1,1,0,0,1";
-        string[] sEngList;
-        string[] sNsList;
+        private string[] sEngList;
+        private string[] sNsList;
+        private string[] myReplFromTo;
         private int sEngIndex;
         private string savedAddrBar;
+        private string replaceTuples = "(REDIR,REDRI);(redir,redri);(styl,stly);(STYL,STLY);(scri,srci);(SCRI,SRCI);(Scri,Srci);(java,jav);(JAVA,JAV);(func,fucn);(FUNC,FUCN);(onload,onlaod);(over,ovre);(OVER,OVRE);(target,tagret);(mouseout,mouesout);(MOUSEOUT,MOUESOUT);(widg,wigd);(WIDG,WIGD);(img,igm);(IMG,IGM);(t>,);(<h,<hh);(<H,<hh)";
         private ImageZoomer myImageZoom;
         #endregion
 
@@ -71,6 +73,7 @@ namespace WebLoader
             sEngList = searchEngines.Split(new char[] { ';' });
             sEngIndex = sEngList.ToList().IndexOf(currentSearchEng);
             sNsList = searchNeedsSearch.Split(new char[] { ',' });
+            myReplFromTo = replaceTuples.Split(new char[] { ';' });
 
             int findWL = strExeFilePath.IndexOf("WebLoader", strExeFilePath.Length - 15);
             strExeFilePath = strExeFilePath.Substring(0, findWL);
@@ -95,7 +98,7 @@ namespace WebLoader
 
         private void DeleteOldImages()
         {
-            string cmdArgs = "/C del image*.* >null";
+            string cmdArgs = "/C del image*.* >nul";
             runCmdLine(cmdArgs);
             Program.imageCounter++;
         }
@@ -514,7 +517,7 @@ namespace WebLoader
             pageBodyMod = pageBodyMod.Replace("H4", "br/");
 
             if (allowScripts == false)
-                pageBodyMod = ScriptReplacements(pageBodyMod);
+                pageBodyMod = ScriptReplacements(pageBodyMod, myReplFromTo);
             int webSize = (int)Convert.ToSingle(chosenSize) / 4;
             string pageBodyModshow = "<!DOCTYPE html>";
             pageBodyModshow += "<font size=\"" + webSize + "\" face=\"" + chosenFont + "\"/>" + pageBodyMod;
@@ -537,7 +540,7 @@ namespace WebLoader
             return RecoveredDoc;
         }
 
-        private static string ScriptReplacements(string pageBodyMod)
+        private static string ScriptReplacements(string pageBodyMod, string[] myRepls)
         {
             pageBodyMod = RemoveScriptCode(pageBodyMod, "HEAD");
             pageBodyMod = RemoveScriptCode(pageBodyMod, "head");
@@ -545,28 +548,41 @@ namespace WebLoader
             pageBodyMod = RemoveScriptCode(pageBodyMod, "script");
             pageBodyMod = RemoveScriptCode(pageBodyMod, "STYLE");
             pageBodyMod = RemoveScriptCode(pageBodyMod, "style");
-            pageBodyMod = pageBodyMod.Replace("REDIR", "REDRI");
-            pageBodyMod = pageBodyMod.Replace("redir", "redri");
-            pageBodyMod = pageBodyMod.Replace("styl", "stly");
-            pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
-            pageBodyMod = pageBodyMod.Replace("scri", "srci");
-            pageBodyMod = pageBodyMod.Replace("SCRI", "SRCI");
-            pageBodyMod = pageBodyMod.Replace("Scri", "Srci");
-            pageBodyMod = pageBodyMod.Replace("java", "jav");
-            pageBodyMod = pageBodyMod.Replace("JAVA", "JAV");
-            pageBodyMod = pageBodyMod.Replace("func", "fucn");
-            pageBodyMod = pageBodyMod.Replace("FUNC", "FUCN");
-            pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
-            pageBodyMod = pageBodyMod.Replace("over", "ovre");
-            pageBodyMod = pageBodyMod.Replace("OVER", "OVRE");
-            pageBodyMod = pageBodyMod.Replace("target", "tagret");
-            pageBodyMod = pageBodyMod.Replace("mouseout", "mouesout");
-            pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
-            pageBodyMod = pageBodyMod.Replace("widg", "wigd");
-            pageBodyMod = pageBodyMod.Replace("WIDG", "WIGD");
-            pageBodyMod = pageBodyMod.Replace("img", "igm");
-            pageBodyMod = pageBodyMod.Replace("IMG", "IGM");
-            pageBodyMod = pageBodyMod.Replace("t>", "  ");
+
+            foreach (string replThis in myRepls)
+            {
+                string replLessParens = replThis.Substring(1,replThis.Length - 2);
+                string[] rFromTo = replLessParens.Split(new char[] { ',' });
+                string rFrom = rFromTo[0];
+                string rTo = rFromTo[1];
+                pageBodyMod = pageBodyMod.Replace(rFrom, rTo);
+            }
+
+            //pageBodyMod = pageBodyMod.Replace("REDIR", "REDRI");
+            //pageBodyMod = pageBodyMod.Replace("redir", "redri");
+            //pageBodyMod = pageBodyMod.Replace("styl", "stly");
+            //pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
+            //pageBodyMod = pageBodyMod.Replace("scri", "srci");
+            //pageBodyMod = pageBodyMod.Replace("SCRI", "SRCI");
+            //pageBodyMod = pageBodyMod.Replace("Scri", "Srci");
+            //pageBodyMod = pageBodyMod.Replace("java", "jav");
+            //pageBodyMod = pageBodyMod.Replace("JAVA", "JAV");
+            //pageBodyMod = pageBodyMod.Replace("func", "fucn");
+            //pageBodyMod = pageBodyMod.Replace("FUNC", "FUCN");
+            //pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
+            //pageBodyMod = pageBodyMod.Replace("over", "ovre");
+            //pageBodyMod = pageBodyMod.Replace("OVER", "OVRE");
+            //pageBodyMod = pageBodyMod.Replace("target", "tagret");
+            //pageBodyMod = pageBodyMod.Replace("mouseout", "mouesout");
+            //pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
+            //pageBodyMod = pageBodyMod.Replace("widg", "wigd");
+            //pageBodyMod = pageBodyMod.Replace("WIDG", "WIGD");
+            //pageBodyMod = pageBodyMod.Replace("img", "igm");
+            //pageBodyMod = pageBodyMod.Replace("IMG", "IGM");
+            //pageBodyMod = pageBodyMod.Replace("t>", "  ");
+            //pageBodyMod = pageBodyMod.Replace("<h", "<hh");
+            //pageBodyMod = pageBodyMod.Replace("<H", "<hh");
+
             return pageBodyMod;
         }
 
