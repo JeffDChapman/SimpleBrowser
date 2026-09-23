@@ -46,7 +46,7 @@ namespace WebLoader
         private string[] myReplFromTo;
         private int sEngIndex;
         private string savedAddrBar;
-        private string replaceTuples = "(REDIR,REDRI);(redir,redri);(styl,stly);(STYL,STLY);(scri,srci);(SCRI,SRCI);(Scri,Srci);(java,jav);(JAVA,JAV);(func,fucn);(FUNC,FUCN);(onload,onlaod);(over,ovre);(OVER,OVRE);(target,tagret);(mouseout,mouesout);(MOUSEOUT,MOUESOUT);(widg,wigd);(WIDG,WIGD);(img,igm);(IMG,IGM);(t>,);(<h,<hh);(<H,<hh)";
+        private string replaceTuples = "(REDIR,REDRI);(redir,redri);(styl,stly);(STYL,STLY);(scri,srci);(SCRI,SRCI);(Scri,Srci);(java,jav);(JAVA,JAV);(func,fucn);(FUNC,FUCN);(onload,onlaod);(over,ovre);(OVER,OVRE);(target,tagret);(mouseout,mouesout);(MOUSEOUT,MOUESOUT);(widg,wigd);(WIDG,WIGD);(img,igm);(IMG,IGM);(t>,);(<h,<br/><hh);(<H,<br/><hh)";
         private ImageZoomer myImageZoom;
         #endregion
 
@@ -476,6 +476,7 @@ namespace WebLoader
             if (!atHome) { btnAddHome.BringToFront(); }
             tmrShowAddHome.Enabled = true;
             CheckSearchSitch();
+            this.myBrowser.Focus();
         }
 
         private void CheckSearchSitch()
@@ -557,32 +558,6 @@ namespace WebLoader
                 string rTo = rFromTo[1];
                 pageBodyMod = pageBodyMod.Replace(rFrom, rTo);
             }
-
-            //pageBodyMod = pageBodyMod.Replace("REDIR", "REDRI");
-            //pageBodyMod = pageBodyMod.Replace("redir", "redri");
-            //pageBodyMod = pageBodyMod.Replace("styl", "stly");
-            //pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
-            //pageBodyMod = pageBodyMod.Replace("scri", "srci");
-            //pageBodyMod = pageBodyMod.Replace("SCRI", "SRCI");
-            //pageBodyMod = pageBodyMod.Replace("Scri", "Srci");
-            //pageBodyMod = pageBodyMod.Replace("java", "jav");
-            //pageBodyMod = pageBodyMod.Replace("JAVA", "JAV");
-            //pageBodyMod = pageBodyMod.Replace("func", "fucn");
-            //pageBodyMod = pageBodyMod.Replace("FUNC", "FUCN");
-            //pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
-            //pageBodyMod = pageBodyMod.Replace("over", "ovre");
-            //pageBodyMod = pageBodyMod.Replace("OVER", "OVRE");
-            //pageBodyMod = pageBodyMod.Replace("target", "tagret");
-            //pageBodyMod = pageBodyMod.Replace("mouseout", "mouesout");
-            //pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
-            //pageBodyMod = pageBodyMod.Replace("widg", "wigd");
-            //pageBodyMod = pageBodyMod.Replace("WIDG", "WIGD");
-            //pageBodyMod = pageBodyMod.Replace("img", "igm");
-            //pageBodyMod = pageBodyMod.Replace("IMG", "IGM");
-            //pageBodyMod = pageBodyMod.Replace("t>", "  ");
-            //pageBodyMod = pageBodyMod.Replace("<h", "<hh");
-            //pageBodyMod = pageBodyMod.Replace("<H", "<hh");
-
             return pageBodyMod;
         }
 
