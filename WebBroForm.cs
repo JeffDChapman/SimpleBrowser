@@ -512,10 +512,10 @@ namespace WebLoader
             pageBodyMod = pageBodyMod.Replace("FONT", "FNOT");
             pageBodyMod = pageBodyMod.Replace("widt", "wdit");
             pageBodyMod = pageBodyMod.Replace("WIDT", "WDIT");
-            pageBodyMod = pageBodyMod.Replace("H1", "br/");
-            pageBodyMod = pageBodyMod.Replace("H2", "br/");
-            pageBodyMod = pageBodyMod.Replace("H3", "br/");
-            pageBodyMod = pageBodyMod.Replace("H4", "br/");
+            //pageBodyMod = pageBodyMod.Replace("H1", "br/");
+            //pageBodyMod = pageBodyMod.Replace("H2", "br/");
+            //pageBodyMod = pageBodyMod.Replace("H3", "br/");
+            //pageBodyMod = pageBodyMod.Replace("H4", "br/");
 
             if (allowScripts == false)
                 pageBodyMod = ScriptReplacements(pageBodyMod, myReplFromTo);
