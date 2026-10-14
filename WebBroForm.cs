@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
-using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using Microsoft.Win32;
 using System.Collections;
+using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace WebLoader
 {
@@ -41,10 +41,12 @@ namespace WebLoader
         private string currentSearchEng = "bing";
         private string searchEngines = "bing;google;duckduckgo;metasearx;mojeek";
         private string searchNeedsSearch = "1,1,0,0,1";
-        string[] sEngList;
-        string[] sNsList;
+        private string[] sEngList;
+        private string[] sNsList;
+        private string[] myReplFromTo;
         private int sEngIndex;
         private string savedAddrBar;
+        private string replaceTuples = "(REDIR,REDRI);(redir,redri);(styl,stly);(STYL,STLY);(scri,srci);(SCRI,SRCI);(Scri,Srci);(java,jav);(JAVA,JAV);(func,fucn);(FUNC,FUCN);(onload,onlaod);(over,ovre);(OVER,OVRE);(target,tagret);(mouseout,mouesout);(MOUSEOUT,MOUESOUT);(widg,wigd);(WIDG,WIGD);(img,igm);(IMG,IGM);(t>,);(<h,<br/><hh);(<H,<br/><hh)";
         private ImageZoomer myImageZoom;
         #endregion
 
@@ -65,10 +67,13 @@ namespace WebLoader
 
         private void WebBroForm_Load(object sender, EventArgs e)
         {
+            if (Program.imageCounter == -1) { DeleteOldImages(); }
+            RestoreCoordinates();
             hasAhome = true;
             sEngList = searchEngines.Split(new char[] { ';' });
             sEngIndex = sEngList.ToList().IndexOf(currentSearchEng);
             sNsList = searchNeedsSearch.Split(new char[] { ',' });
+            myReplFromTo = replaceTuples.Split(new char[] { ';' });
 
             int findWL = strExeFilePath.IndexOf("WebLoader", strExeFilePath.Length - 15);
             strExeFilePath = strExeFilePath.Substring(0, findWL);
@@ -87,9 +92,44 @@ namespace WebLoader
             { this.myBrowser.Navigate(passedStartDoc); }
             else { if (hasAhome) { myBrowser.Navigate(homeLoc); } }
 
-            this.Top = 0;
-            this.Height = Screen.PrimaryScreen.Bounds.Bottom;
             try { GlobalFavs = File.ReadAllText(strExeFilePath + favsPath); }
+            catch { }
+        }
+
+        private void DeleteOldImages()
+        {
+            string cmdArgs = "/C del image*.* >nul";
+            runCmdLine(cmdArgs);
+            Program.imageCounter++;
+        }
+
+        private static void runCmdLine(string cmdArgs)
+        {
+            var p = new Process
+            {
+                StartInfo = { FileName = @"cmd.exe",
+                    Arguments = cmdArgs, UseShellExecute = false,
+                    CreateNoWindow = true}
+            };
+            p.Start();
+            p.WaitForExit();
+            p.Close();
+        }
+
+        private void RestoreCoordinates()
+        {
+            RegistryKey ThisUser = Registry.CurrentUser;
+            try
+            {
+                RegistryKey ScreenLoc = ThisUser.OpenSubKey("Software\\WebLoader\\ScreenLocation", true);
+                Top = Convert.ToInt32(ScreenLoc.GetValue("Top", 1));
+                Left = Convert.ToInt32(ScreenLoc.GetValue("Left", 1));
+                RegistryKey ScreenSize = ThisUser.OpenSubKey("Software\\WebLoader\\ScreenSize", true);
+                Height = Convert.ToInt32(ScreenSize.GetValue("Height", 532));
+                if (Height < 300) { Height = 300; }
+                Width = Convert.ToInt32(ScreenSize.GetValue("Width", 728));
+                if (Width < 300) { Width = 300; }
+            }
             catch { }
         }
 
@@ -357,16 +397,8 @@ namespace WebLoader
         private static void CloseAllSocks()
         {
             int nProcessID = Process.GetCurrentProcess().Id;
-
-            var p = new Process
-            {
-                StartInfo = { FileName = @"cmd.exe",
-                    Arguments = "/C netstat -a -n -o >activeSocks.txt", UseShellExecute = false,
-                    CreateNoWindow = true}
-            };
-            p.Start();
-            p.WaitForExit();
-            p.Close();
+            string cmdArgs = "/C netstat -a -n -o >activeSocks.txt";
+            runCmdLine(cmdArgs);
 
             var lines = File.ReadLines("activeSocks.txt");
             foreach (var line in lines)
@@ -444,6 +476,7 @@ namespace WebLoader
             if (!atHome) { btnAddHome.BringToFront(); }
             tmrShowAddHome.Enabled = true;
             CheckSearchSitch();
+            this.myBrowser.Focus();
         }
 
         private void CheckSearchSitch()
@@ -479,13 +512,13 @@ namespace WebLoader
             pageBodyMod = pageBodyMod.Replace("FONT", "FNOT");
             pageBodyMod = pageBodyMod.Replace("widt", "wdit");
             pageBodyMod = pageBodyMod.Replace("WIDT", "WDIT");
-            pageBodyMod = pageBodyMod.Replace("H1", "br/");
-            pageBodyMod = pageBodyMod.Replace("H2", "br/");
-            pageBodyMod = pageBodyMod.Replace("H3", "br/");
-            pageBodyMod = pageBodyMod.Replace("H4", "br/");
+            //pageBodyMod = pageBodyMod.Replace("H1", "br/");
+            //pageBodyMod = pageBodyMod.Replace("H2", "br/");
+            //pageBodyMod = pageBodyMod.Replace("H3", "br/");
+            //pageBodyMod = pageBodyMod.Replace("H4", "br/");
 
             if (allowScripts == false)
-                pageBodyMod = ScriptReplacements(pageBodyMod);
+                pageBodyMod = ScriptReplacements(pageBodyMod, myReplFromTo);
             int webSize = (int)Convert.ToSingle(chosenSize) / 4;
             string pageBodyModshow = "<!DOCTYPE html>";
             pageBodyModshow += "<font size=\"" + webSize + "\" face=\"" + chosenFont + "\"/>" + pageBodyMod;
@@ -508,7 +541,7 @@ namespace WebLoader
             return RecoveredDoc;
         }
 
-        private static string ScriptReplacements(string pageBodyMod)
+        private static string ScriptReplacements(string pageBodyMod, string[] myRepls)
         {
             pageBodyMod = RemoveScriptCode(pageBodyMod, "HEAD");
             pageBodyMod = RemoveScriptCode(pageBodyMod, "head");
@@ -516,28 +549,15 @@ namespace WebLoader
             pageBodyMod = RemoveScriptCode(pageBodyMod, "script");
             pageBodyMod = RemoveScriptCode(pageBodyMod, "STYLE");
             pageBodyMod = RemoveScriptCode(pageBodyMod, "style");
-            pageBodyMod = pageBodyMod.Replace("REDIR", "REDRI");
-            pageBodyMod = pageBodyMod.Replace("redir", "redri");
-            pageBodyMod = pageBodyMod.Replace("styl", "stly");
-            pageBodyMod = pageBodyMod.Replace("STYL", "STLY");
-            pageBodyMod = pageBodyMod.Replace("scri", "srci");
-            pageBodyMod = pageBodyMod.Replace("SCRI", "SRCI");
-            pageBodyMod = pageBodyMod.Replace("Scri", "Srci");
-            pageBodyMod = pageBodyMod.Replace("java", "jav");
-            pageBodyMod = pageBodyMod.Replace("JAVA", "JAV");
-            pageBodyMod = pageBodyMod.Replace("func", "fucn");
-            pageBodyMod = pageBodyMod.Replace("FUNC", "FUCN");
-            pageBodyMod = pageBodyMod.Replace("onload", "onlaod");
-            pageBodyMod = pageBodyMod.Replace("over", "ovre");
-            pageBodyMod = pageBodyMod.Replace("OVER", "OVRE");
-            pageBodyMod = pageBodyMod.Replace("target", "tagret");
-            pageBodyMod = pageBodyMod.Replace("mouseout", "mouesout");
-            pageBodyMod = pageBodyMod.Replace("MOUSEOUT", "MOUESOUT");
-            pageBodyMod = pageBodyMod.Replace("widg", "wigd");
-            pageBodyMod = pageBodyMod.Replace("WIDG", "WIGD");
-            pageBodyMod = pageBodyMod.Replace("img", "igm");
-            pageBodyMod = pageBodyMod.Replace("IMG", "IGM");
-            pageBodyMod = pageBodyMod.Replace("t>", "  ");
+
+            foreach (string replThis in myRepls)
+            {
+                string replLessParens = replThis.Substring(1,replThis.Length - 2);
+                string[] rFromTo = replLessParens.Split(new char[] { ',' });
+                string rFrom = rFromTo[0];
+                string rTo = rFromTo[1];
+                pageBodyMod = pageBodyMod.Replace(rFrom, rTo);
+            }
             return pageBodyMod;
         }
 

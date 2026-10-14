@@ -1,14 +1,15 @@
 ﻿using System.Diagnostics;
 using System.Net;
+using System.Security.Policy;
 
 namespace WebLoader
 {
     public partial class ImageZoomer : Form
     {
-        private int imgCounter = 0;
         public string imageBase;
         private WebBroForm myParent;
         private string fileToUse;
+        private bool gotTheFile;
 
         public ImageZoomer(WebBroForm parent)
         {
@@ -20,11 +21,10 @@ namespace WebLoader
         {
             int imageIndex = lbImageList.SelectedIndex;
             string actualImagePath = myParent.webpageImages[imageIndex].ToString();
-            // string pageImage = "https://" + imageBase + actualImagePath;
             string pageImage = actualImagePath;
             if (actualImagePath.ToLower().IndexOf("http") == -1)
                 { pageImage = "https:" + actualImagePath; }
-            string fileReturned = getLocalImage(pageImage);
+            string fileReturned = getLocalImageAsync(pageImage);
             FileInfo fileInfo = new FileInfo(fileReturned);
             Application.DoEvents();
             if (fileReturned.Length > 0) { 
@@ -32,15 +32,17 @@ namespace WebLoader
                 catch { } }
         }
 
-        private string getLocalImage(string pageImage)
+        private string getLocalImageAsync(string pageImage)
         {
             string imageFileName = "imageXX.YYY";
-            imgCounter++;
-            string fileToUseBase = imageFileName.Replace("XX", imgCounter.ToString());
-            string fileExt = pageImage.Substring(pageImage.Length - 3);
+            Program.imageCounter++;
+            string fileToUseBase = imageFileName.Replace("XX", Program.imageCounter.ToString());
+            string imageTrim = pageImage.Trim();
+            if (imageTrim.Substring(imageTrim.Length - 1) == "?")
+                { imageTrim = imageTrim.Substring(0, imageTrim.Length - 1); }
+            string fileExt = imageTrim.Substring(imageTrim.Length - 3);
             fileToUse = fileToUseBase.Replace("YYY", fileExt);
-            string imageLocBase = pageImage;
-            // string imageLoc = imageLocBase.Replace("&amp;", "&");
+            string imageLocBase = imageTrim;
             string imageLoc = System.Web.HttpUtility.UrlDecode(imageLocBase);
             if (imageLoc[imageLoc.Length - 1] == '/') 
                 { imageLoc = imageLoc.Substring(0, imageLoc.Length - 1); }
@@ -51,8 +53,24 @@ namespace WebLoader
                 try { client.DownloadFile(new Uri(imageLoc), fileToUse); }
                 catch { MessageBox.Show("Failed To Get: " + imageLoc); }
             }
+
+            //await DownloadFileAsync(imageLoc, fileToUse).WaitAsync(TimeSpan.FromSeconds(2));
+            //if (!gotTheFile) { MessageBox.Show("Failed To Get: " + imageLoc); }
             return fileToUse;
         }
+
+        //public async Task DownloadFileAsync(string url, string outputPath)
+        //{
+        //    gotTheFile = false;
+        //    using HttpClient client = new HttpClient();
+        //    using HttpResponseMessage response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead).WaitAsync(TimeSpan.FromSeconds(2));
+        //    response.EnsureSuccessStatusCode();
+
+        //    using Stream downloadStream = await response.Content.ReadAsStreamAsync();
+        //    using FileStream fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+        //    await downloadStream.CopyToAsync(fileStream);
+        //    gotTheFile = true;
+        //}
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
